@@ -1,19 +1,21 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tn_jewellery_admin/features/auth/repository/auth_repo.dart';
 import 'package:tn_jewellery_admin/utils/Loader/loader_utils.dart';
+
 import '../../../Utils/core/helper/route_helper.dart';
-import '../model/profile_model.dart';
 
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
 
   AuthController({required this.authRepo});
 
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
+
+  bool obscurePassword = true;
 
   String? _verificationId;
   bool _isOtpSent = false;
@@ -256,8 +258,6 @@ class AuthController extends GetxController implements GetxService {
 
     update();
   }
-
-
 
   String _verificationCode = '';
   String _otp = '';

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/signIn/LoginScreen.dart';
+import 'package:tn_jewellery_admin/features/splash/splash_screen.dart';
 import 'package:tn_jewellery_admin/utils/config.dart';
 
 import '../../../common/update_screen.dart';
@@ -28,7 +30,6 @@ class RouteHelper {
   static const String customercarescreen = '/customercarescreen';
   static const String notificationcreen = '/notificationscreen';
 
-
   static String getInitialRoute() => initial;
   static String getSplashRoute() => splash;
   static String getLanguageRoute(String page) => '$language?page=$page';
@@ -46,11 +47,12 @@ class RouteHelper {
   static String getCustomerCareRoute() => customercarescreen;
   static String getNotificationRoute() => notificationcreen;
 
-  static String getAddLocation(int id, int accountId) => '$addLocation?userId=$id&accountId=$accountId';
+  static String getAddLocation(int id, int accountId) =>
+      '$addLocation?userId=$id&accountId=$accountId';
 
   static List<GetPage> routes = [
-    // GetPage(name: splash, page: () => const SplashScreen()),
-    // GetPage(name: onBoardScreen, page: () => getRoute(const OnboardScreen())),
+    GetPage(name: splash, page: () => const SplashScreen()),
+    GetPage(name: onBoardScreen, page: () => getRoute(const LoginScreen())),
     // GetPage(name: otpVerifyScreen, page: () => getRoute(const Otpverifyscreen())),
     // GetPage(name: dashboardscreen, page: () => getRoute(const Dashboardscreen())),
     // GetPage(name: profilescreen, page: () => getRoute(const ProfileScreen())),
@@ -63,7 +65,6 @@ class RouteHelper {
     // GetPage(name: userinfoscreen, page: () => const UserInfoScreen()),
     // GetPage(name: customercarescreen, page: () => const CustomerCareScreen()),
     // GetPage(name: notificationcreen, page: () => const NotificationScreen()),
-
   ];
 
   static getRoute(Widget navigateTo) {

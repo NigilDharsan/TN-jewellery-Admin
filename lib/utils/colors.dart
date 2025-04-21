@@ -24,3 +24,13 @@ const listTitleColor = Color(0XFF6F8C79);
 const tabBarColor = Color(0xFFDDC9C9);
 
 const iconColorLight = Color(0xFFE8E2D4);
+
+const brandPrimaryColor = Color(0xFFA43965);
+
+const brandGreyColor = Color(0xFF6D717F);
+const brandGreySoftColor = Color(0x996D717F);
+
+const brandGoldColor = Color(0xFFD7A85B);
+const brandGoldDarkColor = Color(0xFFCC893B);
+
+const brandGoldLightColor = Color(0xFFF6F4F0);

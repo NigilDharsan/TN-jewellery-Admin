@@ -1,37 +1,90 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:ui';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:tn_jewellery_admin/Utils/core/helper/route_helper.dart';
+import 'package:tn_jewellery_admin/features/splash/controller/splash_controller.dart';
+import 'package:tn_jewellery_admin/utils/Loader/Loader.dart';
+import 'package:tn_jewellery_admin/utils/Loader/LoaderController.dart';
+import 'package:tn_jewellery_admin/utils/app_constants.dart';
+import 'package:tn_jewellery_admin/utils/core/initial_binding/initial_binding.dart';
+import 'package:tn_jewellery_admin/utils/core/theme/controller/theme_controller.dart';
+import 'package:tn_jewellery_admin/utils/core/theme/dark_theme.dart';
+import 'package:tn_jewellery_admin/utils/core/theme/light_theme.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Get.put(LoaderController());
+
+  await initControllers();
+  await GetStorage.init();
+  HttpOverrides.global = MyHttpOverrides();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  // final String? bookingID;
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    print("object");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return GetBuilder<ThemeController>(builder: (themeController) {
+      return GetBuilder<SplashController>(builder: (splashController) {
+        return GetMaterialApp(
+          title: AppConstants.appName,
+          debugShowCheckedModeBanner: false,
+          navigatorKey: Get.key,
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
+            dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch},
+          ),
+          initialBinding: InitialBinding(),
+          theme: themeController.darkTheme ? dark : light,
+          initialRoute: RouteHelper.getSplashRoute(),
+          getPages: RouteHelper.routes,
+          // defaultTransition: Transition.topLevel,
+          // transitionDuration: const Duration(milliseconds: 500),
+          builder: (context, child) {
+            return Stack(
+              children: [
+                child!,
+                Loader(), // Add the Loader widget here
+              ],
+            );
+          },
+        );
+      });
+    });
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 

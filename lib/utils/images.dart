@@ -1,5 +1,8 @@
 class Images {
   static const String logo = 'assets/logo/logo.png';
+
+  static const String logoPng = 'assets/logo/logo.png';
+
   static const String hello_axi_logo =
       'assets/images/hello_taxi_appicon_blue.png';
   static const String riderSearch = 'assets/images/riderSearch.gif';
@@ -22,7 +25,6 @@ class Images {
   static String get noficationimage1 => 'pillar_crane_code_composition'.png;
   static String get splashscreen => 'hellotaxi_mobile_screen'.png;
 
-
   static String get update => 'update'.png;
   static String get maintenance => 'maintenance'.png;
   static String get cart => 'cart'.png;
@@ -31,7 +33,6 @@ class Images {
   static String get notification => 'notification'.svg;
   static String get search => 'search'.svg;
   static String get pet => 'group_pets'.svg;
-
 
   static String get chat => 'chat'.svg;
 
