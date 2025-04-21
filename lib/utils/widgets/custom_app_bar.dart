@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 import 'package:tn_jewellery_admin/utils/dimensions.dart' show Dimensions;
 import 'package:tn_jewellery_admin/utils/styles.dart';
@@ -32,9 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title!,
-        style: ubuntuBold.copyWith(
-            fontSize: Dimensions.fontSizeExtraLarge,
-            color: titleColor ?? Theme.of(context).primaryColor),
+        style: order_style2,
       ),
       centerTitle: centerTitle,
       automaticallyImplyLeading: true,
@@ -43,9 +42,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               splashRadius: Dimensions.paddingSizeLarge,
               hoverColor: Colors.transparent,
-              icon: Icon(Icons.arrow_back,
+              icon: Icon(Icons.arrow_back_ios,
                   color: titleColor ?? Theme.of(context).primaryColor),
-              color: Theme.of(context).textTheme.bodyLarge!.color,
+              color: brandGreyColor,
               onPressed: () => (isLogin != null && isLogin!)
                   ? Get.offAllNamed(RouteHelper.onBoardScreen)
                   : onBackPressed != null

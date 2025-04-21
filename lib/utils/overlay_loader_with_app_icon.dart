@@ -28,7 +28,7 @@ class OverlayLoaderWithAppIcon extends StatelessWidget {
       opacity: overlayOpacity,
       color: Colors.black,
       progressIndicator: Material(
-        color: buttonColor,
+        color: primaryColor,
         borderRadius: BorderRadius.circular(borderRadius),
         child: Padding(
           padding:

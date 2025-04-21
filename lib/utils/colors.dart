@@ -34,3 +34,5 @@ const brandGoldColor = Color(0xFFD7A85B);
 const brandGoldDarkColor = Color(0xFFCC893B);
 
 const brandGoldLightColor = Color(0xFFF6F4F0);
+
+

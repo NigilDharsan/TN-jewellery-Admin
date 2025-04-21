@@ -247,7 +247,6 @@ class AuthController extends GetxController implements GetxService {
     );
     if (response != null && response.statusCode == 200) {
       mobileNumberController.clear();
-      // Get.toNamed(RouteHelper.getDashBoardRoute());
       Get.toNamed(RouteHelper.getOtpVerifyRoute());
     } else {
       print('Invalid User');

@@ -2,6 +2,7 @@ class Images {
   static const String logo = 'assets/logo/logo.png';
 
   static const String logoPng = 'assets/logo/logo.png';
+  static const String logolpeg = 'assets/logo/logo.jpeg';
 
   static const String hello_axi_logo =
       'assets/images/hello_taxi_appicon_blue.png';
