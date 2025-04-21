@@ -76,11 +76,7 @@ Widget buildOrderCard(Map<String, String> order) {
                   const SizedBox(height: 10),
                   InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (_) => const NewOrder_Seletion()),
-                      // );
+                 Get.toNamed(RouteHelper.neworderScreen);
                     },
                     child: Container(
                       height: 40,
