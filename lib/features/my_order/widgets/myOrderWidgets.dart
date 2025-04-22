@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
-
 
 Widget buildTabButton(String title, bool isSelected, VoidCallback onPressed) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
       backgroundColor: isSelected ? const Color(0xFF8D3D5B) : Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      padding: const EdgeInsets.symmetric(vertical: 12), // Responsive vertical padding
+      padding: const EdgeInsets.symmetric(
+          vertical: 12), // Responsive vertical padding
     ),
     onPressed: onPressed,
     child: Text(
@@ -26,7 +25,15 @@ Widget buildTabButton(String title, bool isSelected, VoidCallback onPressed) {
   );
 }
 
-Widget buildOrderCard(Map<String, String> order) {
+Widget buildOrderCard() {
+  Map<String, String> order = {
+    "image": "https://example.com/image.jpg",
+    "name": "Order Name",
+    "product": "Product Name",
+    "gram": "Gram",
+    "percentage": "Percentage",
+    "status": "Status"
+  };
   return InkWell(
     onTap: () {
       Get.toNamed(RouteHelper.orderdetailScreen);
@@ -43,7 +50,7 @@ Widget buildOrderCard(Map<String, String> order) {
                 height: 60,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.error),
+                    const Icon(Icons.error),
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return const SizedBox(
@@ -63,7 +70,8 @@ Widget buildOrderCard(Map<String, String> order) {
                   Text(order["name"] ?? "",
                       style: const TextStyle(
                           fontFamily: 'JosefinSans',
-                          fontWeight: FontWeight.bold, fontSize: 16)),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16)),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,7 +84,7 @@ Widget buildOrderCard(Map<String, String> order) {
                   const SizedBox(height: 10),
                   InkWell(
                     onTap: () {
-                 Get.toNamed(RouteHelper.neworderScreen);
+                      Get.toNamed(RouteHelper.neworderScreen);
                     },
                     child: Container(
                       height: 40,

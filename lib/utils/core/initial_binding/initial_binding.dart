@@ -1,8 +1,12 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
+import 'package:tn_jewellery_admin/features/my_order/repository/order_repo.dart';
 import 'package:tn_jewellery_admin/features/splash/controller/splash_controller.dart';
-import 'package:tn_jewellery_admin/utils/Loader/LoaderController.dart' show LoaderController;
-import 'package:tn_jewellery_admin/utils/core/theme/controller/theme_controller.dart' show ThemeController;
+import 'package:tn_jewellery_admin/utils/Loader/LoaderController.dart'
+    show LoaderController;
+import 'package:tn_jewellery_admin/utils/core/theme/controller/theme_controller.dart'
+    show ThemeController;
 
 import '../../../features/auth/controller/auth_controller.dart';
 import '../../../features/auth/repository/auth_repo.dart';
@@ -27,7 +31,9 @@ class InitialBinding extends Bindings {
         authRepo:
             AuthRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
 
-    // Get.lazyPut(() => DashBoardController());
+    Get.lazyPut(() => OrderController(
+        orderRepo:
+            OrderRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
     // Get.lazyPut(() => SignalRServices());
     // Get.lazyPut(() => StatusController());
     // Get.lazyPut(() => InAppCallController(

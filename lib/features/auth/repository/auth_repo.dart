@@ -78,6 +78,14 @@ class AuthRepo {
     return await sharedPreferences.setString(AppConstants.refreshToken, token);
   }
 
+  Future<bool?> saveUserToken(String token) async {
+    apiClient.token = token;
+    apiClient.postUpdateHeader(token);
+    apiClient.getUpdateHeader(token);
+
+    return await sharedPreferences.setString(AppConstants.token, token);
+  }
+
   String getRefreshToken() {
     return sharedPreferences.getString(AppConstants.refreshToken) ?? "";
   }

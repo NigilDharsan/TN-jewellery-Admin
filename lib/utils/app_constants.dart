@@ -10,8 +10,9 @@ class AppConstants {
 
   static const String getNewOrderListUrl = 'orders/open_orders/list/';
   static const String getOrderStatusListByIdUrl =
-      'orders/in_progress_orders/?status=inprogress';
+      'orders/in_progress_orders/?status=';
   static const String getOrderAssignUrl = 'orders/job_order/create/';
+  static const String getOrderUpdatenUrl = 'orders/order/job_orders/update/';
 
   static const String isSupplier = 'is_supplier';
   static const String notificationChannel = 'channel_type';

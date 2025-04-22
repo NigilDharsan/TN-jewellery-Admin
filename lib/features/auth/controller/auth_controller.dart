@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tn_jewellery_admin/features/auth/model/account_model.dart';
 import 'package:tn_jewellery_admin/features/auth/repository/auth_repo.dart';
 import 'package:tn_jewellery_admin/utils/Loader/loader_utils.dart';
 import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
@@ -23,8 +24,6 @@ class AuthController extends GetxController implements GetxService {
   bool? _acceptTerms = false;
   bool hasMoreItems = true;
   bool cameFromApp = false;
-
-  // bool get isLoading => _isLoading;
 
   bool? get acceptTerms => _acceptTerms;
 
@@ -148,6 +147,8 @@ class AuthController extends GetxController implements GetxService {
 
   int? selectedLocationIndex;
 
+  AccountModel? accountModel;
+
   final TextEditingController searchController = TextEditingController();
   List suggestions = [];
   double latitude = 0.0;
@@ -247,6 +248,11 @@ class AuthController extends GetxController implements GetxService {
     if (response != null && response.statusCode == 200) {
       signInPasswordController.clear();
       signInEmailController.clear();
+
+      accountModel = AccountModel.fromJson(response.body);
+
+      String accessToken = accountModel!.token!;
+      await authRepo.saveUserToken(accessToken);
 
       Get.offAllNamed(RouteHelper.getMainRoute("0"));
     } else {

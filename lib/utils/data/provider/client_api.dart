@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tn_jewellery_admin/utils/app_constants.dart';
 import 'package:tn_jewellery_admin/utils/config.dart' show Config;
 import 'package:tn_jewellery_admin/utils/core/common_model/errors_model.dart';
 import 'package:tn_jewellery_admin/utils/widgets/custom_snackbar.dart';
@@ -22,15 +24,32 @@ class ApiClient extends GetxService {
   static final String noInternetMessage = 'connection_to_api_server_failed'.tr;
   final int timeoutInSeconds = 30;
 
+  String? token;
+  late Map<String, String> getmainHeaders;
+  late Map<String, String> mainHeaders;
+
   ApiClient({required this.appBaseUrl, required this.sharedPreferences}) {
-    // token = sharedPreferences.getString(AppConstants.token);
+    token = sharedPreferences.getString(AppConstants.token);
 
-    // postUpdateHeader(token);
-
-    // getUpdateHeader(token);
+    postUpdateHeader(token);
+    getUpdateHeader(token);
   }
 
+  void getUpdateHeader(String? token) {
+    getmainHeaders = {
+      'Accept': '*/*',
+      'Content-Type': 'application/json',
+      'Authorization': 'Token $token'
+    };
+  }
 
+  void postUpdateHeader(String? token) {
+    mainHeaders = {
+      'Accept': '*/*',
+      'Content-Type': 'application/json',
+      'Authorization': 'Token $token'
+    };
+  }
 
   Future<Response> getData(String uri,
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
@@ -65,7 +84,7 @@ class ApiClient extends GetxService {
         .post(
           Uri.parse(appBaseUrl! + uri),
           body: jsonEncode(body),
-          headers: headers ?? null,
+          headers: headers ?? mainHeaders,
         )
         .timeout(Duration(seconds: timeoutInSeconds));
     try {
