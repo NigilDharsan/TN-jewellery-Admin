@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/myOrderWidgets.dart';
 import 'package:tn_jewellery_admin/utils/widgets/custom_app_bar.dart';
 
-
 class myOrderScreen extends StatefulWidget {
   const myOrderScreen({super.key});
 
@@ -16,7 +15,7 @@ class _myOrderScreenState extends State<myOrderScreen> {
   final List<Map<String, String>> orders = [
     {
       "image":
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSZ8b6qsJACPFXvkLvfOBtn-suzr47aiB9iA&s",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSZ8b6qsJACPFXvkLvfOBtn-suzr47aiB9iA&s",
       "name": "Raja Jewellery",
       "product": "Ring",
       "gram": "10g",
@@ -25,7 +24,7 @@ class _myOrderScreenState extends State<myOrderScreen> {
     },
     {
       "image":
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSZ8b6qsJACPFXvkLvfOBtn-suzr47aiB9iA&s",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSZ8b6qsJACPFXvkLvfOBtn-suzr47aiB9iA&s",
       "name": "Raja Jewellery",
       "product": "Ring",
       "gram": "10g",
@@ -34,7 +33,7 @@ class _myOrderScreenState extends State<myOrderScreen> {
     },
     {
       "image":
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSZ8b6qsJACPFXvkLvfOBtn-suzr47aiB9iA&s",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSZ8b6qsJACPFXvkLvfOBtn-suzr47aiB9iA&s",
       "name": "Raja Jewellery",
       "product": "Ring",
       "gram": "10g",
@@ -49,10 +48,11 @@ class _myOrderScreenState extends State<myOrderScreen> {
         ? orders
         : orders.where((order) => order["status"] != "ASSIGN NOW").toList();
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.fromHeight(50),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50),
           child: CustomAppBar(
             title: 'CUSTOM ORDERS',
-            isBackButtonExist: true,
+            isBackButtonExist: false,
           )),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -67,7 +67,8 @@ class _myOrderScreenState extends State<myOrderScreen> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: buildTabButton("ORDER STATUS", !isNewOrdersSelected, () {
+                  child:
+                      buildTabButton("ORDER STATUS", !isNewOrdersSelected, () {
                     setState(() => isNewOrdersSelected = false);
                   }),
                 ),
@@ -77,19 +78,19 @@ class _myOrderScreenState extends State<myOrderScreen> {
             Expanded(
               child: isNewOrdersSelected
                   ? ListView.separated(
-                itemCount: filteredOrders.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  return buildOrderCard(filteredOrders[index]);
-                },
-              )
+                      itemCount: filteredOrders.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        return buildOrderCard(filteredOrders[index]);
+                      },
+                    )
                   : ListView.separated(
-                itemCount: filteredOrders.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  return buildOrderCard(filteredOrders[index]);
-                },
-              ),
+                      itemCount: filteredOrders.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        return buildOrderCard(filteredOrders[index]);
+                      },
+                    ),
             ),
           ],
         ),

@@ -1,12 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/auth/controller/auth_controller.dart';
+import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 
 import '../../../utils/overlay_loader_with_app_icon.dart';
-import '../../Utils/core/helper/route_helper.dart';
-import '../../utils/images.dart';
-import '../auth/controller/auth_controller.dart';
-import '../auth/repository/auth_repo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,7 +21,6 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     // bool firstTime = true;
     // _onConnectivityChanged = Connectivity()
     //     .onConnectivityChanged
@@ -68,9 +66,8 @@ class SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 2), () async {
       if (Get.find<AuthController>().isLoggedIn()) {
         Get.offAllNamed(RouteHelper.getSignInRoute());
-        SingleTon().LoginType == 'supplier';
       } else {
-        Get.offAllNamed(RouteHelper.getSignInRoute());
+        Get.toNamed(RouteHelper.getSignInRoute());
       }
     });
   }
@@ -86,16 +83,6 @@ class SplashScreenState extends State<SplashScreen> {
         body: Stack(
           children: [
             Container(),
-            Container(
-              width: MediaQuery.of(context).size.width * 2.5,
-              height: MediaQuery.of(context).size.height * 2.5,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Images.splashscreen),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
             // Center(
             //   child: Padding(
             //     padding: const EdgeInsets.all(Dimensions.paddingSizeExtraLarge),
@@ -108,11 +95,11 @@ class SplashScreenState extends State<SplashScreen> {
             //           width: 200.0, // Set the width of the image
             //           height: 200.0, // Set the height of the image
             //         ),
-            //         SvgPicture.asset(
-            //           Images.splash,
-            //           // color: Colors.white,
-            //           width: MediaQuery.of(context).size.width / 2.2,
-            //         ),
+            //         // SvgPicture.asset(
+            //         //   Images.splash,
+            //         //   // color: Colors.white,
+            //         //   width: MediaQuery.of(context).size.width / 2.2,
+            //         // ),
             //       ],
             //     ),
             //   ),

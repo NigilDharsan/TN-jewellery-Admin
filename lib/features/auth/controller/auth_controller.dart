@@ -5,8 +5,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tn_jewellery_admin/features/auth/repository/auth_repo.dart';
 import 'package:tn_jewellery_admin/utils/Loader/loader_utils.dart';
-
-import '../../../Utils/core/helper/route_helper.dart';
+import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
@@ -242,12 +241,14 @@ class AuthController extends GetxController implements GetxService {
 
     update();
     Response? response = await authRepo.login(
-      mobileNumber:
-          mobileNumberController.text, // Fixed: Correct way to get text
+      mobileNumber: signInEmailController.text,
+      password: signInPasswordController.text,
     );
     if (response != null && response.statusCode == 200) {
-      mobileNumberController.clear();
-      Get.toNamed(RouteHelper.getOtpVerifyRoute());
+      signInPasswordController.clear();
+      signInEmailController.clear();
+
+      Get.offAllNamed(RouteHelper.getMainRoute("0"));
     } else {
       print('Invalid User');
     }

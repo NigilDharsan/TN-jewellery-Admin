@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/utils/Loader/LoaderController.dart';
+import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/images.dart';
-import '../colors.dart';
-import 'LoaderController.dart';
 
 class Loader extends StatelessWidget {
   final bool? isLoading;
@@ -29,13 +29,13 @@ class Loader extends StatelessWidget {
               opacity: overlayOpacity,
               color: Colors.black,
               progressIndicator: Material(
-                color: buttonColor,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(borderRadius),
                 child: Padding(
                   padding: const EdgeInsets.only(
                       top: 20, bottom: 20, left: 10, right: 10),
                   child: SizedBox(
-                    height: 60,
+                    height: 80,
                     width: 130,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,14 +43,14 @@ class Loader extends StatelessWidget {
                       children: [
                         SizedBox(
                             width: 130,
-                            height: 40,
-                            child: Image.asset(Images.hello_axi_logo)),
+                            height: 60,
+                            child: Image.asset(Images.splash)),
                         const SizedBox(
                           height: 5,
                           width: 130,
                           child: LinearProgressIndicator(
-                            backgroundColor: buttonColor,
-                            color: buttonTextColor,
+                            backgroundColor: Colors.white,
+                            color: brandPrimaryColor,
                           ),
                         ),
                         const SizedBox(

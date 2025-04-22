@@ -38,9 +38,7 @@ class Config {
 
 class _Config {
   static const String environment = 'dev';
-  static const String baseUrl = 'https://wholesale.shiningdawn.in/api';
-
-
+  static const String baseUrl = 'https://wholesale.shiningdawn.in/api/';
 
   static const List<String> scopes = <String>[
     'openid',
@@ -52,7 +50,7 @@ class _Config {
 
   static Map<dynamic, dynamic> debugConstants = {
     environment: "dev",
-    baseUrl: 'https://wholesale.shiningdawn.in/api',
+    baseUrl: 'https://wholesale.shiningdawn.in/api/',
     scopes: <String>[
       'openid',
       'email',
@@ -64,7 +62,7 @@ class _Config {
 
   static Map<dynamic, dynamic> stagingConstants = {
     environment: "uat",
-    baseUrl: 'https://wholesale.shiningdawn.in/api',
+    baseUrl: 'https://wholesale.shiningdawn.in/api/',
     scopes: <String>[
       'openid',
       'email',
@@ -76,7 +74,7 @@ class _Config {
 
   static Map<dynamic, dynamic> prodConstants = {
     environment: "prod",
-    baseUrl: 'https://wholesale.shiningdawn.in/api',
+    baseUrl: 'https://wholesale.shiningdawn.in/api/',
     scopes: <String>[
       'openid',
       'email',

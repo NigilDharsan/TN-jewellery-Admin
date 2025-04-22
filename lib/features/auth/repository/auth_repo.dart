@@ -3,15 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tn_jewellery_admin/utils/app_constants.dart';
 import 'package:tn_jewellery_admin/utils/data/provider/client_api.dart';
 
-import '../../../utils/config.dart';
-
 class AuthRepo {
   final ApiClient apiClient;
   final SharedPreferences sharedPreferences;
 
   AuthRepo({required this.apiClient, required this.sharedPreferences});
-
-
 
   Future<Response?> getUserProfile() async {
     try {
@@ -33,99 +29,21 @@ class AuthRepo {
   }
 
   Future<Response?> login(
-      {  required String mobileNumber}) async {
-    Map<String, String> headers = {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      'Accept': 'application/json',
-    };
-
-    // Ynl1ZnVlbC1zcGEtY2xpZW50LXB3ZDpxbjlJZXlSV0gxbUV1RE1JNHJKZ0FVVFYwZXdCdkJWNQ==
-    //
-    // byufuel-spa-client-mob-pwd' + ':' + 'AkfoTMTmUmPC6oWK0N2a8eaNNIUANMuW',
-
+      {required String mobileNumber, required String password}) async {
     var body = {
-      "mobileno": mobileNumber,
+      "username": mobileNumber,
+      "password": password,
+      "id_company": "1"
     };
 
-    String encodedBody = body.entries
-        .map((entry) =>
-            '${Uri.encodeComponent(entry.key)}=${Uri.encodeComponent(entry.value)}')
-        .join('&');
-
-    return await apiClient.postLoginData(AppConstants.getPhoneLoginOTP, encodedBody,
-        headers: headers);
+    return await apiClient.postLoginData(
+      AppConstants.getEmpLoginUrl,
+      body,
+    );
   }
-
-
 
   Future<Response?> getProfile() async {
     return await apiClient.getData(AppConstants.getProfile);
-  }
-  Future<Response?> signupVerification(
-      String validateStr, String verifyStr) async {
-    Map<String, String> headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': '*/*'
-    };
-
-    return await apiClient.getData(
-        headers: headers,
-        "${AppConstants.signupVerificationUrl}/$validateStr/$verifyStr");
-  }
-
-  Future<Response?> forgetPasswordOTP(String email,
-      {required String isVerifyEmail}) async {
-    Map<String, String> headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json'
-    };
-
-    return await apiClient.postData(AppConstants.forgotPasswordOTP,
-        {"id": "0", "email": email, "channel": isVerifyEmail},
-        headers: headers);
-  }
-
-  Future<Response?> changePassword({required String password}) async {
-    var body = {'password': password};
-
-    return await apiClient.postData(AppConstants.changePassword, body);
-  }
-
-  Future<Response?> getAntiForgeryToken() async {
-    Map<String, String> headers = {'Accept': 'application/json'};
-    return await apiClient.getData(AppConstants.getAntiForgeryToken,
-        headers: headers);
-  }
-
-  Future<Response?> verifyPhoneOTP(String phoneNumber, String otp) async {
-    return await apiClient.postData(
-        AppConstants.verifyPhoneOTP, {'phone': phoneNumber, 'otp': otp});
-  }
-
-  Future<Response?> resendPhoneOTP(String phoneNumber) async {
-    return await apiClient
-        .postData(AppConstants.resendPhoneOTP, {'phone': phoneNumber});
-  }
-
-  // login
-  // Future<Response?> getPhoneLoginOTP(String phoneNumber) async {
-  //   return await apiClient
-  //       .postData(AppConstants.getPhoneLoginOTP, {'mobileno': phoneNumber});
-  // }
-
-  Future<Response?> verifyLoginPhoneOTP(String phoneNumber, String otp) async {
-    return await apiClient.postData(
-        AppConstants.verifyLoginPhoneOTP, {'phone': phoneNumber, 'otp': otp});
-  }
-
-  Future<Response?> verifyEmailOTP(String email, String otp) async {
-    return await apiClient
-        .postData(AppConstants.verifyEmailOTP, {"email": email, "otp": otp});
-  }
-
-  Future<Response?> resendEmailOTP(String email) async {
-    return await apiClient
-        .postData(AppConstants.resendEmailOTP, {'email': email});
   }
 
   Future<void> saveUserNumberAndEmail(String number, String email) async {

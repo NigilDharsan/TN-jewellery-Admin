@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tn_jewellery_admin/Utils/core/helper/route_helper.dart';
 import 'package:tn_jewellery_admin/features/auth/controller/auth_controller.dart';
-import 'package:tn_jewellery_admin/features/landing/landing_screen.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/images.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -160,8 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         onPressed: () {
           if (controller.formKey.currentState!.validate()) {
-            // controller.login();
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen(pageIndex: 0)));
+            controller.login();
           }
         },
         child: const Text(
