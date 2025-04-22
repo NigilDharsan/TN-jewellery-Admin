@@ -55,6 +55,7 @@ dependencies:
 
   url_launcher:
   pin_code_fields:
+  dropdown_button2:
 
 dev_dependencies:
   flutter_test:
