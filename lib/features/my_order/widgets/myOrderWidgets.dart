@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/my_order/model/openOrderListModel.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 
@@ -25,14 +26,14 @@ Widget buildTabButton(String title, bool isSelected, VoidCallback onPressed) {
   );
 }
 
-Widget buildOrderCard() {
+Widget buildOrderCard(OpenOrderData? orderListData) {
   Map<String, String> order = {
-    "image": "https://example.com/image.jpg",
-    "name": "Order Name",
-    "product": "Product Name",
-    "gram": "Gram",
-    "percentage": "Percentage",
-    "status": "Status"
+    "image": orderListData?.image ?? "",
+    "name": orderListData?.customerName ?? "",
+    "product": orderListData?.productName ?? "",
+    "gram": "${orderListData?.netWt}g",
+    "percentage": "${orderListData?.wastagePercent ?? 0}",
+    "status": orderListData?.orderStatusName ?? ""
   };
   return InkWell(
     onTap: () {

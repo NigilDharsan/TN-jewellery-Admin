@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tn_jewellery_admin/utils/app_constants.dart';
 import 'package:tn_jewellery_admin/utils/config.dart' show Config;
 import 'package:tn_jewellery_admin/utils/core/common_model/errors_model.dart';
+import 'package:tn_jewellery_admin/utils/core/helper/help_me.dart';
 import 'package:tn_jewellery_admin/utils/widgets/custom_snackbar.dart';
 
 import '../../../features/auth/controller/auth_controller.dart';
@@ -77,8 +78,9 @@ class ApiClient extends GetxService {
   Future<Response> postData(String uri, dynamic body,
       {Map<String, String>? headers}) async {
     print(Uri.parse(appBaseUrl! + uri));
-    print(jsonEncode(body));
-    print(headers);
+    print("Header :: ${headers}");
+    print("Request ::${jsonEncode(body)}");
+    
 
     http.Response response = await http
         .post(
@@ -90,7 +92,7 @@ class ApiClient extends GetxService {
     try {
       if (response.statusCode == 401 &&
           Get.find<AuthController>().isLoggedIn()) {}
-
+      printLog("RESPONSE BODY ${response.body}");
       return handleResponse(response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);

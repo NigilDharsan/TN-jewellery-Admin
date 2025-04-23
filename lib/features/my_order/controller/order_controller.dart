@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
+import 'package:tn_jewellery_admin/features/my_order/model/openOrderListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/repository/order_repo.dart';
 import 'package:tn_jewellery_admin/utils/Loader/loader_utils.dart';
+import 'package:tn_jewellery_admin/utils/widgets/custom_snackbar.dart';
 
 class OrderController extends GetxController implements GetxService {
   final OrderRepo orderRepo;
@@ -8,7 +11,8 @@ class OrderController extends GetxController implements GetxService {
   bool _isLoading = false;
   bool hasMoreItems = true;
   bool get isLoading => _isLoading;
-
+  List<OpenOrderData>? openOrderListData;
+  List<InProgressOrderData>? InProgressOrderListData;
   bool isNewOrdersSelected = true;
 
   OrderController({required this.orderRepo});
@@ -20,6 +24,12 @@ class OrderController extends GetxController implements GetxService {
     update();
     Response? response = await orderRepo.orderList();
     if (response != null && response.statusCode == 200) {
+      var jsonData = response.body;
+  if (jsonData['data'] != null && jsonData['data'] is List) {
+    openOrderListData = (jsonData['data'] as List)
+        .map((e) => OpenOrderData.fromJson(e))
+        .toList();
+  }
     } else {
       print('Invalid User');
     }
@@ -37,6 +47,12 @@ class OrderController extends GetxController implements GetxService {
     update();
     Response? response = await orderRepo.orderStatusList(orderStatus);
     if (response != null && response.statusCode == 200) {
+            var jsonData = response.body;
+  if (jsonData['data'] != null && jsonData['data'] is List) {
+    InProgressOrderListData = (jsonData['data'] as List)
+        .map((e) => InProgressOrderData.fromJson(e))
+        .toList();
+  }
     } else {
       print('Invalid User');
     }
@@ -75,21 +91,23 @@ class OrderController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> OrderCancelStatus() async {
+  Future<void> OrderCancelStatus({Map<String, dynamic>? body}) async {
     _isLoading = true;
     loaderController.showLoaderAfterBuild(_isLoading);
 
     update();
 
-    Map<String, dynamic> body = {
-      "cancel_reason": "Any",
-      "detail_id": "78",
-      "id_job_order_detail": "54",
-      "status": 6
-    };
+    // Map<String, dynamic> body = {
+    //   "cancel_reason": "Any",
+    //   "detail_id": "78",
+    //   "id_job_order_detail": "54",
+    //   "status": 6
+    // };
 
     Response? response = await orderRepo.orderUpdateStatus([body]);
     if (response != null && response.statusCode == 200) {
+       customSnackBar('Job Orders Status Updated successfully',isError: false);
+      getOrderStatusList("inprogress");
     } else {
       print('Invalid User');
     }
@@ -100,21 +118,23 @@ class OrderController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> OrderCompleteStatus() async {
+  Future<void> OrderCompleteStatus({Map<String, dynamic>? body}) async {
     _isLoading = true;
     loaderController.showLoaderAfterBuild(_isLoading);
 
     update();
 
-    Map<String, dynamic> body = {
-      "detail_id": "73",
-      "added_through": 2,
-      "id_job_order_detail": "19",
-      "status": 4 // 4 = Complete, 5 = Delivered
-    };
+    // Map<String, dynamic> body = {
+    //   "detail_id": "73",
+    //   "added_through": 2,
+    //   "id_job_order_detail": "19",
+    //   "status": 4 // 4 = Complete, 5 = Delivered
+    // };
 
     Response? response = await orderRepo.orderUpdateStatus([body]);
     if (response != null && response.statusCode == 200) {
+      customSnackBar('Job Orders Status Updated successfully',isError: false);
+      getOrderStatusList("inprogress");
     } else {
       print('Invalid User');
     }

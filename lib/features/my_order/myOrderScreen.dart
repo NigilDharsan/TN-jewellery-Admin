@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
+import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/myOrderWidgets.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/widgets/custom_app_bar.dart';
@@ -64,13 +65,14 @@ Widget buildOrderList(OrderController controller) {
             : Expanded(
                 child: controller.isNewOrdersSelected
                     ? ListView.separated(
-                        itemCount: 0,
+                        itemCount: controller.openOrderListData?.length ?? 0,
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
-                          return buildOrderCard();
+                         var orderListData = controller.openOrderListData?[index];
+                          return buildOrderCard(orderListData);
                         },
                       )
-                    : OrderStatusPage(),
+                    : OrderStatusPage(controller: controller,),
               ),
       ],
     ),
@@ -78,7 +80,8 @@ Widget buildOrderList(OrderController controller) {
 }
 
 class OrderStatusPage extends StatefulWidget {
-  const OrderStatusPage({super.key});
+  OrderController controller;
+   OrderStatusPage( {super.key, required this.controller});
 
   @override
   State<OrderStatusPage> createState() => _OrderStatusPageState();
@@ -126,10 +129,11 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
         ),
         Expanded(
           child: ListView.separated(
-            itemCount: orders.length,
+            itemCount: widget.controller?.InProgressOrderListData?.length ?? 0,
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
-              return orderDetailsStatus(orders[index]);
+              var InProgressData = widget.controller?.InProgressOrderListData?[index];
+              return orderDetailsStatus(InProgressData);
             },
           ),
         )
@@ -230,7 +234,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
     );
   }
 
-  Widget orderDetailsStatus(Map<String, String> order) {
+  Widget orderDetailsStatus([InProgressOrderData? inProgressData]) {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Column(
@@ -255,7 +259,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(order['shopName'] ?? '',
+                    Text(inProgressData?.customerName ?? "",
                         style: const TextStyle(
                             fontFamily: 'JosefinSans',
                             fontSize: 16,
@@ -266,18 +270,18 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${order['status']}',
+                          inProgressData?.productName ?? "",
                           style: TextStyle(
                               fontFamily: 'JosefinSans',
                               fontWeight: FontWeight.w500,
                               color: brandGreyColor),
                         ),
-                        Text(' ${order['gram']}',
+                        Text(' ${inProgressData?.netWt ?? ""}g',
                             style: TextStyle(
                                 fontFamily: 'JosefinSans',
                                 fontWeight: FontWeight.w500,
                                 color: brandGreyColor)),
-                        Text('${order['date']}',
+                        Text(inProgressData?.orderDate ?? "",
                             style: TextStyle(
                                 fontFamily: 'JosefinSans',
                                 fontWeight: FontWeight.w500,
@@ -300,7 +304,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
               ),
               HorizontalStatusStep(
                 label: 'In Progress',
-                completed: true,
+                completed: inProgressData?.orderStatusName == "Work in Progress"?true:false,
                 isFirst: false,
                 isLast: false,
               ),
@@ -327,6 +331,24 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                   setState(() {
                     selectedIndex = index;
                   });
+                  if(selectedIndex == 0){
+                   Get.find<OrderController>().OrderCancelStatus(body: {
+                       "cancel_reason": "Any",
+                        "detail_id": "${inProgressData?.detailId ?? 0}",
+                        "id_job_order_detail": "${inProgressData?.idJobOrderDetail ?? 0}",
+                         "status": 6
+                   }
+                   );
+                  }else{
+                       Get.find<OrderController>().OrderCompleteStatus(
+                    body: {
+                       "detail_id": "${inProgressData?.detailId ?? 0}",
+                       "added_through": 2,
+                       "id_job_order_detail": "${inProgressData?.idJobOrderDetail ?? 0}",
+                       "status": 4 // 4 = Complete, 5 = Delivered
+                     }
+                  );
+                  }
                 },
                 child: actionButton(
                   labels[index],
