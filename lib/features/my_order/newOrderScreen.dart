@@ -181,16 +181,9 @@ class _newOrderScreenState extends State<newOrderScreen> {
                     };
                     var status = await controller.orderAssign(body);
                     if (status) {
-                      Get.snackbar("Success", "Order Assigned Successfully",
-                          backgroundColor: Colors.green,
-                          colorText: Colors.white);
                       Navigator.pop(context);
                       Navigator.pop(context, true);
-                    } else {
-                      Get.snackbar(
-                          "Error", "Item Already Assigned this Karigar]",
-                          backgroundColor: Colors.red, colorText: Colors.white);
-                    }
+                    } else {}
 
                     // Add your onTap code here
                   },
