@@ -16,6 +16,10 @@ class OrderRepo {
     );
   }
 
+  Future<Response?> getSupplierRepo() async {
+    return await apiClient.getData(AppConstants.getSupplierUrl);
+  }
+
   Future<Response?> orderStatusList(String orderStatus) async {
     return await apiClient.postData(
       AppConstants.getOrderStatusListByIdUrl + orderStatus,

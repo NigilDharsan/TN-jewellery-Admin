@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/openOrderListModel.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
@@ -26,18 +27,17 @@ Widget buildTabButton(String title, bool isSelected, VoidCallback onPressed) {
   );
 }
 
-Widget buildOrderCard(OpenOrderData? orderListData) {
-  Map<String, String> order = {
-    "image": orderListData?.image ?? "",
-    "name": orderListData?.customerName ?? "",
-    "product": orderListData?.productName ?? "",
-    "gram": "${orderListData?.netWt}g",
-    "percentage": "${orderListData?.wastagePercent ?? 0}",
-    "status": orderListData?.orderStatusName ?? ""
-  };
+Widget buildOrderCard(
+    OrderController controller, OpenOrderData? orderListData) {
   return InkWell(
     onTap: () {
-      Get.toNamed(RouteHelper.orderdetailScreen);
+      controller.selectNewOrderListData = orderListData;
+      controller.update();
+      Get.toNamed(RouteHelper.orderdetailScreen)?.then((value) {
+        if (value == true) {
+          controller.getNewOrderList();
+        }
+      });
     },
     child: Column(
       children: [
@@ -46,7 +46,7 @@ Widget buildOrderCard(OpenOrderData? orderListData) {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                order["image"]!,
+                orderListData?.image ?? "",
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,
@@ -68,7 +68,7 @@ Widget buildOrderCard(OpenOrderData? orderListData) {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(order["name"] ?? "",
+                  Text(orderListData?.customerName ?? "",
                       style: const TextStyle(
                           fontFamily: 'JosefinSans',
                           fontWeight: FontWeight.bold,
@@ -77,34 +77,28 @@ Widget buildOrderCard(OpenOrderData? orderListData) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(order["product"] ?? ""),
-                      Text(order["gram"] ?? ""),
-                      Text(order["percentage"] ?? ""),
+                      Text(orderListData?.productName ?? ""),
+                      Text("${orderListData?.grossWt ?? ""}" + " g"),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(RouteHelper.neworderScreen);
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: brandGoldDarkColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          child: Text(
-                            order["status"] ?? "",
-                            style: const TextStyle(
-                              fontFamily: 'JosefinSans',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  Container(
+                    height: 40,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      color: brandGoldDarkColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: Text(
+                          "ASSIGN NOW",
+                          style: const TextStyle(
+                            fontFamily: 'JosefinSans',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),

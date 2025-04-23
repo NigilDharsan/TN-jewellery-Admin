@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
+import 'package:tn_jewellery_admin/features/my_order/model/SupplierListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/openOrderListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/repository/order_repo.dart';
 import 'package:tn_jewellery_admin/utils/Loader/loader_utils.dart';
@@ -11,8 +12,15 @@ class OrderController extends GetxController implements GetxService {
   bool _isLoading = false;
   bool hasMoreItems = true;
   bool get isLoading => _isLoading;
-  List<OpenOrderData>? openOrderListData;
-  List<InProgressOrderData>? InProgressOrderListData;
+
+  var selectedWorkStatus = "inprogress";
+
+  OpenOrderListModel? openOrderListModel;
+  OpenOrderData? selectNewOrderListData;
+
+  InProgressOrderListModel? inProgressOrderListModel;
+  SupplierListModel? supplierListModel;
+
   bool isNewOrdersSelected = true;
 
   OrderController({required this.orderRepo});
@@ -24,12 +32,24 @@ class OrderController extends GetxController implements GetxService {
     update();
     Response? response = await orderRepo.orderList();
     if (response != null && response.statusCode == 200) {
-      var jsonData = response.body;
-  if (jsonData['data'] != null && jsonData['data'] is List) {
-    openOrderListData = (jsonData['data'] as List)
-        .map((e) => OpenOrderData.fromJson(e))
-        .toList();
+      openOrderListModel = OpenOrderListModel.fromJson(response.body);
+    } else {
+      print('Invalid User');
+    }
+
+    _isLoading = false;
+    loaderController.showLoaderAfterBuild(_isLoading);
+
+    update();
   }
+
+  Future<void> getSupplierList() async {
+    _isLoading = true;
+    loaderController.showLoaderAfterBuild(_isLoading);
+
+    Response? response = await orderRepo.getSupplierRepo();
+    if (response != null && response.statusCode == 200) {
+      supplierListModel = SupplierListModel.fromJson(response.body);
     } else {
       print('Invalid User');
     }
@@ -47,12 +67,8 @@ class OrderController extends GetxController implements GetxService {
     update();
     Response? response = await orderRepo.orderStatusList(orderStatus);
     if (response != null && response.statusCode == 200) {
-            var jsonData = response.body;
-  if (jsonData['data'] != null && jsonData['data'] is List) {
-    InProgressOrderListData = (jsonData['data'] as List)
-        .map((e) => InProgressOrderData.fromJson(e))
-        .toList();
-  }
+      inProgressOrderListModel =
+          InProgressOrderListModel.fromJson(response.body);
     } else {
       print('Invalid User');
     }
@@ -63,32 +79,24 @@ class OrderController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> orderAssign() async {
+  Future<bool> orderAssign(Map<String, dynamic> body) async {
     _isLoading = true;
     loaderController.showLoaderAfterBuild(_isLoading);
 
     update();
 
-    Map<String, dynamic> body = {
-      "assigned_to": 1, //constant
-      "employee": null, //constant
-      "added_through": 2, //constant
-      "supplier": 1,
-      "order_detail_ids": [
-        {"detail_id": "73", "karigar_due_date": "2025-04-30", "remarks": "Hai"}
-      ]
-    };
-
     Response? response = await orderRepo.orderCreate(body);
-    if (response != null && response.statusCode == 200) {
-    } else {
-      print('Invalid User');
-    }
-
     _isLoading = false;
     loaderController.showLoaderAfterBuild(_isLoading);
 
     update();
+
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      print('Invalid User');
+      return false;
+    }
   }
 
   Future<void> OrderCancelStatus({Map<String, dynamic>? body}) async {
@@ -106,8 +114,7 @@ class OrderController extends GetxController implements GetxService {
 
     Response? response = await orderRepo.orderUpdateStatus([body]);
     if (response != null && response.statusCode == 200) {
-       customSnackBar('Job Orders Status Updated successfully',isError: false);
-      getOrderStatusList("inprogress");
+      customSnackBar('Job Orders Status Updated successfully', isError: false);
     } else {
       print('Invalid User');
     }
@@ -133,8 +140,7 @@ class OrderController extends GetxController implements GetxService {
 
     Response? response = await orderRepo.orderUpdateStatus([body]);
     if (response != null && response.statusCode == 200) {
-      customSnackBar('Job Orders Status Updated successfully',isError: false);
-      getOrderStatusList("inprogress");
+      customSnackBar('Job Orders Status Updated successfully', isError: false);
     } else {
       print('Invalid User');
     }

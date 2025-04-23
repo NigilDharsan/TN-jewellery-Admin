@@ -14,6 +14,8 @@ class AppConstants {
   static const String getOrderAssignUrl = 'orders/job_order/create/';
   static const String getOrderUpdatenUrl = 'orders/order/job_orders/update/';
 
+  static const String getSupplierUrl = 'retailmaster/supplier/?active';
+
   static const String isSupplier = 'is_supplier';
   static const String notificationChannel = 'channel_type';
   static const String theme = 'lms_theme';

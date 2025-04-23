@@ -66,8 +66,8 @@ class AuthController extends GetxController implements GetxService {
   dynamic countryDialCodeForSignup;
 
   ///textEditingController for signIn screen
-  var signInEmailController = TextEditingController();
-  var signInPasswordController = TextEditingController();
+  var signInEmailController = TextEditingController(text: "shiningdawn");
+  var signInPasswordController = TextEditingController(text: "wholesale@sds");
   dynamic countryDialCodeForSignIn;
 
   ///TextEditingController for forgot password
@@ -186,6 +186,9 @@ class AuthController extends GetxController implements GetxService {
 
     newPasswordControllerForChangePasswordScreen.text = '';
     confirmPasswordControllerForChangePasswordScreen.text = '';
+
+    signInEmailController.text = "shiningdawn";
+    signInPasswordController.text = "wholesale@sds";
 
     // getUCOGetInfo();
     // getUserProfile(false);

@@ -1,14 +1,14 @@
 class OpenOrderListModel {
-  List<OpenOrderData>? openOrderListData;
+  List<OpenOrderData>? data;
   String? message;
 
-  OpenOrderListModel({this.openOrderListData, this.message});
+  OpenOrderListModel({this.data, this.message});
 
   OpenOrderListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      openOrderListData = <OpenOrderData>[];
+      data = <OpenOrderData>[];
       json['data'].forEach((v) {
-        openOrderListData!.add(new OpenOrderData.fromJson(v));
+        data!.add(new OpenOrderData.fromJson(v));
       });
     }
     message = json['message'];
@@ -16,8 +16,8 @@ class OpenOrderListModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.openOrderListData != null) {
-      data['data'] = this.openOrderListData!.map((v) => v.toJson()).toList();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     data['message'] = this.message;
     return data;
@@ -79,7 +79,7 @@ class OpenOrderData {
   int? order;
   int? purity;
   int? uom;
-  Null? erpTag;
+  int? erpTag;
   int? product;
   int? design;
   Null? subDesign;

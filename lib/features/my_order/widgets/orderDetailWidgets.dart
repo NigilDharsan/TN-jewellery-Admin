@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
+import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 
 Widget buildSelectButton() {
   return Center(
@@ -11,7 +14,9 @@ Widget buildSelectButton() {
           side: const BorderSide(color: buttonTextColor),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Get.toNamed(RouteHelper.neworderScreen);
+        },
         child: const Text('SELECT KARIKAR',
             style: TextStyle(
                 fontFamily: 'JosefinSans',
@@ -23,7 +28,7 @@ Widget buildSelectButton() {
   );
 }
 
-Widget buildChangeStatus() {
+Widget buildChangeStatus(OrderController controller) {
   return Center(
     child: SizedBox(
       width: 235,
@@ -33,7 +38,17 @@ Widget buildChangeStatus() {
           backgroundColor: brandGoldColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        onPressed: () async {},
+        onPressed: () async {
+          var body = {
+            "cancel_reason": "Any",
+            "detail_id": "${controller.selectNewOrderListData?.detailId ?? 0}",
+            "id_job_order_detail": "",
+            "status": 6
+          };
+
+          controller.OrderCancelStatus(body: body);
+          // Get.toNamed(RouteHelper.neworderScreen);
+        },
         child: const Text('CHANGE STATUS',
             style: TextStyle(
                 fontFamily: 'JosefinSans',
@@ -44,4 +59,3 @@ Widget buildChangeStatus() {
     ),
   );
 }
-
