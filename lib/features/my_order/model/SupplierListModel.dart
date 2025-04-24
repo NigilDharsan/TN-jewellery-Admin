@@ -1,13 +1,13 @@
 class SupplierListModel {
-  List<Data>? data;
+  List<SupplierListData>? data;
 
   SupplierListModel({this.data});
 
   SupplierListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <SupplierListData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new SupplierListData.fromJson(v));
       });
     }
   }
@@ -21,7 +21,7 @@ class SupplierListModel {
   }
 }
 
-class Data {
+class SupplierListData {
   int? idSupplier;
   int? isVendor;
   String? shortCode;
@@ -50,7 +50,7 @@ class Data {
   int? createdBy;
   Null? updatedBy;
 
-  Data({
+  SupplierListData({
     this.idSupplier,
     this.isVendor,
     this.shortCode,
@@ -80,7 +80,7 @@ class Data {
     this.updatedBy,
   });
 
-  Data.fromJson(Map<String, dynamic> json) {
+  SupplierListData.fromJson(Map<String, dynamic> json) {
     idSupplier = json['id_supplier'];
     isVendor = json['is_vendor'];
     shortCode = json['short_code'];

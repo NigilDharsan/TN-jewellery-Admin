@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
+import 'package:tn_jewellery_admin/features/my_order/model/SupplierListModel.dart' show SupplierListData, SupplierListModel;
 import 'package:tn_jewellery_admin/utils/colors.dart';
+import 'package:tn_jewellery_admin/utils/widgets/custom_text_field.dart' show TextFieldDatePicker;
 
 class newOrderScreen extends StatefulWidget {
   const newOrderScreen({super.key});
@@ -50,41 +53,51 @@ class _newOrderScreenState extends State<newOrderScreen> {
                         fontSize: 15,
                         fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: secondaryColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                "VIKAS JOB WORK",
-                                style: TextStyle(
-                                    fontFamily: 'JosefinSans',
-                                    color: brandGoldColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18),
-                              ),
-                              SizedBox(width: 8),
-                              Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.black,
-                                size: 30,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                      Expanded(
+               child: Container(
+                width: MediaQuery.sizeOf(context).width,
+                decoration: BoxDecoration(
+              color: secondaryColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: DropdownButtonHideUnderline(
+  child: DropdownButton<int>(
+    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8, right: 2.0),
+    value: controller.SupplierId, // Now comparing by id
+    icon: const Icon(
+      Icons.keyboard_arrow_down,
+      color: Colors.black,
+      size: 30,
+    ),
+    dropdownColor: secondaryColor,
+    style: const TextStyle(
+      fontFamily: 'JosefinSans',
+      color: brandGoldColor,
+      fontWeight: FontWeight.w700,
+      fontSize: 18,
+    ),
+    items: controller.supplierListModel?.data?.map((SupplierListData supplier) {
+      return DropdownMenuItem<int>(
+        value: supplier.idSupplier,
+        child: Text(supplier.supplierName ?? "Select Supplier"),
+      );
+    }).toList(),
+    onChanged: (int? newId) {
+      setState(() {
+        controller.SupplierId = newId;
+        controller.selectedSupplier = controller.supplierListModel?.data
+            ?.firstWhere((s) => s.idSupplier == newId);
+      });
+    },
+  ),
+),
+
+        
+            ),
+          ),
+        ),
                 SizedBox(height: 30),
                 Text("Required Delivery Date",
                     style: TextStyle(
@@ -93,41 +106,36 @@ class _newOrderScreenState extends State<newOrderScreen> {
                         fontSize: 15,
                         fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: secondaryColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                "12/12/2025",
-                                style: TextStyle(
-                                    fontFamily: 'JosefinSans',
-                                    color: brandGoldColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18),
-                              ),
-                              SizedBox(width: 8),
-                              Icon(
-                                Icons.calendar_today,
-                                color: Colors.black,
-                                size: 30,
-                              ),
-                            ],
+                           TextFieldDatePicker(
+                            Controller: controller.selectDeliveryDate,
+                            onChanged: null,
+                            hintText: 'dd/MM/yyyy',
+                            onTap: () async {
+                              FocusScope.of(context).unfocus();
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2050),
+                              );
+                              if (pickedDate != null) {
+                                String formattedDate =
+                                    DateFormat("yyyy-MM-dd").format(pickedDate);
+                                if (mounted) {
+                                  setState(() {
+                                    controller.selectDeliveryDate.text = formattedDate;
+                                  });
+                                }
+                        
+                              }
+                            },
+                            validating: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please select Date of Birth';
+                              } 
+                            }, isDownArrow: true,
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            
                 SizedBox(height: 30),
                 Text("Your comments",
                     style: TextStyle(
@@ -146,6 +154,7 @@ class _newOrderScreenState extends State<newOrderScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       maxLines: 5,
+                      controller: controller.comment,
                       decoration: InputDecoration(
                         hintText:
                             "Some Text describing the changes the cusopmer looking for the retailer",
@@ -169,13 +178,13 @@ class _newOrderScreenState extends State<newOrderScreen> {
                       "assigned_to": 1, //constant
                       "employee": null, //constant
                       "added_through": 2, //constant
-                      "supplier": 1,
+                      "supplier": controller.SupplierId,
                       "order_detail_ids": [
                         {
                           "detail_id":
                               controller.selectNewOrderListData?.detailId ?? 0,
-                          "karigar_due_date": "2025-04-30",
-                          "remarks": "Hai"
+                          "karigar_due_date": controller.selectDeliveryDate.text,
+                          "remarks": controller.comment.text
                         }
                       ]
                     };

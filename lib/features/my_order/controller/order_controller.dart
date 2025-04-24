@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/SupplierListModel.dart';
@@ -15,11 +16,17 @@ class OrderController extends GetxController implements GetxService {
 
   var selectedWorkStatus = "inprogress";
 
+
   OpenOrderListModel? openOrderListModel;
   OpenOrderData? selectNewOrderListData;
 
+
   InProgressOrderListModel? inProgressOrderListModel;
   SupplierListModel? supplierListModel;
+  SupplierListData? selectedSupplier;
+  TextEditingController selectDeliveryDate = TextEditingController();
+  TextEditingController comment = TextEditingController();
+  int? SupplierId;
 
   bool isNewOrdersSelected = true;
 
@@ -92,6 +99,10 @@ class OrderController extends GetxController implements GetxService {
     update();
 
     if (response != null && response.statusCode == 200) {
+      selectDeliveryDate.clear();
+      selectedSupplier = null;
+      SupplierId = null;
+      comment.clear();
       return true;
     } else {
       print('Invalid User');

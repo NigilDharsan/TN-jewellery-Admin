@@ -174,597 +174,64 @@ class CustomTextFieldState extends State<CustomTextField> {
   }
 }
 
-//MARK LOCATION FIELD
-Widget Mark_Location_Field(
+//TEXTFIELD DATE PICKER
+Widget TextFieldDatePicker(
     {TextEditingController? Controller,
     String? Function(String?)? validating,
-    bool? isEnabled,
     void Function(String)? onChanged,
     required String hintText,
-    List<TextInputFormatter>? inputFormatters,
-    required TextInputType keyboardtype,
-    FocusNode? focusNode}) {
-  return Container(
-    // height: 50,
-    child: TextFormField(
-      enabled: isEnabled,
-      focusNode: focusNode,
-      maxLength: 20,
-      controller: Controller,
-      textCapitalization: TextCapitalization.none,
-      inputFormatters: inputFormatters,
-      validator: validating,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        hintText: hintText,
-        hintStyle: Mark_Hint_Style,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: textfieldFillColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: textfieldFillColor),
-        ),
-        fillColor: textfieldFillColor,
-        filled: true,
-        counterText: '',
-      ),
-      onChanged: onChanged,
-      textInputAction: TextInputAction.next,
-      style: Textfield_Style,
-      keyboardType: keyboardtype,
-    ),
-  );
-}
-
-//COMMON TEXTFORM FIELD
-Widget Common_TextForm_Field(
-  context, {
-  TextEditingController? Controller,
-  String? Function(String?)? validating,
-  bool? isEnabled,
-  void Function(String)? onChanged,
-  required String hintText,
-  List<TextInputFormatter>? inputFormatters,
-  required TextInputType keyboardtype,
-  void Function()? onTapVerify,
-  FocusNode? focusNode,
-  required bool? isVerifyNeeded,
-  bool? isDataVerified,
-}) {
-  return Container(
-    child: TextFormField(
-      enabled: isEnabled,
-      focusNode: focusNode,
-      controller: Controller,
-      textCapitalization: TextCapitalization.none,
-      inputFormatters: inputFormatters,
-      validator: validating,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        hintText: hintText,
-        hintStyle: Mark_Hint_Style,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide(color: textfieldFillDisabledColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide(color: textfieldFillDisabledColor),
-        ),
-        fillColor: textfieldFillColor,
-        filled: true,
-        suffixIcon: isVerifyNeeded == true
-            ? GestureDetector(
-                onTap: onTapVerify,
-                child: Container(
-                  width: 50,
-                  height: 20,
-                  margin: EdgeInsets.only(right: 5.0),
-                  alignment: Alignment.centerRight,
-                  child: isDataVerified == true
-                      ? Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                      : Text(
-                          'verify'.tr,
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: buttonTextColor,
-                          ),
-                        ),
-                ),
-              )
-            : Container(
-                width: 50,
-                height: 20,
-                margin: EdgeInsets.only(right: 5.0),
-                alignment: Alignment.centerRight,
-                child: isDataVerified == true
-                    ? Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      )
-                    : null,
-              ),
-      ),
-      onChanged: onChanged,
-      textInputAction: TextInputAction.next,
-      style: Textfield_Style,
-      keyboardType: keyboardtype,
-    ),
-  );
-}
-
-//TEXTFORMFIELD  WITH ICON
-
-Widget Textfield_Icon(context,
-    {required TextEditingController? controller, required IconData? icon}) {
-  return Container(
-    height: 50,
-    decoration: BoxDecoration(
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.3), // Shadow color with opacity
-          spreadRadius: 2.0, // The amount the shadow spreads
-          blurRadius: 2.0, // The blur radius of the shadow
-          offset: Offset(0, 2), // The position of the shadow
-        ),
-      ],
-      border: Border.all(
-        color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.2),
-      ),
-      borderRadius:
-          const BorderRadius.all(Radius.circular(Dimensions.paddingSizeSmall)),
-    ),
-    child: CustomTextField(
-      // hintText: 'first_name'.tr,
-      borderRadius: Dimensions.paddingSizeSmall,
-      controller: controller,
-      prefixIcon: Padding(
-        padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: Dimensions.paddingSizeDefault,
-            top: Dimensions.paddingSizeDefault,
-            bottom: Dimensions.paddingSizeDefault,
-          ),
-          child: Icon(icon),
-        ),
-      ),
-    ),
-  );
-}
-
-//TEXTFORMFIELD WITH IMAGE
-Widget Textfield_Img(
-  BuildContext context, {
-  TextEditingController? Controller,
-  String? Function(String?)? validating,
-  bool? isEnabled,
-  void Function(String)? onChanged,
-  required String hintText,
-  List<TextInputFormatter>? inputFormatters,
-  required TextInputType keyboardtype,
-  void Function()? onTapVerify,
-  FocusNode? focusNode,
-  String? textFieldImg,
-  bool? isSvg,
-  bool? isIcon,
-  IconData? icon,
-  required bool? isVerifyNeeded,
-  bool? isDataVerified,
-  bool hasError = false, // Flag to track error state
-}) {
-  return Container(
-    child: StatefulBuilder(builder: (context, setState) {
-      return TextFormField(
-        enabled: isEnabled,
-        focusNode: focusNode,
-        controller: Controller,
-        textCapitalization: TextCapitalization.none,
-        inputFormatters: inputFormatters,
-        validator: (value) {
-          if (validating != null) {
-            return validating(value);
-          } else if (value == "") {
-            hasError = true; // No error, reset flag
-          }
-
-          return null;
-        },
-        autovalidateMode: AutovalidateMode
-            .onUserInteraction, // Re-validate on user interaction
-        decoration: InputDecoration(
-          errorText:
-              null, // Set errorText to an empty string to hide the message
-
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-          hintText: hintText,
-          hintStyle: ubuntuRegular.copyWith(
-            fontSize: Dimensions.fontSizeDefault,
-            color: Theme.of(context)
-                .hintColor
-                .withOpacity(Get.isDarkMode ? .5 : 1),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color: hasError ? Colors.red : textfieldFillDisabledColor),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color: hasError ? Colors.red : textfieldFillDisabledColor),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color: hasError ? Colors.red : textfieldFillDisabledColor),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color: Colors.red), // Red border when there's an error
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color: Colors.red), // Red border when there's an error
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color:
-                    textfieldFillDisabledColor), // Normal border when focused
-          ),
-          fillColor: (isEnabled == null || isEnabled == true)
-              ? textfieldFillColor
-              : textfieldFillDisabledColor,
-          filled: true,
-          prefixIcon: isIcon == true
-              ? Icon(icon)
-              : Padding(
-                  padding: const EdgeInsets.only(
-                    left: Dimensions.paddingSizeMint,
-                    top: Dimensions.paddingSizeDefault,
-                    bottom: Dimensions.paddingSizeDefault,
-                  ),
-                  child: isSvg == true
-                      ? SvgPicture.asset(
-                          textFieldImg ?? "",
-                          color: Colors.black,
-                        )
-                      : Container(
-                          height: 10,
-                          width: 10,
-                          child: Image.asset(
-                            textFieldImg ?? "",
-                          ),
-                        ),
-                ),
-          suffixIcon: isVerifyNeeded == true
-              ? GestureDetector(
-                  onTap: onTapVerify,
-                  child: Container(
-                    width: 50,
-                    height: 20,
-                    margin: EdgeInsets.only(right: 5.0),
-                    alignment: Alignment.centerRight,
-                    child: isDataVerified == true
-                        ? Icon(
-                            Icons.check,
-                            color: Colors.green,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Text(
-                              'verify'.tr,
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                  ),
-                )
-              : null,
-        ),
-
-        onChanged: (value) {
-          // Trigger validation and UI changes when typing
-          if (onChanged != null) onChanged(value);
-          setState(() {}); // Refresh to update the border color when typing
-        },
-        textInputAction: TextInputAction.next,
-        style: Textfield_Style,
-        keyboardType: keyboardtype,
-      );
-    }),
-  );
-}
-
-//POP UP FIELD
-Widget POP_up_TextField(
-  BuildContext context, {
-  TextEditingController? Controller,
-  String? Function(String?)? validating,
-  bool? isEnabled,
-  void Function(String)? onChanged,
-  required String hintText,
-  List<TextInputFormatter>? inputFormatters,
-  required TextInputType keyboardtype,
-  FocusNode? focusNode,
-}) {
-  return Container(
-    height: 25,
-    child: StatefulBuilder(builder: (context, setState) {
-      return TextFormField(
-        enabled: isEnabled,
-        focusNode: focusNode,
-        controller: Controller,
-        textCapitalization: TextCapitalization.none,
-        inputFormatters: inputFormatters,
-        validator: (value) {
-          if (validating != null) {
-            return validating(value);
-          }
-          return null;
-        },
-        autovalidateMode: AutovalidateMode
-            .onUserInteraction, // Re-validate on user interaction
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-          hintText: hintText,
-          hintStyle: Mark_Hint_Style,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: Color.fromRGBO(226, 219, 201, 1)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: Color.fromRGBO(226, 219, 201, 1)),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(
-                color: Colors.red), // Red border when there's an error
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(
-                color: Colors.red), // Red border when focused on error
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(
-                color: Color.fromRGBO(
-                    226, 219, 201, 1)), // Normal border when focused
-          ),
-          fillColor: Color.fromRGBO(226, 219, 201, 1),
-          filled: true,
-        ),
-        onChanged: (value) {
-          // Trigger validation and UI changes when typing
-          if (onChanged != null) onChanged(value);
-          setState(() {}); // Refresh to update the border color when typing
-        },
-        textInputAction: TextInputAction.next,
-        style: Textfield_Style2,
-        keyboardType: keyboardtype,
-      );
-    }),
-  );
-}
-
-//PASSWORD TEXTFORMFIELD
-Widget textFieldPassword(
-    {TextEditingController? Controller,
-    String? Function(String?)? validating,
-    void Function(String)? onChanged,
-    required bool obscure,
-    required void Function()? onPressed,
+    required bool isDownArrow,
     FocusNode? focusNode,
-    required TextInputType keyboardtype}) {
-  return Container(
-    // height: 50,
-    child: TextFormField(
-      controller: Controller,
-      obscureText: obscure,
-      validator: validating,
-      focusNode: focusNode,
-      textCapitalization: TextCapitalization.words,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-        ),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: textfieldFillDisabledColor),
-            borderRadius: BorderRadius.circular(25)),
-        prefixIcon: Padding(
-            padding: const EdgeInsets.only(
-              left: Dimensions.paddingSizeMint,
-            ),
-            child: Image.asset(
-              Images.keyPng,
-            )),
-        suffixIcon: IconButton(
-          icon: Icon(
-            obscure ? Icons.visibility_off : Icons.visibility,
-            color: Colors.grey.shade800,
-          ),
-          onPressed: onPressed,
-        ),
-        fillColor: textfieldFillColor,
-        filled: true,
+    void Function()? onTap}) {
+  return TextFormField(
+    controller: Controller,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    onTap: onTap,
+    readOnly: true,
+    focusNode: focusNode,
+    keyboardType: TextInputType.number,
+    maxLength: 15,
+    decoration: InputDecoration(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.white),
       ),
-      onChanged: onChanged,
-      textInputAction: TextInputAction.next,
-      keyboardType: keyboardtype,
-      style: Textfield_Style,
-    ),
-  );
-}
-
-//SIGN IN TEXTFORM FIELD
-Widget SignIn_TextForm_Field(
-  context, {
-  TextEditingController? Controller,
-  String? Function(String?)? validating,
-  bool? isEnabled,
-  void Function(String)? onChanged,
-  required String hintText,
-  List<TextInputFormatter>? inputFormatters,
-  required TextInputType keyboardtype,
-  FocusNode? focusNode,
-  String? textFieldImg,
-}) {
-  return Container(
-    child: StatefulBuilder(builder: (context, setState) {
-      return TextFormField(
-        enabled: isEnabled,
-        focusNode: focusNode,
-        controller: Controller,
-        textCapitalization: TextCapitalization.none,
-        inputFormatters: inputFormatters,
-        validator: (value) {
-          if (validating != null) {
-            return validating(value);
-          }
-          return null;
-        },
-        autovalidateMode: AutovalidateMode
-            .onUserInteraction, // Re-validate on user interaction
-        decoration: InputDecoration(
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-          hintText: hintText,
-          hintStyle: ubuntuRegular.copyWith(
-            fontSize: Dimensions.fontSizeDefault,
-            color: buttonColor.withOpacity(0.5),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(color: Colors.grey.shade200),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(color: Colors.grey.shade200),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color: Colors.red), // Red border when there's an error
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color: Colors.red), // Red border when focused on error
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide(
-                color: Colors.grey.shade200), // Normal border when focused
-          ),
-          fillColor: textfieldFillColor,
-          filled: true,
-          prefixIcon: Padding(
-            padding:
-                const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: Dimensions.paddingSizeDefault,
-                // top: 2.0,
-                // bottom: 2.0,
-              ),
-              child: SvgPicture.asset(
-                textFieldImg ?? "",
-                color: buttonColor.withOpacity(0.5),
-              ),
-            ),
-          ),
-        ),
-        onChanged: (value) {
-          // Trigger validation and UI changes when typing
-          if (onChanged != null) onChanged(value);
-          setState(() {}); // Refresh to update the border color when typing
-        },
-        textInputAction: TextInputAction.next,
-        style: Textfield_Style,
-        keyboardType: keyboardtype,
-      );
-    }),
-  );
-}
-
-Widget signInPassword(context,
-    {TextEditingController? Controller,
-    String? Function(String?)? validating,
-    void Function(String)? onChanged,
-    required bool obscure,
-    required void Function()? onPressed,
-    required String hintText,
-    FocusNode? focusNode,
-    required TextInputType keyboardtype}) {
-  return Container(
-    // height: 50,
-    child: TextFormField(
-      controller: Controller,
-      obscureText: obscure,
-      validator: validating,
-      focusNode: focusNode,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        hintText: hintText,
-        hintStyle: ubuntuRegular.copyWith(
-          fontSize: Dimensions.fontSizeDefault,
-          color: buttonColor.withOpacity(0.5),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-        ),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade200),
-            borderRadius: BorderRadius.circular(25)),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: Dimensions.paddingSizeDefault,
-              top: Dimensions.paddingSizeSmall,
-              bottom: Dimensions.paddingSizeSmall,
-            ),
-            child: Icon(
-              Icons.key,
-              color: buttonColor.withOpacity(0.5),
-            ),
-          ),
-        ),
-        suffixIcon: IconButton(
-          icon: Icon(
-            obscure ? Icons.visibility_off : Icons.visibility,
-            color: buttonColor.withOpacity(0.5),
-          ),
-          onPressed: onPressed,
-        ),
-        fillColor: textfieldFillColor,
-        filled: true,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.white),
       ),
-      onChanged: onChanged,
-      textInputAction: TextInputAction.next,
-      keyboardType: keyboardtype,
-      style: Textfield_Style,
+      counterText: "",
+      hintText: hintText,
+      helperStyle: TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    color: Color.fromRGBO(140, 140, 140, 1),
+    fontWeight: FontWeight.w400),
+      suffixIcon: Icon(
+        Icons.calendar_today_outlined,
+        color: Colors.black,
+        size: 25,
+      ),
+    
+      hintStyle: TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    color: Color.fromRGBO(140, 140, 140, 1),
+    fontWeight: FontWeight.w400),
+      errorMaxLines: 3,
+     contentPadding:
+          const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8, right: 2.0),
+      fillColor: Colors.white,
+      filled: true,
     ),
+    validator: validating,
+    onChanged: onChanged,
+    textInputAction: TextInputAction.next,
+    style: const TextStyle(
+                    fontFamily: 'JosefinSans',
+                    color: brandGoldColor,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
   );
 }
