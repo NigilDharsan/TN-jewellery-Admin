@@ -11,6 +11,8 @@ class CustomerNameList extends StatefulWidget {
 }
 
 class _CustomerNameListState extends State<CustomerNameList> {
+
+
   @override
   void initState() {
     super.initState();
@@ -19,15 +21,16 @@ class _CustomerNameListState extends State<CustomerNameList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: GetBuilder<DashboardController>(
-      initState: (state) => Get.find<DashboardController>().getCustomerList(),
-      autoRemove: false,
-      builder: (controller) {
-        return controller.isLoading
-            ? Container()
-            : buildCustomerDetail(controller);
-      },
-    ));
+      body: GetBuilder<DashboardController>(
+        initState: (state) => Get.find<DashboardController>().getCustomerList(),
+        autoRemove: false,
+        builder: (controller) {
+          return controller.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : buildCustomerDetail(controller);
+        },
+      ),
+    );
   }
 
   Widget buildCustomerDetail(DashboardController controller) {
@@ -43,22 +46,24 @@ class _CustomerNameListState extends State<CustomerNameList> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.customerModel?.data?.length ?? 0,
               itemBuilder: (context, index) {
+                final customer = controller.customerModel!.data![index];
                 return Column(
                   children: [
                     Row(
                       children: [
                         Checkbox(
-                          value: false,
+                          value: controller.selectedCustomers[customer.pkId] ?? false,
                           onChanged: (bool? newValue) {
-                            // you probably want to manage selection here
+                            setState(() {
+                              controller.selectedCustomers[customer.pkId!] = newValue!;
+                            });
                           },
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              controller.customerModel!.data![index].name
-                                  .toString(),
+                              customer.name ?? '',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -67,8 +72,7 @@ class _CustomerNameListState extends State<CustomerNameList> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              controller.customerModel!.data![index].mobile
-                                  .toString(),
+                              customer.mobile ?? '',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -88,14 +92,42 @@ class _CustomerNameListState extends State<CustomerNameList> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _optionButton('Approved'),
-                _optionButton('Reject'),
+                InkWell(
+                  onTap: () {
+                    _submitCustomerStatus(controller, 2); 
+                  },
+                  child: _optionButton('Approved'),
+                ),
+                InkWell(
+                  onTap: () {
+                    _submitCustomerStatus(controller, 3); 
+                  },
+                  child: _optionButton('Reject'),
+                ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _submitCustomerStatus(DashboardController controller, int status) {
+    final List<Map<String, dynamic>> selectedIds = controller.selectedCustomers.entries
+        .where((entry) => entry.value == true)
+        .map((entry) => {"pk_id": entry.key})
+        .toList();
+
+    if (selectedIds.isEmpty) {
+      Get.snackbar("No Selection", "Please select at least one customer.");
+      return;
+    }
+
+    controller.postCustomerStatus({
+      "approved_through": 2,
+      "approved_status": status,
+      "approve_ids": selectedIds,
+    });
   }
 
   Widget _optionButton(String text) {

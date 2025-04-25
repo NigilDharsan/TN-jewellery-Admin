@@ -17,4 +17,10 @@ class DashboardRepo {
     return await apiClient
         .getData(AppConstants.getCustomerUrl + "?type=1&&added_through=2");
   }
+
+    Future<Response?> postCustomerStatusRepo(Map<String,dynamic> body) async {
+    return await apiClient
+        .postData(AppConstants.getCustomerUrl,body);
+  }
+  
 }
