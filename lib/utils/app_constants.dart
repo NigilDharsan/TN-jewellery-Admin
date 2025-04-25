@@ -6,7 +6,9 @@ class AppConstants {
   static const String socialLoginUrl = 'social-login';
 
   static const String getEmpLoginUrl = 'employee/emp_login/';
-  static const String getProfile = 'get_profile';
+
+  static const String getDashboardUrl = 'dashboard/admin_app_dashboard/';
+  static const String getCustomerUrl = 'customersettings/customer_approval/';
 
   static const String getNewOrderListUrl = 'orders/open_orders/list/';
   static const String getOrderStatusListByIdUrl =

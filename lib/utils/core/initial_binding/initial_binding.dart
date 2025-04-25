@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_controller.dart';
+import 'package:tn_jewellery_admin/features/dashboard/repository/dashboard_repo.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/repository/order_repo.dart';
 import 'package:tn_jewellery_admin/features/splash/controller/splash_controller.dart';
@@ -34,6 +36,11 @@ class InitialBinding extends Bindings {
     Get.lazyPut(() => OrderController(
         orderRepo:
             OrderRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
+
+    Get.lazyPut(() => DashboardController(
+        dashboardRepo: DashboardRepo(
+            sharedPreferences: Get.find(), apiClient: Get.find())));
+
     // Get.lazyPut(() => SignalRServices());
     // Get.lazyPut(() => StatusController());
     // Get.lazyPut(() => InAppCallController(

@@ -1,14 +1,14 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/customers/CustomerApprovals.dart';
 import 'package:tn_jewellery_admin/features/dashboard/dashboard.dart';
 import 'package:tn_jewellery_admin/features/my_order/myOrderScreen.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
-import '../../utils/dimensions.dart';
-import '../../utils/images.dart';
-import '../../utils/styles.dart';
 
+import '../../utils/dimensions.dart';
+import '../../utils/styles.dart';
 
 class MainScreen extends StatefulWidget {
   final int pageIndex;
@@ -32,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
 
     _screens = [
       dashboardScreen(),
-      myOrderScreen(),
+      CustomerNameList(),
       myOrderScreen(),
       myOrderScreen(),
     ];
@@ -110,15 +110,20 @@ class _MainScreenState extends State<MainScreen> {
                 width: 105,
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 decoration: BoxDecoration(
-                  color:brandGreySoftColor,
+                  color: brandGreySoftColor,
                   borderRadius: BorderRadius.circular(0),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    Icon(Icons.currency_rupee, color: Colors.black),
+                    Icon(Icons.home, color: Colors.black),
                     SizedBox(height: 4),
-                    Text('Cash', style: TextStyle(fontFamily: 'JosefinSans',fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold)),
+                    Text('Home',
+                        style: TextStyle(
+                            fontFamily: 'JosefinSans',
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -131,14 +136,18 @@ class _MainScreenState extends State<MainScreen> {
                 decoration: BoxDecoration(
                   color: brandGreySoftColor,
                   borderRadius: BorderRadius.circular(0),
-
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
                     Icon(Icons.verified, color: Colors.black),
                     SizedBox(height: 4),
-                    Text('Approval', style: TextStyle(fontFamily: 'JosefinSans',fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold)),
+                    Text('Customers',
+                        style: TextStyle(
+                            fontFamily: 'JosefinSans',
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -155,9 +164,14 @@ class _MainScreenState extends State<MainScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    Icon(Icons.inventory, color: Colors.black),
+                    Icon(Icons.shopping_cart, color: Colors.black),
                     SizedBox(height: 4),
-                    Text('Stock', style: TextStyle(fontFamily: 'JosefinSans',fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold)),
+                    Text('Orders',
+                        style: TextStyle(
+                            fontFamily: 'JosefinSans',
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -174,9 +188,14 @@ class _MainScreenState extends State<MainScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    Icon(Icons.shopping_cart, color: Colors.black),
+                    Icon(Icons.image, color: Colors.black),
                     SizedBox(height: 4),
-                    Text('Orders', style: TextStyle(fontFamily: 'JosefinSans',fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold)),
+                    Text('Images',
+                        style: TextStyle(
+                            fontFamily: 'JosefinSans',
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -187,5 +206,4 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-
 }

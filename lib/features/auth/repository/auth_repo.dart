@@ -42,10 +42,6 @@ class AuthRepo {
     );
   }
 
-  Future<Response?> getProfile() async {
-    return await apiClient.getData(AppConstants.getProfile);
-  }
-
   Future<void> saveUserNumberAndEmail(String number, String email) async {
     try {
       await sharedPreferences.setString(AppConstants.userEmail, email);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
+import 'package:tn_jewellery_admin/features/my_order/widgets/StepIndicator.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/myOrderWidgets.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/widgets/custom_app_bar.dart';
@@ -91,7 +92,6 @@ class OrderStatusPage extends StatefulWidget {
 
 class _OrderStatusPageState extends State<OrderStatusPage> {
   int selectedIndex = 0; // Default selected button
-  int currentStep = 1;
 
   List<String> labels = ['CANCEL ORDER', 'COMPLETE STATUS'];
   List<Color> borderColors = [brandGoldColor, brandGoldColor];
@@ -153,11 +153,15 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                       controller.update();
 
                       if (controller.selectedWorkStatus == "inprogress") {
+                        controller.currentStep = 2;
                         controller.getOrderStatusList("inprogress");
                       } else if (controller.selectedWorkStatus ==
                           "delivery_ready") {
+                        controller.currentStep = 3;
+
                         controller.getOrderStatusList("delivery_ready");
                       } else if (controller.selectedWorkStatus == "delivered") {
+                        controller.currentStep = 4;
                         controller.getOrderStatusList("delivered");
                       }
                     }),
@@ -210,7 +214,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
             itemCount: controller.inProgressOrderListModel?.data?.length ?? 0,
             separatorBuilder: (c, _) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
-              return orderDetailsStatus(
+              return orderDetailsStatus(controller,
                   controller.inProgressOrderListModel?.data![index]);
             },
           ),
@@ -219,7 +223,8 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
     );
   }
 
-  Widget orderDetailsStatus(InProgressOrderData? inProgressOrderData) {
+  Widget orderDetailsStatus(
+      OrderController controller, InProgressOrderData? inProgressOrderData) {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Column(
@@ -280,10 +285,10 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
             ],
           ),
           const SizedBox(height: 10),
-          // Padding(
-          //   padding: const EdgeInsets.all(16.0),
-          //   child: StepIndicator(currentStep: currentStep),
-          // ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: StepIndicator(currentStep: controller.currentStep),
+          ),
           const SizedBox(height: 10),
           inProgressOrderData?.orderStatus == 4
               ? Center(

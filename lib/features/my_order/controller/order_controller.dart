@@ -15,11 +15,10 @@ class OrderController extends GetxController implements GetxService {
   bool get isLoading => _isLoading;
 
   var selectedWorkStatus = "inprogress";
-
+  var currentStep = 2;
 
   OpenOrderListModel? openOrderListModel;
   OpenOrderData? selectNewOrderListData;
-
 
   InProgressOrderListModel? inProgressOrderListModel;
   SupplierListModel? supplierListModel;
