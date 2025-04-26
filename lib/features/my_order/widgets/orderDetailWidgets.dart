@@ -43,11 +43,11 @@ Widget buildChangeStatus(OrderController controller) {
             "cancel_reason": "Any",
             "detail_id": "${controller.selectNewOrderListData?.detailId ?? 0}",
             "id_job_order_detail": "",
-            "status": 6
+            "status": 7
           };
 
-          controller.OrderCancelStatus(body: body);
-          // Get.toNamed(RouteHelper.neworderScreen);
+          await controller.OrderCancelStatus(body: body);
+          Navigator.pop(Get.context!, true);
         },
         child: const Text('CHANGE STATUS',
             style: TextStyle(

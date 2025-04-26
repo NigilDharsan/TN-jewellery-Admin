@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_controller.dart';
+import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
+import 'package:tn_jewellery_admin/utils/colors.dart';
+import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
 
 class dashboardScreen extends StatefulWidget {
@@ -58,7 +61,7 @@ class _dashboardScreenState extends State<dashboardScreen> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: brandGoldDarkColor,
                       borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
@@ -76,7 +79,7 @@ class _dashboardScreenState extends State<dashboardScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: Colors.grey,
+                            color: brandPrimaryColor,
                             borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(8)),
                           ),
@@ -85,7 +88,7 @@ class _dashboardScreenState extends State<dashboardScreen> {
                             style: TextStyle(
                               fontFamily: 'JosefinSans',
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 16,
                             ),
                           ),
@@ -97,7 +100,7 @@ class _dashboardScreenState extends State<dashboardScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Customerbuild(
-                                  'Total Approve',
+                                  'Total Approved',
                                   controller.dashboardModel?.data
                                           ?.approvedCustomers
                                           .toString() ??
@@ -118,15 +121,19 @@ class _dashboardScreenState extends State<dashboardScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Customerbuild(
-                                  'Yet & Approve',
+                                  'Yet to Approve',
                                   controller.dashboardModel?.data
                                           ?.yetToApproveCustomers
                                           .toString() ??
                                       ""),
-                              CircleAvatar(
-                                backgroundColor: Colors.grey[500],
-                                child: const Icon(Icons.arrow_forward,
-                                    color: Colors.white),
+                              InkWell(
+                                onTap: () => Get.offAllNamed(
+                                    RouteHelper.getMainRoute("1")),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: const Icon(Icons.arrow_forward,
+                                      color: brandPrimaryColor),
+                                ),
                               ),
                             ],
                           ),
@@ -138,7 +145,7 @@ class _dashboardScreenState extends State<dashboardScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            buildApprovedButtons(),
+            buildApprovedButtons(controller),
           ],
         ),
       ),
@@ -151,10 +158,13 @@ Widget Customerbuild(String label, String value) {
     children: [
       Text(label,
           style: const TextStyle(
-              fontFamily: 'JosefinSans', fontWeight: FontWeight.w400)),
+              color: Colors.white,
+              fontFamily: 'JosefinSans',
+              fontWeight: FontWeight.w800)),
       const SizedBox(height: 4),
       Text(value,
           style: const TextStyle(
+              color: Colors.white,
               fontFamily: 'JosefinSans',
               fontSize: 20,
               fontWeight: FontWeight.w900)),
@@ -162,24 +172,40 @@ Widget Customerbuild(String label, String value) {
   );
 }
 
-Widget buildApprovedButtons() {
+Widget buildApprovedButtons(DashboardController controller) {
   return Column(
     children: [
       Row(
         children: [
           Expanded(
             child: buildApprovalCard(
-              title: 'YET',
-              subtitle: 'Design',
-              badgeCount: 10,
+              title: 'Yet To Assign',
+              subtitle: '',
+              badgeCount: controller
+                      .dashboardModel?.data?.nonAssignedOrdersCount
+                      .toString() ??
+                  "",
+              color: brandPrimaryColor,
+              onTap: () {
+                // Handle tap
+                Get.offAllNamed(RouteHelper.getMainRoute("2"));
+              },
             ),
           ),
           const SizedBox(width: 10),
           Expanded(
             child: buildApprovalCard(
-              title: 'Work',
-              subtitle: 'Progress',
-              badgeCount: 10,
+              title: 'Work in Progress',
+              subtitle: '',
+              badgeCount: controller
+                      .dashboardModel?.data?.workInProgressOrdersCount
+                      .toString() ??
+                  "",
+              color: brandGreySoftColor,
+              onTap: () {
+                // Handle tap
+                Get.offAllNamed(RouteHelper.getMainRoute("2"));
+              },
             ),
           ),
         ],
@@ -189,17 +215,34 @@ Widget buildApprovedButtons() {
         children: [
           Expanded(
             child: buildApprovalCard(
-              title: 'Delivery',
-              subtitle: 'Read',
-              badgeCount: 5,
+              title: 'Delivery Ready',
+              subtitle: '',
+              badgeCount: controller
+                      .dashboardModel?.data?.deliveryReadyOrdersCount
+                      .toString() ??
+                  "",
+              color: brandGreySoftColor,
+              onTap: () {
+                // Handle tap
+                Get.offAllNamed(RouteHelper.getMainRoute("2"));
+              },
             ),
           ),
           const SizedBox(width: 10),
           Expanded(
             child: buildApprovalCard(
-              title: 'Over Due',
-              subtitle: 'orders',
-              badgeCount: 2,
+              title: 'Over Due Orders',
+              subtitle: '',
+              badgeCount: controller.dashboardModel?.data?.overdueOrdersCount
+                      .toString() ??
+                  "",
+              color: brandGoldColor,
+              onTap: () {
+                // Handle tap
+                Get.find<OrderController>().isNewOrdersSelected = false;
+
+                Get.offAllNamed(RouteHelper.getMainRoute("2"));
+              },
             ),
           ),
         ],
@@ -211,48 +254,52 @@ Widget buildApprovedButtons() {
 Widget buildApprovalCard({
   required String title,
   required String subtitle,
-  required int badgeCount,
+  required String badgeCount,
+  required Function()? onTap,
+  required Color color,
 }) {
   return Stack(
     clipBehavior: Clip.none,
     children: [
-      Container(
-        height: 100,
-        padding:
-            const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
-        decoration: BoxDecoration(
-          color:
-              Colors.grey[300], // Use your desired color or brandGreySoftColor
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontFamily: 'JosefinSans',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, // Use secondaryColor if defined
-                  fontSize: 12,
+      InkWell(
+        onTap: onTap,
+        child: Container(
+          height: 100,
+          padding:
+              const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
+          decoration: BoxDecoration(
+            color: color, // Use your desired color or brandGreySoftColor
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'JosefinSans',
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white, // Use secondaryColor if defined
+                    fontSize: 12,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Center(
-              child: Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontFamily: 'JosefinSans',
-                  color: Colors.black, // Use secondaryColor if defined
-                  fontSize: 12,
+              const SizedBox(height: 4),
+              Center(
+                child: Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'JosefinSans',
+                    color: Colors.black, // Use secondaryColor if defined
+                    fontSize: 12,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       Positioned(
@@ -260,8 +307,7 @@ Widget buildApprovalCard({
         top: -10,
         child: CircleAvatar(
           radius: 15,
-          backgroundColor:
-              Colors.blueAccent, // Use brandPrimaryColor if defined
+          backgroundColor: brandGreyColor, // Use brandPrimaryColor if defined
           child: Text(
             '$badgeCount',
             style: const TextStyle(

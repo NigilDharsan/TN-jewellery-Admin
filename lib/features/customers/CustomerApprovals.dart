@@ -10,55 +10,106 @@ class CustomerNameList extends StatefulWidget {
   State<CustomerNameList> createState() => _CustomerNameListState();
 }
 
-class _CustomerNameListState extends State<CustomerNameList> {
-
+class _CustomerNameListState extends State<CustomerNameList>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  final List<String> _tabs = ['Yet to Approve', 'Rejected', 'Total Approved'];
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: _tabs.length, vsync: this);
+    _tabController.addListener(_handleTabChange);
+    Get.find<DashboardController>().getCustomerList("1"); // Default first tab
+  }
+
+  void _handleTabChange() {
+    if (_tabController.indexIsChanging) return;
+
+    final status = _getStatusByTabIndex(_tabController.index);
+    Get.find<DashboardController>().getCustomerList(status.toString());
+  }
+
+  int _getStatusByTabIndex(int index) {
+    switch (index) {
+      case 0:
+        return 1; // Yet to Approve
+      case 1:
+        return 3; // Rejected
+      case 2:
+        return 2; // Approved
+      default:
+        return 1;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Customer Approval'),
+        backgroundColor: brandGoldColor,
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: _tabs.map((label) => Tab(text: label)).toList(),
+          labelColor: Colors.black,
+          indicatorColor: Colors.black,
+        ),
+      ),
       body: GetBuilder<DashboardController>(
-        initState: (state) => Get.find<DashboardController>().getCustomerList(),
         autoRemove: false,
         builder: (controller) {
-          return controller.isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : buildCustomerDetail(controller);
+          if (controller.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return TabBarView(
+            controller: _tabController,
+            children: [
+              _buildCustomerList(controller, statusFilter: 1), // Yet to Approve
+              _buildCustomerList(controller, statusFilter: 3), // Rejected
+              _buildCustomerList(controller, statusFilter: 2), // Approved
+            ],
+          );
         },
       ),
     );
   }
 
-  Widget buildCustomerDetail(DashboardController controller) {
+  Widget _buildCustomerList(DashboardController controller,
+      {required int statusFilter}) {
+    final customerList = controller.customerModel?.data ?? [];
+
+    final isApprovalTab = statusFilter == 1;
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.customerModel?.data?.length ?? 0,
+              itemCount: customerList.length,
               itemBuilder: (context, index) {
-                final customer = controller.customerModel!.data![index];
+                final customer = customerList[index];
                 return Column(
                   children: [
                     Row(
                       children: [
-                        Checkbox(
-                          value: controller.selectedCustomers[customer.pkId] ?? false,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              controller.selectedCustomers[customer.pkId!] = newValue!;
-                            });
-                          },
-                        ),
+                        if (isApprovalTab)
+                          Checkbox(
+                            value:
+                                controller.selectedCustomers[customer.pkId] ??
+                                    false,
+                            onChanged: (bool? newValue) {
+                              setState(() {
+                                controller.selectedCustomers[customer.pkId!] =
+                                    newValue!;
+                              });
+                            },
+                          ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -88,24 +139,25 @@ class _CustomerNameListState extends State<CustomerNameList> {
                 );
               },
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                  onTap: () {
-                    _submitCustomerStatus(controller, 2); 
-                  },
-                  child: _optionButton('Approved'),
-                ),
-                InkWell(
-                  onTap: () {
-                    _submitCustomerStatus(controller, 3); 
-                  },
-                  child: _optionButton('Reject'),
-                ),
-              ],
-            ),
+            if (isApprovalTab) const SizedBox(height: 20),
+            if (isApprovalTab)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      _submitCustomerStatus(controller, 2); // Approved
+                    },
+                    child: _optionButton('Approve'),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _submitCustomerStatus(controller, 3); // Reject
+                    },
+                    child: _optionButton('Reject'),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
@@ -113,7 +165,8 @@ class _CustomerNameListState extends State<CustomerNameList> {
   }
 
   void _submitCustomerStatus(DashboardController controller, int status) {
-    final List<Map<String, dynamic>> selectedIds = controller.selectedCustomers.entries
+    final List<Map<String, dynamic>> selectedIds = controller
+        .selectedCustomers.entries
         .where((entry) => entry.value == true)
         .map((entry) => {"pk_id": entry.key})
         .toList();
@@ -127,6 +180,10 @@ class _CustomerNameListState extends State<CustomerNameList> {
       "approved_through": 2,
       "approved_status": status,
       "approve_ids": selectedIds,
+    }).then((_) {
+      final currentStatus = _getStatusByTabIndex(_tabController.index);
+      controller.getCustomerList(currentStatus.toString()); // Refresh list
+      controller.selectedCustomers.clear(); // Clear selections
     });
   }
 

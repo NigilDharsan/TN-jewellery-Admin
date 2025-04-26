@@ -14,7 +14,9 @@ class OrderController extends GetxController implements GetxService {
   bool hasMoreItems = true;
   bool get isLoading => _isLoading;
 
-  var selectedWorkStatus = "inprogress";
+  var selectedWorkStatus = "In Progress";
+  var selectedWorkStatusID = "inprogress";
+
   var currentStep = 2;
 
   OpenOrderListModel? openOrderListModel;
@@ -28,6 +30,13 @@ class OrderController extends GetxController implements GetxService {
   int? SupplierId;
 
   bool isNewOrdersSelected = true;
+
+  String? selectedVendor;
+  dynamic filterBody = {
+    "id_supplier": "",
+    "id_customer": "",
+    "date": "",
+  };
 
   OrderController({required this.orderRepo});
 
@@ -66,12 +75,12 @@ class OrderController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getOrderStatusList(String orderStatus) async {
+  Future<void> getOrderStatusList(String orderStatus, dynamic body) async {
     _isLoading = true;
     loaderController.showLoaderAfterBuild(_isLoading);
 
     update();
-    Response? response = await orderRepo.orderStatusList(orderStatus);
+    Response? response = await orderRepo.orderStatusList(orderStatus, body);
     if (response != null && response.statusCode == 200) {
       inProgressOrderListModel =
           InProgressOrderListModel.fromJson(response.body);

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:tn_jewellery_admin/features/auth/signIn/LoginScreen.dart';
 import 'package:tn_jewellery_admin/features/dashboard/dashboard.dart';
 import 'package:tn_jewellery_admin/features/landing/landing_screen.dart';
-import 'package:tn_jewellery_admin/features/my_order/myOrderScreen.dart' show myOrderScreen;
-import 'package:tn_jewellery_admin/features/my_order/newOrderScreen.dart' show newOrderScreen;
-import 'package:tn_jewellery_admin/features/my_order/orderDetailScreen.dart' show orderDetailScreen;
-import 'package:tn_jewellery_admin/features/auth/signIn/LoginScreen.dart';
+import 'package:tn_jewellery_admin/features/my_order/myOrderScreen.dart'
+    show myOrderScreen;
+import 'package:tn_jewellery_admin/features/my_order/newOrderScreen.dart'
+    show newOrderScreen;
+import 'package:tn_jewellery_admin/features/my_order/orderDetailScreen.dart'
+    show orderDetailScreen;
 import 'package:tn_jewellery_admin/features/splash/splash_screen.dart';
 import 'package:tn_jewellery_admin/utils/config.dart';
 
 import '../../../common/update_screen.dart';
-
 import '../../../features/splash/controller/splash_controller.dart';
 
 class RouteHelper {
@@ -30,7 +31,6 @@ class RouteHelper {
   static const String orderdetailScreen = '/orderDetailScreen';
   static const String neworderScreen = '/newOrderScreen';
 
-
   static String getInitialRoute() => initial;
   static String getSplashRoute() => splash;
   static String getLanguageRoute(String page) => '$language?page=$page';
@@ -42,7 +42,6 @@ class RouteHelper {
   static String getOrderDetailsScreen() => orderdetailScreen;
   static String getNewOrderScreen() => neworderScreen;
 
-
   static String getAddLocation(int id, int accountId) =>
       '$addLocation?userId=$id&accountId=$accountId';
 
@@ -53,8 +52,14 @@ class RouteHelper {
     GetPage(name: myorderScreen, page: () => const myOrderScreen()),
     GetPage(name: orderdetailScreen, page: () => const orderDetailScreen()),
     GetPage(name: neworderScreen, page: () => const newOrderScreen()),
-    GetPage(name: main, page: () => const MainScreen(pageIndex: 0)),
-
+    GetPage(
+      name: main,
+      page: () {
+        final pageParam = Get.parameters['page'] ?? '0';
+        final pageIndex = int.tryParse(pageParam) ?? 0;
+        return MainScreen(pageIndex: pageIndex);
+      },
+    ),
   ];
 
   static getRoute(Widget navigateTo) {

@@ -20,10 +20,10 @@ class OrderRepo {
     return await apiClient.getData(AppConstants.getSupplierUrl);
   }
 
-  Future<Response?> orderStatusList(String orderStatus) async {
+  Future<Response?> orderStatusList(String orderStatus, dynamic body) async {
     return await apiClient.postData(
       AppConstants.getOrderStatusListByIdUrl + orderStatus,
-      {},
+      body,
     );
   }
 

@@ -13,14 +13,12 @@ class DashboardRepo {
     return await apiClient.getData(AppConstants.getDashboardUrl);
   }
 
-  Future<Response?> getCustomerRepo() async {
+  Future<Response?> getCustomerRepo(String type) async {
     return await apiClient
-        .getData(AppConstants.getCustomerUrl + "?type=1&&added_through=2");
+        .getData(AppConstants.getCustomerUrl + "?type=$type&&added_through=2");
   }
 
-    Future<Response?> postCustomerStatusRepo(Map<String,dynamic> body) async {
-    return await apiClient
-        .postData(AppConstants.getCustomerUrl,body);
+  Future<Response?> postCustomerStatusRepo(Map<String, dynamic> body) async {
+    return await apiClient.postData(AppConstants.getCustomerUrl, body);
   }
-  
 }

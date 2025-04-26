@@ -36,11 +36,11 @@ class DashboardController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getCustomerList() async {
+  Future<void> getCustomerList(String type) async {
     _isLoading = true;
     loaderController.showLoaderAfterBuild(_isLoading);
 
-    Response? response = await dashboardRepo.getCustomerRepo();
+    Response? response = await dashboardRepo.getCustomerRepo(type);
     if (response != null && response.statusCode == 200) {
       customerModel = CustomerModel.fromJson(response.body);
     } else {
@@ -53,15 +53,15 @@ class DashboardController extends GetxController implements GetxService {
     update();
   }
 
-    Future<void> postCustomerStatus(Map<String,dynamic> body) async {
+  Future<void> postCustomerStatus(Map<String, dynamic> body) async {
     _isLoading = true;
     loaderController.showLoaderAfterBuild(_isLoading);
 
     Response? response = await dashboardRepo.postCustomerStatusRepo(body);
     if (response != null && response.statusCode == 200) {
       selectedCustomers.clear();
-      getCustomerList();
-      customSnackBar(response.statusText,isError: false);
+      getCustomerList("1");
+      customSnackBar(response.statusText, isError: false);
     } else {
       print('Invalid User');
     }
