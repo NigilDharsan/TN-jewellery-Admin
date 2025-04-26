@@ -93,6 +93,8 @@ class InProgressOrderData {
   int? jobOrder;
   int? orderDetail;
   int? status;
+  String? supplierName;
+  String? supplierMobile;
 
   InProgressOrderData(
       {this.detailId,
@@ -161,7 +163,9 @@ class InProgressOrderData {
       this.deliveryDate,
       this.jobOrder,
       this.orderDetail,
-      this.status});
+      this.status,
+      this.supplierName,
+      this.supplierMobile});
 
   InProgressOrderData.fromJson(Map<String, dynamic> json) {
     detailId = json['detail_id'];
@@ -236,6 +240,8 @@ class InProgressOrderData {
     jobOrder = json['job_order'];
     orderDetail = json['order_detail'];
     status = json['status'];
+    supplierName = json['supplier_name'];
+    supplierMobile = json['supplier_mobile'];
   }
 
   Map<String, dynamic> toJson() {
@@ -309,6 +315,9 @@ class InProgressOrderData {
     data['job_order'] = this.jobOrder;
     data['order_detail'] = this.orderDetail;
     data['status'] = this.status;
+    data['supplier_name'] = this.supplierName;
+    data['supplier_mobile'] = this.supplierMobile;
+
     return data;
   }
 }

@@ -110,7 +110,7 @@ Widget buildOrderCard(
           ],
         ),
         const SizedBox(height: 12),
-        const Divider(thickness: 1, color: Colors.grey),
+        Divider(thickness: 1, color: Colors.grey[300]),
       ],
     ),
   );

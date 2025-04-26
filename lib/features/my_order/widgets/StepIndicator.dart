@@ -12,7 +12,7 @@ class StepIndicator extends StatelessWidget {
 
     Widget child;
     if (isCompleted) {
-      child = Icon(Icons.check, color: brandGoldColor, size: 16);
+      child = Icon(Icons.check, color: brandGoldColor, size: 20);
     } else if (isCurrent) {
       child = Container(
         width: 12,
@@ -23,14 +23,14 @@ class StepIndicator extends StatelessWidget {
         ),
       );
     } else {
-      child = Icon(Icons.circle_outlined, color: brandGoldColor, size: 14);
+      child = Icon(Icons.circle_outlined, color: Colors.white, size: 14);
     }
 
     return Container(
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: isCompleted ? brandGoldColor : Colors.transparent,
+        color: isCompleted ? Colors.white : Colors.transparent,
         shape: BoxShape.circle,
         border: Border.all(color: brandGoldColor, width: 2),
       ),
@@ -49,7 +49,7 @@ class StepIndicator extends StatelessWidget {
                 Expanded(
                   child: Container(
                     height: 2,
-                    color: currentStep > step ? brandGreyColor : brandGoldColor,
+                    color: currentStep > step ? brandGoldColor : brandGoldColor,
                   ),
                 ),
             ],

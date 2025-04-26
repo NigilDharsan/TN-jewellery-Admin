@@ -6,6 +6,7 @@ import 'package:tn_jewellery_admin/features/my_order/controller/order_controller
 import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/StepIndicator.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderStatusPage extends StatefulWidget {
   const OrderStatusPage({super.key});
@@ -218,7 +219,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
   Widget orderDetailsStatus(
       OrderController controller, InProgressOrderData? inProgressOrderData) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.only(top: 12, bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -247,7 +248,12 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             color: textColor)),
-                    const SizedBox(height: 4),
+                    Text(inProgressOrderData?.customerMobile ?? '',
+                        style: const TextStyle(
+                            fontFamily: 'JosefinSans',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: textColor)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -277,6 +283,71 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
             ],
           ),
           const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Customer Info (Left Aligned)
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.person, size: 18, color: Colors.black54),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Supplier",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'JosefinSans',
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              inProgressOrderData?.supplierName ?? '',
+                              style: const TextStyle(
+                                fontFamily: 'JosefinSans',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            GestureDetector(
+                              onTap: () {
+                                final phone =
+                                    inProgressOrderData?.supplierMobile ?? '';
+                                if (phone.isNotEmpty) {
+                                  launchUrl(Uri.parse("tel:$phone"));
+                                }
+                              },
+                              child: Text(
+                                inProgressOrderData?.supplierMobile ?? '',
+                                style: const TextStyle(
+                                  fontFamily: 'JosefinSans',
+                                  fontSize: 14,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: StepIndicator(currentStep: controller.currentStep),
@@ -371,7 +442,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                     )
                   : SizedBox.shrink(),
           SizedBox(height: 10),
-          Divider(),
+          Divider(thickness: 1, color: Colors.grey[300]),
         ],
       ),
     );

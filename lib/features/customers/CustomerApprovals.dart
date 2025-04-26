@@ -46,6 +46,7 @@ class _CustomerNameListState extends State<CustomerNameList>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: brandGoldLightColor.withAlpha(80),
       appBar: AppBar(
         title: const Text('Customer Approval'),
         backgroundColor: brandGoldColor,
@@ -94,48 +95,60 @@ class _CustomerNameListState extends State<CustomerNameList>
               itemCount: customerList.length,
               itemBuilder: (context, index) {
                 final customer = customerList[index];
-                return Column(
-                  children: [
-                    Row(
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (isApprovalTab)
-                          Checkbox(
-                            value:
-                                controller.selectedCustomers[customer.pkId] ??
-                                    false,
-                            onChanged: (bool? newValue) {
-                              setState(() {
-                                controller.selectedCustomers[customer.pkId!] =
-                                    newValue!;
-                              });
-                            },
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: Checkbox(
+                              value:
+                                  controller.selectedCustomers[customer.pkId] ??
+                                      false,
+                              onChanged: (bool? newValue) {
+                                setState(() {
+                                  controller.selectedCustomers[customer.pkId!] =
+                                      newValue!;
+                                });
+                              },
+                            ),
                           ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              customer.name ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                fontFamily: 'JosefinSans',
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                customer.name ?? 'No Name',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  fontFamily: 'JosefinSans',
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              customer.mobile ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                fontFamily: 'JosefinSans',
+                              const SizedBox(height: 6),
+                              Text(
+                                customer.mobile ?? 'No Mobile',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'JosefinSans',
+                                  color: Colors.black54,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    const Divider(color: Colors.black),
-                  ],
+                  ),
                 );
               },
             ),
