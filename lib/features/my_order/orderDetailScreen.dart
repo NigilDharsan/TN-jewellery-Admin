@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/Photo_View_Screen.dart';
+import 'package:tn_jewellery_admin/features/my_order/widgets/Video_Player.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/orderDetailWidgets.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
@@ -269,10 +270,34 @@ Widget buildOrderDetail(OrderController controller) {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          Icon(Icons.arrow_downward, color: brandGreyColor),
-                          SizedBox(width: 10),
-                          Icon(Icons.remove_red_eye_outlined,
-                              color: brandGreyColor),
+                          IconButton(
+                            icon: Icon(Icons.arrow_downward,
+                                color: brandGreyColor),
+                            onPressed: () {
+                              controller.downloadFile(
+                                  context,
+                                  controller.selectNewOrderListData
+                                          ?.previewVideos?[index].video ??
+                                      "");
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.remove_red_eye_outlined,
+                                color: brandGreyColor),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => VideoPlayerScreen(
+                                      videoPath: controller
+                                              .selectNewOrderListData
+                                              ?.previewVideos?[index]
+                                              .video ??
+                                          ""),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       );
                     },
@@ -315,9 +340,36 @@ Widget buildOrderDetail(OrderController controller) {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          Icon(Icons.arrow_downward, color: brandGreyColor),
-                          SizedBox(width: 10),
-                          Icon(Icons.play_arrow, color: brandGreyColor),
+                          IconButton(
+                            icon: Icon(Icons.arrow_downward,
+                                color: brandGreyColor),
+                            onPressed: () {
+                              controller.downloadFile(
+                                  context,
+                                  controller.selectNewOrderListData
+                                          ?.previewVoices?[index].audio ??
+                                      "");
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                                controller.isCurrentPlaying &&
+                                        controller.currentPlayingFile ==
+                                            "${controller.selectNewOrderListData?.previewVoices?[index].audio ?? ""}"
+                                    ? Icons.stop
+                                    : Icons.play_arrow,
+                                color: brandGreyColor),
+                            onPressed: () {
+                              if (controller.isCurrentPlaying &&
+                                  controller.currentPlayingFile ==
+                                      "${controller.selectNewOrderListData?.previewVoices?[index].audio ?? ""}") {
+                                controller.stopPlayback();
+                              } else {
+                                controller.playSegment(
+                                    "${controller.selectNewOrderListData?.previewVoices?[index].audio ?? ""}"); // Provide the correct audio file
+                              }
+                            },
+                          ),
                         ],
                       );
                     },

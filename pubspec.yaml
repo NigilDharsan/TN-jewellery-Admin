@@ -58,6 +58,9 @@ dependencies:
   dropdown_button2:
 
   photo_view:
+  video_player:
+  audioplayers:
+
 
 dev_dependencies:
   flutter_test:
