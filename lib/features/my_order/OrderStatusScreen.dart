@@ -21,29 +21,11 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
   List<String> labels = ['CANCEL ORDER', 'COMPLETE STATUS'];
   List<Color> borderColors = [brandGoldColor, brandGoldColor];
 
-  String? selectedVendor;
-
-  DateTime? selectedDate;
-
   final List<String> workStatusList = [
     'In Progress',
     'Delivery Ready',
     'Delivered'
   ];
-
-  Future<void> _pickDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +65,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                       };
 
                       controller.selectedVendor = null;
+                      controller.selectedDate = null;
 
                       if (controller.selectedWorkStatus == "In Progress") {
                         controller.selectedWorkStatusID = "inprogress";
@@ -132,9 +115,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                           controller.filterBody = {
                             "id_supplier": supplierID,
                             "id_customer": "",
-                            "date": selectedDate == null
-                                ? ""
-                                : "${selectedDate?.year}-${selectedDate?.month}-${selectedDate?.day}",
+                            "date": controller.formatDateToYMD(),
                           };
 
                           controller.getOrderStatusList(
@@ -166,9 +147,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                           controller.filterBody = {
                             "id_supplier": "",
                             "id_customer": customerID,
-                            "date": selectedDate == null
-                                ? ""
-                                : "${selectedDate?.year}-${selectedDate?.month}-${selectedDate?.day}",
+                            "date": controller.formatDateToYMD(),
                           };
                           controller.getOrderStatusList(
                               controller.selectedWorkStatusID,
@@ -186,11 +165,13 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
               ),
               alignment: Alignment.center,
               child: GestureDetector(
-                onTap: _pickDate,
+                onTap: () {
+                  controller.pickDate(controller);
+                },
                 child: Text(
-                  selectedDate == null
+                  controller.selectedDate == null
                       ? "Delivery Date"
-                      : "Delivery: ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
+                      : controller.formatDateToYMD(),
                   style: const TextStyle(
                     fontFamily: 'JosefinSans',
                     fontSize: 15,
@@ -300,19 +281,11 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                       const Icon(Icons.person, size: 18, color: Colors.black54),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Column(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Supplier",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'JosefinSans',
-                              ),
-                            ),
-                            const SizedBox(height: 2),
                             Text(
-                              inProgressOrderData?.supplierName ?? '',
+                              "${inProgressOrderData?.supplierName ?? ''} - ",
                               style: const TextStyle(
                                 fontFamily: 'JosefinSans',
                                 fontSize: 15,
@@ -320,7 +293,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                 color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            const SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
                                 final phone =
@@ -335,7 +308,6 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                   fontFamily: 'JosefinSans',
                                   fontSize: 14,
                                   color: Colors.blue,
-                                  decoration: TextDecoration.underline,
                                 ),
                               ),
                             ),

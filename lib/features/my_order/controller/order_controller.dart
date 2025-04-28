@@ -1,5 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/SupplierListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/openOrderListModel.dart';
@@ -32,6 +34,7 @@ class OrderController extends GetxController implements GetxService {
   bool isNewOrdersSelected = true;
 
   String? selectedVendor;
+  DateTime? selectedDate;
   dynamic filterBody = {
     "id_supplier": "",
     "id_customer": "",
@@ -39,6 +42,32 @@ class OrderController extends GetxController implements GetxService {
   };
 
   OrderController({required this.orderRepo});
+
+  Future<void> pickDate(OrderController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: Get.context!,
+      initialDate: controller.selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != controller.selectedDate) {
+      controller.selectedDate = picked;
+      controller.update();
+    }
+  }
+
+  // Date Convert
+  String formatDateToYMD() {
+    if (selectedDate == null) {
+      return '';
+    }
+    return DateFormat('yyyy-MM-dd').format(selectedDate!);
+  }
+
+  Future<void> downloadFile(BuildContext context, String filePath) async {
+    var status =
+        await Permission.storage.request(); // Request storage permissions
+  }
 
   Future<void> getNewOrderList() async {
     _isLoading = true;

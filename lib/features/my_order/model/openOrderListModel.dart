@@ -79,7 +79,7 @@ class OpenOrderData {
   int? order;
   int? purity;
   int? uom;
-  int? erpTag;
+  Null? erpTag;
   int? product;
   int? design;
   Null? subDesign;
@@ -93,6 +93,7 @@ class OpenOrderData {
   Null? cancelledBy;
   Null? updatedBy;
   Null? receipt;
+  List<Null>? orderRepairType;
   String? orderStatusName;
   String? colour;
   String? orderNo;
@@ -101,6 +102,11 @@ class OpenOrderData {
   List<PreviewImages>? previewImages;
   String? image;
   String? imageText;
+  String? video;
+  String? videoText;
+  List<PreviewVoices>? previewVoices;
+  String? audio;
+  String? audioText;
   int? orderId;
   String? date;
   int? orderType;
@@ -118,6 +124,7 @@ class OpenOrderData {
   String? customerName;
   String? customerMobile;
   String? uomName;
+  List<PreviewVideos>? previewVideos;
 
   OpenOrderData(
       {this.detailId,
@@ -188,6 +195,7 @@ class OpenOrderData {
       this.cancelledBy,
       this.updatedBy,
       this.receipt,
+      this.orderRepairType,
       this.orderStatusName,
       this.colour,
       this.orderNo,
@@ -196,6 +204,11 @@ class OpenOrderData {
       this.previewImages,
       this.image,
       this.imageText,
+      this.video,
+      this.videoText,
+      this.previewVoices,
+      this.audio,
+      this.audioText,
       this.orderId,
       this.date,
       this.orderType,
@@ -212,7 +225,8 @@ class OpenOrderData {
       this.branchName,
       this.customerName,
       this.customerMobile,
-      this.uomName});
+      this.uomName,
+      this.previewVideos});
 
   OpenOrderData.fromJson(Map<String, dynamic> json) {
     detailId = json['detail_id'];
@@ -296,6 +310,16 @@ class OpenOrderData {
     }
     image = json['image'];
     imageText = json['image_text'];
+    video = json['video'];
+    videoText = json['video_text'];
+    if (json['preview_voices'] != null) {
+      previewVoices = <PreviewVoices>[];
+      json['preview_voices'].forEach((v) {
+        previewVoices!.add(new PreviewVoices.fromJson(v));
+      });
+    }
+    audio = json['audio'];
+    audioText = json['audio_text'];
     orderId = json['order_id'];
     date = json['date'];
     orderType = json['order_type'];
@@ -313,6 +337,12 @@ class OpenOrderData {
     customerName = json['customer_name'];
     customerMobile = json['customer_mobile'];
     uomName = json['uom_name'];
+    if (json['preview_videos'] != null) {
+      previewVideos = <PreviewVideos>[];
+      json['preview_videos'].forEach((v) {
+        previewVideos!.add(new PreviewVideos.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -385,6 +415,7 @@ class OpenOrderData {
     data['cancelled_by'] = this.cancelledBy;
     data['updated_by'] = this.updatedBy;
     data['receipt'] = this.receipt;
+
     data['order_status_name'] = this.orderStatusName;
     data['colour'] = this.colour;
     data['order_no'] = this.orderNo;
@@ -396,6 +427,14 @@ class OpenOrderData {
     }
     data['image'] = this.image;
     data['image_text'] = this.imageText;
+    data['video'] = this.video;
+    data['video_text'] = this.videoText;
+    if (this.previewVoices != null) {
+      data['preview_voices'] =
+          this.previewVoices!.map((v) => v.toJson()).toList();
+    }
+    data['audio'] = this.audio;
+    data['audio_text'] = this.audioText;
     data['order_id'] = this.orderId;
     data['date'] = this.date;
     data['order_type'] = this.orderType;
@@ -413,6 +452,10 @@ class OpenOrderData {
     data['customer_name'] = this.customerName;
     data['customer_mobile'] = this.customerMobile;
     data['uom_name'] = this.uomName;
+    if (this.previewVideos != null) {
+      data['preview_videos'] =
+          this.previewVideos!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -438,6 +481,57 @@ class PreviewImages {
     data['name'] = this.name;
     data['image'] = this.image;
     data['order_detail'] = this.orderDetail;
+    return data;
+  }
+}
+
+class PreviewVoices {
+  int? detOrderAudioId;
+  int? orderDetail;
+  String? name;
+  String? audio;
+
+  PreviewVoices(
+      {this.detOrderAudioId, this.orderDetail, this.name, this.audio});
+
+  PreviewVoices.fromJson(Map<String, dynamic> json) {
+    detOrderAudioId = json['det_order_audio_id'];
+    orderDetail = json['order_detail'];
+    name = json['name'];
+    audio = json['audio'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['det_order_audio_id'] = this.detOrderAudioId;
+    data['order_detail'] = this.orderDetail;
+    data['name'] = this.name;
+    data['audio'] = this.audio;
+    return data;
+  }
+}
+
+class PreviewVideos {
+  int? detOrderVidId;
+  int? orderDetail;
+  String? name;
+  String? video;
+
+  PreviewVideos({this.detOrderVidId, this.orderDetail, this.name, this.video});
+
+  PreviewVideos.fromJson(Map<String, dynamic> json) {
+    detOrderVidId = json['det_order_vid_id'];
+    orderDetail = json['order_detail'];
+    name = json['name'];
+    video = json['video'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['det_order_vid_id'] = this.detOrderVidId;
+    data['order_detail'] = this.orderDetail;
+    data['name'] = this.name;
+    data['video'] = this.video;
     return data;
   }
 }

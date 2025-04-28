@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
+import 'package:tn_jewellery_admin/features/my_order/widgets/Photo_View_Screen.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/orderDetailWidgets.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
@@ -162,112 +163,169 @@ Widget buildOrderDetail(OrderController controller) {
         //   ],
         // ),
         const SizedBox(height: 10),
-        const Text('Images & video Reference',
-            style: TextStyle(
-                color: white8,
-                fontFamily: 'JosefinSans',
-                fontSize: 15,
-                fontWeight: FontWeight.bold)),
-        const SizedBox(height: 10),
 
-// Image and audio row 1
-        Row(
-          children: [
-            Expanded(
-              child: Row(
-                children: const [
-                  Icon(Icons.photo, color: brandGreyColor),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      "photo_01_jpg",
-                      style: TextStyle(
-                          color: white8,
-                          fontSize: 16,
-                          fontFamily: 'JosefinSans',
-                          fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Icon(Icons.arrow_downward, color: brandGreyColor),
-                  Icon(Icons.remove_red_eye_outlined, color: brandGreyColor),
-                ],
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Row(
-                children: const [
-                  Icon(Icons.volume_up, color: brandGreyColor),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      "Audio 01.mp3",
+        (controller.selectNewOrderListData?.previewImages != null)
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Images Reference',
                       style: TextStyle(
                           color: white8,
                           fontFamily: 'JosefinSans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Icon(Icons.arrow_downward, color: brandGreyColor),
-                  Icon(Icons.play_arrow, color: brandGreyColor),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller
+                        .selectNewOrderListData?.previewImages?.length,
+                    itemBuilder: (context, index) {
+                      return Row(
+                        children: [
+                          Icon(Icons.photo, color: brandGreyColor),
+                          SizedBox(width: 5),
+                          Expanded(
+                            child: Text(
+                              "photo ${index + 1}.jpg",
+                              style: TextStyle(
+                                  color: white8,
+                                  fontSize: 16,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.arrow_downward,
+                                color: brandGreyColor),
+                            onPressed: () => controller.downloadFile(
+                                context,
+                                controller.selectNewOrderListData
+                                        ?.previewImages?[index].image ??
+                                    ""),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.remove_red_eye_outlined,
+                                color: brandGreyColor),
+                            onPressed: () {
+                              List<String> allImagePaths = controller
+                                  .selectNewOrderListData!.previewImages!
+                                  .map((img) => img.image ?? "")
+                                  .toList();
 
-// Image and audio row 2
-        Row(
-          children: [
-            Expanded(
-              child: Row(
-                children: const [
-                  Icon(Icons.photo, color: brandGreyColor),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      "photo_02_jpg",
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ShowImageGallery(
+                                    imagePaths: allImagePaths,
+                                    startIndex: index,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  )
+                ],
+              )
+            : Container(),
+
+        const SizedBox(height: 15),
+
+        (controller.selectNewOrderListData?.previewVideos != null)
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Video Reference',
                       style: TextStyle(
                           color: white8,
                           fontFamily: 'JosefinSans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Icon(Icons.arrow_downward, color: brandGreyColor),
-                  Icon(Icons.remove_red_eye_outlined, color: brandGreyColor),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller
+                        .selectNewOrderListData?.previewVideos?.length,
+                    itemBuilder: (context, index) {
+                      return Row(
+                        children: [
+                          Icon(Icons.photo, color: brandGreyColor),
+                          SizedBox(width: 5),
+                          Expanded(
+                            child: Text(
+                              "video ${index + 1}.mp4",
+                              style: TextStyle(
+                                  color: white8,
+                                  fontSize: 16,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Icon(Icons.arrow_downward, color: brandGreyColor),
+                          SizedBox(width: 10),
+                          Icon(Icons.remove_red_eye_outlined,
+                              color: brandGreyColor),
+                        ],
+                      );
+                    },
+                  )
                 ],
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Row(
-                children: const [
-                  Icon(Icons.volume_up, color: brandGreyColor),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      "Audio 02.mp3",
+              )
+            : Container(),
+
+        const SizedBox(height: 15),
+        controller.selectNewOrderListData?.previewVoices != null
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Audio Reference',
                       style: TextStyle(
                           color: white8,
                           fontFamily: 'JosefinSans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Icon(Icons.arrow_downward, color: brandGreyColor),
-                  Icon(Icons.play_arrow, color: brandGreyColor),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller
+                        .selectNewOrderListData?.previewVoices?.length,
+                    itemBuilder: (context, index) {
+                      return Row(
+                        children: [
+                          Icon(Icons.volume_up, color: brandGreyColor),
+                          SizedBox(width: 5),
+                          Expanded(
+                            child: Text(
+                              "Audio ${index + 1}.mp3",
+                              style: TextStyle(
+                                  color: white8,
+                                  fontFamily: 'JosefinSans',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Icon(Icons.arrow_downward, color: brandGreyColor),
+                          SizedBox(width: 10),
+                          Icon(Icons.play_arrow, color: brandGreyColor),
+                        ],
+                      );
+                    },
+                  )
                 ],
-              ),
-            ),
-          ],
-        ),
+              )
+            : Container(),
+
         const SizedBox(height: 20),
 
         const Text("Description",

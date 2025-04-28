@@ -57,6 +57,8 @@ dependencies:
   pin_code_fields:
   dropdown_button2:
 
+  photo_view:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

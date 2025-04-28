@@ -203,7 +203,11 @@ Widget buildApprovedButtons(DashboardController controller) {
                   "",
               color: brandGreySoftColor,
               onTap: () {
-                // Handle tap
+                Get.find<OrderController>().selectedWorkStatus = "In Progress";
+                Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+
+                Get.find<OrderController>().isNewOrdersSelected = false;
+
                 Get.offAllNamed(RouteHelper.getMainRoute("2"));
               },
             ),
@@ -223,7 +227,12 @@ Widget buildApprovedButtons(DashboardController controller) {
                   "",
               color: brandGreySoftColor,
               onTap: () {
-                // Handle tap
+                Get.find<OrderController>().selectedWorkStatus =
+                    "Delivery Ready";
+                Get.find<OrderController>().selectedWorkStatusID =
+                    "delivery_ready";
+
+                Get.find<OrderController>().isNewOrdersSelected = false;
                 Get.offAllNamed(RouteHelper.getMainRoute("2"));
               },
             ),
@@ -239,6 +248,9 @@ Widget buildApprovedButtons(DashboardController controller) {
               color: brandGoldColor,
               onTap: () {
                 // Handle tap
+                Get.find<OrderController>().selectedWorkStatus = "In Progress";
+                Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+
                 Get.find<OrderController>().isNewOrdersSelected = false;
 
                 Get.offAllNamed(RouteHelper.getMainRoute("2"));

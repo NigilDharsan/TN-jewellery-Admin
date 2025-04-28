@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/OrderStatusScreen.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/myOrderWidgets.dart';
@@ -35,8 +36,12 @@ class _myOrderScreenState extends State<myOrderScreen> {
         if (Get.find<OrderController>().isNewOrdersSelected == true) {
           Get.find<OrderController>().getNewOrderList();
         } else {
-          Get.find<OrderController>().getOrderStatusList("inprogress",
+          Get.find<OrderController>().getOrderStatusList(
+              Get.find<OrderController>().selectedWorkStatusID,
               Get.find<OrderController>().filterBody); //delivery_ready
+        }
+        if (Get.find<OrderController>().selectedWorkStatusID != "inprogress") {
+          Get.find<DashboardController>().getCustomerList("2");
         }
       }, builder: (controller) {
         return buildOrderList(controller);
@@ -66,6 +71,7 @@ Widget buildOrderList(OrderController controller) {
                 controller.selectedWorkStatus = "In Progress";
                 controller.selectedWorkStatusID = "inprogress";
                 controller.selectedVendor = null;
+                controller.selectedDate = null;
 
                 controller.filterBody = {
                   "id_supplier": "",
