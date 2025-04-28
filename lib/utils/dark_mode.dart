@@ -41,7 +41,7 @@ class _LanguageChangeState extends State<DarkMode> {
                 children: [
                   Text(
                     'change_theme'.tr,
-                    style: ubuntuSemiBold.copyWith(
+                    style: JosefinSansSemiBold.copyWith(
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                         fontSize: Dimensions.fontSizeDefault),
                   ),
@@ -89,7 +89,7 @@ class _LanguageChangeState extends State<DarkMode> {
                         width: Dimensions.paddingSizeDefault,
                       ),
                       Text('dark_mode'.tr,
-                          style: ubuntuRegular.copyWith(
+                          style: JosefinRegular.copyWith(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color!,
                               fontSize: Dimensions.fontSizeSmall)),

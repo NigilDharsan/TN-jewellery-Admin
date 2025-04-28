@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/dimensions.dart' show Dimensions;
-import 'package:tn_jewellery_admin/utils/images.dart' show Images;
 import 'package:tn_jewellery_admin/utils/styles.dart';
-
 
 class CustomTextField extends StatefulWidget {
   final String? hintText;
@@ -78,7 +74,7 @@ class CustomTextFieldState extends State<CustomTextField> {
       maxLines: widget.maxLines,
       controller: widget.controller,
       focusNode: widget.focusNode,
-      style: ubuntuRegular.copyWith(
+      style: JosefinRegular.copyWith(
           fontSize: Dimensions.fontSizeDefault,
           color: widget.isEnabled == false
               ? Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.6)
@@ -113,7 +109,7 @@ class CustomTextFieldState extends State<CustomTextField> {
         fillColor: widget.fillColor ?? Theme.of(context).cardColor,
         contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         hintText: widget.hintText,
-        hintStyle: ubuntuRegular.copyWith(
+        hintStyle: JosefinRegular.copyWith(
             fontSize: Dimensions.fontSizeDefault,
             color: buttonColor.withOpacity(0.5)
             //Theme.of(context).hintColor.withOpacity(Get.isDarkMode ? .5 : 1),
@@ -203,23 +199,22 @@ Widget TextFieldDatePicker(
       counterText: "",
       hintText: hintText,
       helperStyle: TextStyle(
-    fontFamily: 'Roboto',
-    fontSize: 12,
-    color: Color.fromRGBO(140, 140, 140, 1),
-    fontWeight: FontWeight.w400),
+          fontFamily: 'Roboto',
+          fontSize: 12,
+          color: Color.fromRGBO(140, 140, 140, 1),
+          fontWeight: FontWeight.w400),
       suffixIcon: Icon(
         Icons.calendar_today_outlined,
         color: Colors.black,
         size: 25,
       ),
-    
       hintStyle: TextStyle(
-    fontFamily: 'Roboto',
-    fontSize: 12,
-    color: Color.fromRGBO(140, 140, 140, 1),
-    fontWeight: FontWeight.w400),
+          fontFamily: 'Roboto',
+          fontSize: 12,
+          color: Color.fromRGBO(140, 140, 140, 1),
+          fontWeight: FontWeight.w400),
       errorMaxLines: 3,
-     contentPadding:
+      contentPadding:
           const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8, right: 2.0),
       fillColor: Colors.white,
       filled: true,
@@ -228,10 +223,10 @@ Widget TextFieldDatePicker(
     onChanged: onChanged,
     textInputAction: TextInputAction.next,
     style: const TextStyle(
-                    fontFamily: 'JosefinSans',
-                    color: brandGoldColor,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
+      fontFamily: 'JosefinSans',
+      color: brandGoldColor,
+      fontWeight: FontWeight.w700,
+      fontSize: 18,
+    ),
   );
 }

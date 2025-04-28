@@ -24,8 +24,8 @@ class TitleView extends StatelessWidget {
         children: [
           Text(
             title,
-            style:
-                ubuntuSemiBold.copyWith(fontSize: Dimensions.fontSizeDefault),
+            style: JosefinSansSemiBold.copyWith(
+                fontSize: Dimensions.fontSizeDefault),
           ),
           if (isViewAllEnabled == true)
             GestureDetector(
@@ -33,7 +33,7 @@ class TitleView extends StatelessWidget {
                   onViewAllClicked != null ? onViewAllClicked!() : null,
               child: Text(
                 'view_all'.tr,
-                style: ubuntuRegular.copyWith(
+                style: JosefinRegular.copyWith(
                     fontSize: Dimensions.fontSizeExtraSmall,
                     color: Get.isDarkMode
                         ? Theme.of(context).textTheme.bodyMedium!.color

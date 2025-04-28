@@ -1,162 +1,138 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'colors.dart';
+import 'package:tn_jewellery_admin/utils/colors.dart';
+
 import 'dimensions.dart';
 
 const appPadding = 16.0;
 
-const robotoLight = TextStyle(
-  fontFamily: 'Roboto',
+const JosefinSansLight = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontWeight: FontWeight.w500,
+    color: brandGoldLightColor,
+    fontSize: 10);
+
+const JosefinSansRegular = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.w400,
+  color: brandGreyColor,
+  fontSize: 15,
+);
+
+const DrawerJosefinSansRegular = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.bold,
+  color: white3,
+  fontSize: 15,
+);
+
+const Order2 = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.bold,
+  color: textColor,
+  fontSize: 12,
+);
+
+const jewellery = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.bold,
+  color: brandGoldColor,
+  fontSize: 15,
+);
+
+const JosefinRegular = TextStyle(
+  fontFamily: 'JosefinSans',
   fontWeight: FontWeight.w300,
+  color: brandPrimaryColor,
 );
 
-const robotoRegular = TextStyle(
-  fontFamily: 'Roboto',
-  fontWeight: FontWeight.w400,
-);
-
-const robotoMedium = TextStyle(
-  fontFamily: 'Roboto',
+const JosefinSansMedium = TextStyle(
+  fontFamily: 'JosefinSans',
   fontWeight: FontWeight.w500,
 );
 
-const robotoBold = TextStyle(
-  fontFamily: 'Roboto',
+const JosefinSansBold = TextStyle(
+  fontFamily: 'JosefinSans',
   fontWeight: FontWeight.w700,
-);
-
-const robotoSemiBold = TextStyle(
-  fontFamily: 'Roboto',
-  fontWeight: FontWeight.w600,
-);
-
-const ubuntuLight = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.bold,
-);
-
-const ubuntuRegular = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.w400,
-  fontSize: 16,
-    color: Colors.black
-);
-
-const ubuntuMedium = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.w500,
-  fontSize: 15,
-  color: Colors.black
-);
-
-const ubuntuBold = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.bold,
-  color: Colors.white,
-  fontSize: 16,
-);
-
-const colorBold = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.w500,
-  color: Colors.black,
-  fontSize: 14,
-);
-
-const rupees = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-  fontSize: 15,
-);
-
-const level = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.normal,
-  color: Colors.black,
-  fontSize: 15,
-);
-const conBold = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.bold,
-  color: Colors.white,
-  fontSize: 15,
-);
-const con2Bold = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.bold,
-  color: Colors.white,
+  color: brandPrimaryColor,
   fontSize: 18,
 );
 
-const nameBold = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-  fontSize: 15,
-);
-const change = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.w500,
-  color: Colors.black,
-  fontSize: 14,
+const JosefinSansSemiBold = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.w600,
+  fontSize: 12,
+  color: Colors.white,
 );
 
-const textBold = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.w500,
-  color: Colors.black,
-  fontSize: 14,
-);
-
-const vertical = TextStyle(
-  fontFamily: 'Ubuntu',
+const textSemiBold = TextStyle(
+  fontFamily: 'JosefinSans',
   fontWeight: FontWeight.w400,
-  color: Colors.black,
   fontSize: 13,
+  color: Colors.black,
 );
-const vertical1 = TextStyle(
-  fontFamily: 'Ubuntu',
+const smallSemiBold = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.bold,
+  fontSize: 14,
+  color: Colors.black,
+);
+
+const JosefinSansSemiBold1 = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.w600,
+  fontSize: 10,
+  color: Colors.white,
+);
+
+const headerTitle = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.w700,
+  color: brandGreyColor,
+  fontSize: 20,
+);
+const headerTitle1 = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.w700,
+  color: brandGreyColor,
+  fontSize: 18,
+);
+//List Number
+TextStyle spanList = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 10,
+  color: Color.fromRGBO(255, 255, 255, 1),
   fontWeight: FontWeight.w400,
-  color: Colors.indigo,
-  fontSize: 13,
 );
 
-const text1Bold = TextStyle(
-  fontFamily: 'Ubuntu',
+TextStyle categoryTitle = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 14,
+  color: brandGreyColor,
   fontWeight: FontWeight.bold,
-  color: Colors.indigo,
-  fontSize: 15,
 );
-const text2Bold = TextStyle(
-  fontFamily: 'Ubuntu',
+
+TextStyle splTextTitle = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 6,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w700,
+);
+
+TextStyle productName = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 10,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w700,
+);
+
+TextStyle favorite_title = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 8,
+  color: Color.fromRGBO(255, 255, 255, 1),
   fontWeight: FontWeight.bold,
-  color: Colors.black,
-  fontSize: 15,
-);
-const ubuntuSemiBold = TextStyle(
-  fontFamily: 'Ubuntu',
-  fontWeight: FontWeight.w500,
-  fontSize: 13
-);
-const normalBold = TextStyle(
-    fontFamily: 'Ubuntu',
-    fontWeight: FontWeight.w600,
-    fontSize: 13
 );
 
-
-const tripBold = TextStyle(
-    fontFamily: 'Ubuntu',
-    fontWeight: FontWeight.w400,
-    fontSize: 15
-);
-
-const logBold = TextStyle(
-    fontFamily: 'Ubuntu',
-    fontWeight: FontWeight.w500,
-    fontSize: 14
-);
 TextStyle order_style2 = TextStyle(
   fontFamily: 'JosefinSans',
   fontSize: 16,
@@ -170,81 +146,517 @@ TextStyle order_style3 = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+TextStyle order_container = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 16,
+  color: secondaryColor,
+  fontWeight: FontWeight.bold,
+);
+
+TextStyle order_style = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 13,
+  color: brandGreySoftColor,
+  fontWeight: FontWeight.bold,
+);
+
+TextStyle order_normal = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 13,
+  color: brandGreySoftColor,
+  fontWeight: FontWeight.w600,
+);
+TextStyle order_bold = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 14,
+  color: textColor,
+  fontWeight: FontWeight.w700,
+);
+
 TextStyle jewellery_style = TextStyle(
   fontFamily: 'JosefinSans',
   fontSize: 16,
   color: brandGoldColor,
   fontWeight: FontWeight.bold,
 );
-
-const customer1 = TextStyle(
+TextStyle favorite_Subtitle = TextStyle(
   fontFamily: 'JosefinSans',
+  fontSize: 10,
+  color: Color.fromRGBO(255, 255, 255, 1),
   fontWeight: FontWeight.w700,
-  color: brandGreyColor,
-  fontSize: 16,
 );
-const customer2 = TextStyle(
+
+TextStyle List_No_noItaqlic = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 18,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w300);
+TextStyle Itaqlic = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 13,
+    color: Colors.black87,
+    fontWeight: FontWeight.w500);
+
+//List Number
+TextStyle Card_T1 = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 18,
+    color: brandPrimaryColor,
+    fontWeight: FontWeight.w500);
+
+//ITINERARY
+TextStyle itinerary_green_T = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 11.5,
+    color: brandPrimaryColor,
+    fontWeight: FontWeight.w500);
+
+TextStyle contain2 = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 14,
+    color: brandPrimaryColor,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.italic);
+
+TextStyle itinerary_gold_T = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 11.5,
+    color: buttonTextColor,
+    fontWeight: FontWeight.w500);
+
+//SAVE TREE
+TextStyle save_tree_T = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w300,
+    fontStyle: FontStyle.italic);
+
+//List Location Name
+TextStyle List_Loction_Name = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.italic);
+
+TextStyle List_Loction_Name1 = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 11,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.italic);
+
+//APP BAR TIME
+TextStyle AppBar_Time = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 16,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+
+TextStyle light_SubTitle = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 16,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.italic);
+
+TextStyle light_SubTitle_noItialic = TextStyle(
   fontFamily: 'JosefinSans',
-  fontWeight: FontWeight.w700,
-  color: brandGreySoftColor,
+  fontSize: 16,
+  color: Color.fromRGBO(0, 0, 0, 1),
+  fontWeight: FontWeight.w400,
+);
+TextStyle Route_AppBar_Time = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 14,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+
+//APP BAR TIME
+TextStyle AppBar_Time2 = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 18,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+
+TextStyle AppBar_Time2_noItaclic = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 18,
+  color: Color.fromRGBO(0, 0, 0, 1),
+  fontWeight: FontWeight.w600,
+);
+//CONTAINER LIST
+TextStyle Contain_List = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 14,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle Contain_List2 = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 14,
+  color: buttonTextColor,
+  fontWeight: FontWeight.w400,
+);
+
+//List TIme
+TextStyle List_Time = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 14,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+
+TextStyle List_Status = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.italic);
+TextStyle List_Status_green = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Colors.green,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.italic);
+TextStyle List_Status_Orange = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Colors.orangeAccent,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.italic);
+TextStyle AppBar_Date = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+
+TextStyle popId = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 10,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.italic);
+
+TextStyle popId1 = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 11.5,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.italic);
+
+TextStyle dashboardRoundT = TextStyle(
+  fontFamily: 'JosefinSans',
   fontSize: 15,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w800,
+);
+
+//List KM
+TextStyle List_KM = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 16,
+    color: Color.fromRGBO(154, 154, 154, 1),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+
+//DROPOFF
+TextStyle List_Drop_Off = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w200,
+    fontStyle: FontStyle.italic);
+TextStyle chartT = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 14,
+    color: brandPrimaryColor,
+    fontWeight: FontWeight.w300,
+    fontStyle: FontStyle.italic);
+
+//DROPOFF
+TextStyle Delete_Account = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 14,
+  color: Colors.red,
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle app_Id = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: brandPrimaryColor,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+TextStyle app_Id_Small = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 11,
+    color: brandPrimaryColor,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.italic);
+TextStyle app_Id2 = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: buttonTextColor,
+    fontWeight: FontWeight.w600);
+TextStyle noVal = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(48, 158, 89, 1),
+    fontWeight: FontWeight.w600);
+TextStyle with_DRIVE = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(83, 117, 88, 1),
+    fontWeight: FontWeight.w500);
+
+TextStyle ListId = TextStyle(
+    fontFamily: 'JosefinSans',
+    color: buttonTextColor,
+    fontSize: 14,
+    fontWeight: FontWeight.bold);
+
+TextStyle ListInnerTextLight = TextStyle(
+  color: buttonTextColor,
+  fontSize: 13,
+);
+
+TextStyle ListInnerTextLight2 = TextStyle(
+  color: buttonTextColor,
+);
+
+TextStyle Status = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(154, 154, 154, 1),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+TextStyle time_T = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(154, 154, 154, 1),
+    fontWeight: FontWeight.w400);
+TextStyle time_T_2 = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 10,
+    color: Colors.black54,
+    fontWeight: FontWeight.w400);
+
+TextStyle Status_NO_Sty = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: iconColorLight,
+    fontWeight: FontWeight.w600);
+
+TextStyle reportHT = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 18,
+    color: Color.fromRGBO(154, 154, 154, 1),
+    fontWeight: FontWeight.w200);
+
+TextStyle Help_T = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 12,
+    color: Color.fromRGBO(0, 0, 0, 1),
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.italic);
+
+TextStyle Icon_t = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 10,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w600,
+);
+//DRIVER STATUS
+TextStyle driver_Sts_T = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 12,
+  color: Color.fromRGBO(0, 0, 0, 1),
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle Title_T = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 24,
+  color: Color.fromRGBO(0, 0, 0, 1),
+  fontWeight: FontWeight.w600,
+);
+
+TextStyle Sub_Title = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 20,
+  color: Color.fromRGBO(0, 0, 0, 1),
+  fontWeight: FontWeight.w400,
+);
+//OIL CANE COUNT
+TextStyle cane_Count_T = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 18,
+  color: Colors.white,
+  fontWeight: FontWeight.w700,
 );
 
 //RADIO TEXT
 TextStyle radio_T = TextStyle(
-  fontFamily: 'Ubuntu',
+  fontFamily: 'JosefinSans',
   fontSize: 12,
   color: Colors.white,
   fontWeight: FontWeight.w400,
 );
 TextStyle radio_T_Black = TextStyle(
-  fontFamily: 'Ubuntu',
+  fontFamily: 'JosefinSans',
   fontSize: 12,
   color: Colors.black,
   fontWeight: FontWeight.w400,
 );
 
+//DETAILS CARD TITLE
+TextStyle detail_Card_title = TextStyle(
+  fontFamily: 'Inter',
+  fontSize: 14,
+  color: Colors.white,
+  fontWeight: FontWeight.w300,
+);
+TextStyle detail_Card_T = TextStyle(
+  fontFamily: 'Inter',
+  fontSize: 18,
+  color: Colors.white,
+  fontWeight: FontWeight.w400,
+);
 
 TextStyle radio_T_2 = TextStyle(
-  fontFamily: 'Ubuntu',
+  fontFamily: 'JosefinSans',
   fontSize: 12,
   color: Colors.black,
   fontWeight: FontWeight.w400,
 );
 
 TextStyle popUp_fieldT = TextStyle(
-  fontFamily: 'Ubuntu',
+  fontFamily: 'JosefinSans',
   fontSize: 11.5,
   color: Colors.black,
   fontWeight: FontWeight.w400,
 );
 
+TextStyle default_Style = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 14,
+  color: Color.fromRGBO(0, 0, 0, 1),
+  fontWeight: FontWeight.w400,
+);
 
+TextStyle Bottom_Venodor_T = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 10,
+  color: Color.fromRGBO(0, 0, 0, 0.5),
+  fontWeight: FontWeight.w500,
+);
+TextStyle Bottom_Venodor_T_W = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 10,
+  color: Colors.white,
+  fontWeight: FontWeight.w500,
+);
 
+TextStyle Container_DataT = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 12,
+  color: Color.fromRGBO(0, 0, 0, 0.5),
+  fontWeight: FontWeight.w600,
+);
+
+//CARD DETAIL
+TextStyle Card_T = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 12,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w300,
+);
+
+TextStyle pick_T = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 12,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w600,
+);
+
+TextStyle itinerary_D_T = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 11,
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.italic);
+
+TextStyle Bottom_City = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 14,
+  color: Color.fromRGBO(0, 0, 0, 0.5),
+  fontWeight: FontWeight.w500,
+);
+TextStyle Bottom_City_W = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 16,
+  color: Colors.white,
+  fontWeight: FontWeight.w600,
+);
 
 //MARK LOCATION HINT STYLE
 TextStyle Mark_Hint_Style = TextStyle(
-  fontFamily: 'Ubuntu',
+  fontFamily: 'JosefinSans',
   fontSize: 15,
   color: Color.fromRGBO(0, 0, 0, 0.2),
   fontWeight: FontWeight.w500,
 );
 
 TextStyle Textfield_Style = TextStyle(
-    fontFamily: 'Ubuntu',
+    fontFamily: 'JosefinSans',
     fontSize: 15,
     color: Colors.black,
     fontWeight: FontWeight.w400);
 
 TextStyle Textfield_Style2 = TextStyle(
-    fontFamily: 'Ubuntu',
+    fontFamily: 'JosefinSans',
     fontSize: 12.5,
     color: Colors.black,
     fontWeight: FontWeight.w400);
 
+TextStyle itinerary_Status = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 15,
+    color: Colors.black,
+    fontWeight: FontWeight.w500);
 
+TextStyle itinerary_Location_T = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 15,
+    color: buttonTextColor,
+    fontWeight: FontWeight.w500);
 
+TextStyle itinerary_address_T = TextStyle(
+    fontFamily: 'JosefinSans',
+    fontSize: 13,
+    color: buttonTextColor,
+    fontWeight: FontWeight.w500);
 
+//ITINERARY COUNT
+TextStyle itinerary_Count_g_T = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 12,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w500,
+);
+TextStyle itinerary_Count_gold_T = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 12,
+  color: buttonTextColor,
+  fontWeight: FontWeight.w500,
+);
 
 TextStyle StarT = TextStyle(color: Colors.red, fontSize: 20);
 
@@ -296,7 +708,7 @@ Widget Sub_Heading(context,
       Padding(
         padding: const EdgeInsets.only(left: 2.0),
         child: Text(heading,
-            style: ubuntuRegular.copyWith(
+            style: JosefinSansRegular.copyWith(
                 fontSize: Dimensions.fontSizeSmall,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).textTheme.bodyLarge!.color!)),

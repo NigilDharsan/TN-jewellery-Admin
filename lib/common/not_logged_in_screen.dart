@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/utils/images.dart' show Images;
 import 'package:tn_jewellery_admin/utils/styles.dart';
-import 'package:tn_jewellery_admin/utils/widgets/custom_app_bar.dart' show CustomAppBar;
-import 'package:tn_jewellery_admin/utils/widgets/custom_button.dart' show CustomButton;
+import 'package:tn_jewellery_admin/utils/widgets/custom_app_bar.dart'
+    show CustomAppBar;
+import 'package:tn_jewellery_admin/utils/widgets/custom_button.dart'
+    show CustomButton;
 
 import '../../utils/dimensions.dart';
 
@@ -28,7 +30,7 @@ class NotLoggedInScreen extends StatelessWidget {
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             Text(
               'sorry'.tr,
-              style: ubuntuBold.copyWith(
+              style: JosefinSansBold.copyWith(
                   fontSize: MediaQuery.of(context).size.height * 0.023,
                   color: Theme.of(context).primaryColor),
               textAlign: TextAlign.center,
@@ -36,7 +38,7 @@ class NotLoggedInScreen extends StatelessWidget {
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             Text(
               'you_are_not_logged_in'.tr,
-              style: ubuntuRegular.copyWith(
+              style: JosefinRegular.copyWith(
                   fontSize: MediaQuery.of(context).size.height * 0.0175,
                   color: Theme.of(context).disabledColor),
               textAlign: TextAlign.center,

@@ -223,18 +223,34 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(inProgressOrderData?.customerName ?? '',
-                        style: const TextStyle(
-                            fontFamily: 'JosefinSans',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: textColor)),
-                    Text(inProgressOrderData?.customerMobile ?? '',
-                        style: const TextStyle(
-                            fontFamily: 'JosefinSans',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: textColor)),
+                    Row(
+                      children: [
+                        Text("${inProgressOrderData?.customerName ?? ''} - ",
+                            style: const TextStyle(
+                                fontFamily: 'JosefinSans',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: textColor)),
+                        const SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: () {
+                            final phone =
+                                inProgressOrderData?.customerMobile ?? '';
+                            if (phone.isNotEmpty) {
+                              launchUrl(Uri.parse("tel:$phone"));
+                            }
+                          },
+                          child: Text(
+                            inProgressOrderData?.customerMobile ?? '',
+                            style: const TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontSize: 14,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

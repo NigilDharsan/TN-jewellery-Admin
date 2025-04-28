@@ -47,9 +47,9 @@ Widget buildOrderDetail(OrderController controller) {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Retailer Name", style: customer2),
+                Text("Retailer Name", style: JosefinSansMedium),
                 Text(controller.selectNewOrderListData?.customerName ?? "",
-                    style: customer1),
+                    style: JosefinRegular),
               ],
             ),
             Container(
@@ -79,16 +79,16 @@ Widget buildOrderDetail(OrderController controller) {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Due Date", style: customer2),
+                Text("Due Date", style: JosefinSansMedium),
                 Text(controller.selectNewOrderListData?.customerDueDate ?? "",
-                    style: customer1),
+                    style: JosefinRegular),
               ],
             ),
             // Column(
             //   crossAxisAlignment: CrossAxisAlignment.start,
             //   children: const [
-            //     Text("Work Order Type", style: customer2),
-            //     Text("New Size", style: customer1),
+            //     Text("Work Order Type", style: JosefinSansMedium),
+            //     Text("New Size", style: JosefinRegular),
             //   ],
             // ),
           ],
@@ -113,14 +113,14 @@ Widget buildOrderDetail(OrderController controller) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Weight", style: customer2),
+              Text("Weight", style: JosefinSansMedium),
               Text(controller.selectNewOrderListData?.grossWt ?? "",
-                  style: customer1),
+                  style: JosefinRegular),
             ]),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Design ", style: customer2),
+              Text("Design ", style: JosefinSansMedium),
               Text(controller.selectNewOrderListData?.designName ?? "",
-                  style: customer1),
+                  style: JosefinRegular),
             ]),
           ],
         ),
@@ -129,13 +129,13 @@ Widget buildOrderDetail(OrderController controller) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Purity", style: customer2),
-              Text("91.6", style: customer1),
+              Text("Purity", style: JosefinSansMedium),
+              Text("91.6", style: JosefinRegular),
             ]),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Dimension", style: customer2),
+              Text("Dimension", style: JosefinSansMedium),
               Text(controller.selectNewOrderListData?.size ?? "",
-                  style: customer1),
+                  style: JosefinRegular),
             ]),
           ],
         ),
@@ -144,14 +144,14 @@ Widget buildOrderDetail(OrderController controller) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Stone Type", style: customer2),
+              Text("Stone Type", style: JosefinSansMedium),
               Text(controller.selectNewOrderListData?.customizedStoneName ?? "",
-                  style: customer1),
+                  style: JosefinRegular),
             ]),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Stone Weight", style: customer2),
+              Text("Stone Weight", style: JosefinSansMedium),
               Text(controller.selectNewOrderListData?.stoneWt ?? "",
-                  style: customer1),
+                  style: JosefinRegular),
             ]),
           ],
         ),
@@ -159,8 +159,8 @@ Widget buildOrderDetail(OrderController controller) {
         // Column(
         //   crossAxisAlignment: CrossAxisAlignment.start,
         //   children: const [
-        //     Text("Stone quantity", style: customer2),
-        //     Text("XXXXX123", style: customer1),
+        //     Text("Stone quantity", style: JosefinSansMedium),
+        //     Text("XXXXX123", style: JosefinRegular),
         //   ],
         // ),
         const SizedBox(height: 10),
@@ -387,7 +387,7 @@ Widget buildOrderDetail(OrderController controller) {
                 fontSize: 16,
                 fontWeight: FontWeight.bold)),
         Text(controller.selectNewOrderListData?.remarks ?? "",
-            style: customer1),
+            style: JosefinSansRegular),
         const SizedBox(height: 20),
 
         buildChangeStatus(controller),
