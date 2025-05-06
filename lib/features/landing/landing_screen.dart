@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/customers/CustomerApprovals.dart';
 import 'package:tn_jewellery_admin/features/dashboard/dashboard.dart';
 import 'package:tn_jewellery_admin/features/my_order/myOrderScreen.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
+import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 
 class MainScreen extends StatefulWidget {
   final int pageIndex;
@@ -46,13 +48,13 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _getScreen(_selectedPageIndex),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => Get.toNamed(RouteHelper.orderbasicscreen),
-      //   backgroundColor: brandPrimaryColor,
-      //   shape: const CircleBorder(),
-      //   child: const Icon(Icons.add, size: 30, color: Colors.white),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed(RouteHelper.tagsearchscreen),
+        backgroundColor: brandPrimaryColor,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, size: 30, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         backgroundColor: brandGoldLightColor,

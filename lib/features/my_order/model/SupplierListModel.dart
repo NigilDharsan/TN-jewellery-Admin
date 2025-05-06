@@ -43,12 +43,12 @@ class SupplierListData {
   int? noOfDaysForDue;
   Null? image;
   String? createdOn;
-  Null? updatedOn;
+  String? updatedOn;
   int? idCountry;
   int? idState;
   int? idCity;
   int? createdBy;
-  Null? updatedBy;
+  int? updatedBy;
 
   SupplierListData({
     this.idSupplier,

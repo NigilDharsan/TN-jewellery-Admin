@@ -18,6 +18,10 @@ class AppConstants {
 
   static const String getSupplierUrl = 'retailmaster/supplier/?active';
 
+  static const String getTagSearchUrl = 'inventory/tag/admin_app/search/';
+  static const String getTagImageUpdateUrl =
+      'inventory/tag/admin_app/image_update/';
+
   static const String isSupplier = 'is_supplier';
   static const String notificationChannel = 'channel_type';
   static const String theme = 'lms_theme';

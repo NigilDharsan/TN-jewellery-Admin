@@ -10,6 +10,7 @@ import 'package:tn_jewellery_admin/features/my_order/newOrderScreen.dart'
 import 'package:tn_jewellery_admin/features/my_order/orderDetailScreen.dart'
     show orderDetailScreen;
 import 'package:tn_jewellery_admin/features/splash/splash_screen.dart';
+import 'package:tn_jewellery_admin/features/tagSearch/TagSearchScreen.dart';
 import 'package:tn_jewellery_admin/utils/config.dart';
 
 import '../../../common/update_screen.dart';
@@ -30,6 +31,7 @@ class RouteHelper {
   static const String myorderScreen = '/myOrderScreen';
   static const String orderdetailScreen = '/orderDetailScreen';
   static const String neworderScreen = '/newOrderScreen';
+  static const String tagsearchscreen = '/tagsearchscreen';
 
   static String getInitialRoute() => initial;
   static String getSplashRoute() => splash;
@@ -41,6 +43,7 @@ class RouteHelper {
   static String getMyOrderScreen() => myorderScreen;
   static String getOrderDetailsScreen() => orderdetailScreen;
   static String getNewOrderScreen() => neworderScreen;
+  static String getTagSearchScreen() => tagsearchscreen;
 
   static String getAddLocation(int id, int accountId) =>
       '$addLocation?userId=$id&accountId=$accountId';
@@ -52,6 +55,7 @@ class RouteHelper {
     GetPage(name: myorderScreen, page: () => const myOrderScreen()),
     GetPage(name: orderdetailScreen, page: () => const orderDetailScreen()),
     GetPage(name: neworderScreen, page: () => const newOrderScreen()),
+    GetPage(name: tagsearchscreen, page: () => TagSearchScreen()),
     GetPage(
       name: main,
       page: () {

@@ -61,6 +61,8 @@ dependencies:
   video_player:
   audioplayers:
 
+  barcode_scan2:
+
 
 dev_dependencies:
   flutter_test:
