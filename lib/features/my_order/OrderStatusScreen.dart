@@ -223,18 +223,24 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(inProgressOrderData?.customerName ?? '',
-                        style: const TextStyle(
-                            fontFamily: 'JosefinSans',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: textColor)),
-                    Text(inProgressOrderData?.customerMobile ?? '',
-                        style: const TextStyle(
-                            fontFamily: 'JosefinSans',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: textColor)),
+                    Row(
+                      children: [
+                        Text('${inProgressOrderData?.customerName ?? ''} -',
+                            style: const TextStyle(
+                                fontFamily: 'JosefinSans',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: textColor)),
+                        SizedBox(width: 10),
+                        Text(inProgressOrderData?.customerMobile ?? '',
+                            style: const TextStyle(
+                                fontFamily: 'JosefinSans',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: textColor)),
+                      ],
+                    ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -462,15 +468,14 @@ Widget customDropdown({
       child: DropdownButton2<String>(
         isExpanded: true,
         value: selectedValue,
-        hint: Row(
-          children: [
-            Text(
-              label,
-              style: labelStyle,
-            ),
-          ],
+        hint: Expanded(
+          child: Text(
+            label,
+            style: labelStyle,
+          ),
         ),
-        items: items.map((value) {
+
+          items: items.map((value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Align(

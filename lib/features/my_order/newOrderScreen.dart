@@ -193,11 +193,25 @@ class _newOrderScreenState extends State<newOrderScreen> {
                     };
                     var status = await controller.orderAssign(body);
                     if (status) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Order successfully assigned"),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      await Future.delayed(Duration(seconds: 1));
                       Navigator.pop(context);
                       Navigator.pop(context, true);
-                    } else {}
-
-                    // Add your onTap code here
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Failed to assign order"),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
                   },
                   child: Container(
                     height: 50,

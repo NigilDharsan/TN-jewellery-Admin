@@ -32,8 +32,8 @@ class SupplierListData {
   String? address3;
   String? pincode;
   String? gstNumber;
-  Null? panNumber;
-  Null? phoneNo;
+  String? panNumber;
+  String? phoneNo;
   String? mobileNo;
   String? mobCode;
   bool? status;
@@ -41,14 +41,14 @@ class SupplierListData {
   int? metalOpBlc;
   int? silverOpBlc;
   int? noOfDaysForDue;
-  Null? image;
+  String? image;
   String? createdOn;
-  Null? updatedOn;
+  String? updatedOn;
   int? idCountry;
   int? idState;
   int? idCity;
   int? createdBy;
-  Null? updatedBy;
+ int? updatedBy;
 
   SupplierListData({
     this.idSupplier,

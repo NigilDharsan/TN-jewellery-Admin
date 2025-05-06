@@ -52,6 +52,8 @@ dependencies:
   path_provider:
   permission_handler:
   shared_preferences:
+  video_player:
+  audioplayers:
 
   url_launcher:
   pin_code_fields:
