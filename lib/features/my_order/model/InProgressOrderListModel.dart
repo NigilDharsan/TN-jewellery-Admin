@@ -82,90 +82,90 @@ class InProgressOrderData {
   int? orderBranch;
   int? finYear;
   int? customer;
-  Null? supplier;
+  String? supplier;
   int? createdBy;
   String? branchName;
   String? customerName;
   String? customerMobile;
-  int? idJobOrderDetail;
+  String? idJobOrderDetail;
   String? dueDate;
-  Null? deliveryDate;
-  int? jobOrder;
-  int? orderDetail;
-  int? status;
+  String? deliveryDate;
+  String? jobOrder;
+  String? orderDetail;
+  String? status;
   String? supplierName;
   String? supplierMobile;
 
   InProgressOrderData(
       {this.detailId,
-      this.stoneDetails,
-      this.pieces,
-      this.grossWt,
-      this.lessWt,
-      this.netWt,
-      this.diamondWt,
-      this.stoneWt,
-      this.wastagePercent,
-      this.wastageWt,
-      this.itemCost,
-      this.customerDueDate,
-      this.karigarDueDate,
-      this.remarks,
-      this.cancelReason,
-      this.cancelledDate,
-      this.updatedOn,
-      this.deliveredOn,
-      this.nickName,
-      this.customizedRefNo,
-      this.customizedProductName,
-      this.customizedDesignName,
-      this.dimension,
-      this.customizedStoneName,
-      this.customizedStoneWt,
-      this.purchaseTouch,
-      this.purchaseVa,
-      this.repairApproxAmt,
-      this.order,
-      this.purity,
-      this.erpTag,
-      this.product,
-      this.design,
-      this.subDesign,
-      this.size,
-      this.orderStatus,
-      this.productName,
-      this.designName,
-      this.uomName,
-      this.orderStatusName,
-      this.colour,
-      this.orderNo,
-      this.purityValue,
-      this.image,
-      this.imageText,
-      this.orderId,
-      this.date,
-      this.orderType,
-      this.orderDate,
-      this.isRateFixedOnOrder,
-      this.addedThrough,
-      this.totalDiscount,
-      this.createdOn,
-      this.orderBranch,
-      this.finYear,
-      this.customer,
-      this.supplier,
-      this.createdBy,
-      this.branchName,
-      this.customerName,
-      this.customerMobile,
-      this.idJobOrderDetail,
-      this.dueDate,
-      this.deliveryDate,
-      this.jobOrder,
-      this.orderDetail,
-      this.status,
-      this.supplierName,
-      this.supplierMobile});
+        this.stoneDetails,
+        this.pieces,
+        this.grossWt,
+        this.lessWt,
+        this.netWt,
+        this.diamondWt,
+        this.stoneWt,
+        this.wastagePercent,
+        this.wastageWt,
+        this.itemCost,
+        this.customerDueDate,
+        this.karigarDueDate,
+        this.remarks,
+        this.cancelReason,
+        this.cancelledDate,
+        this.updatedOn,
+        this.deliveredOn,
+        this.nickName,
+        this.customizedRefNo,
+        this.customizedProductName,
+        this.customizedDesignName,
+        this.dimension,
+        this.customizedStoneName,
+        this.customizedStoneWt,
+        this.purchaseTouch,
+        this.purchaseVa,
+        this.repairApproxAmt,
+        this.order,
+        this.purity,
+        this.erpTag,
+        this.product,
+        this.design,
+        this.subDesign,
+        this.size,
+        this.orderStatus,
+        this.productName,
+        this.designName,
+        this.uomName,
+        this.orderStatusName,
+        this.colour,
+        this.orderNo,
+        this.purityValue,
+        this.image,
+        this.imageText,
+        this.orderId,
+        this.date,
+        this.orderType,
+        this.orderDate,
+        this.isRateFixedOnOrder,
+        this.addedThrough,
+        this.totalDiscount,
+        this.createdOn,
+        this.orderBranch,
+        this.finYear,
+        this.customer,
+        this.supplier,
+        this.createdBy,
+        this.branchName,
+        this.customerName,
+        this.customerMobile,
+        this.idJobOrderDetail,
+        this.dueDate,
+        this.deliveryDate,
+        this.jobOrder,
+        this.orderDetail,
+        this.status,
+        this.supplierName,
+        this.supplierMobile});
 
   InProgressOrderData.fromJson(Map<String, dynamic> json) {
     detailId = json['detail_id'];
@@ -234,13 +234,13 @@ class InProgressOrderData {
     branchName = json['branch_name'];
     customerName = json['customer_name'];
     customerMobile = json['customer_mobile'];
-    idJobOrderDetail = json['id_job_order_detail'];
-    dueDate = json['due_date'];
-    deliveryDate = json['delivery_date'];
-    jobOrder = json['job_order'];
-    orderDetail = json['order_detail'];
-    status = json['status'];
-    supplierName = json['supplier_name'];
+    idJobOrderDetail = json['id_job_order_detail']?.toString() ?? '';
+    dueDate = json['due_date']?.toString() ?? '';
+    deliveryDate = json['delivery_date']?.toString() ?? '';
+    jobOrder = json['job_order']?.toString() ?? '';
+    orderDetail = json['order_detail']?.toString() ?? '';
+    status = json['status']?.toString() ?? '';
+    supplierName = json['supplier_name']?.toString() ?? '';
     supplierMobile = json['supplier_mobile'];
   }
 

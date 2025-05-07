@@ -5,6 +5,8 @@ import 'package:tn_jewellery_admin/features/dashboard/repository/dashboard_repo.
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/repository/order_repo.dart';
 import 'package:tn_jewellery_admin/features/splash/controller/splash_controller.dart';
+import 'package:tn_jewellery_admin/features/tagSearch/controller/tag_controller.dart';
+import 'package:tn_jewellery_admin/features/tagSearch/repository/tag_repo.dart';
 import 'package:tn_jewellery_admin/utils/Loader/LoaderController.dart'
     show LoaderController;
 import 'package:tn_jewellery_admin/utils/core/theme/controller/theme_controller.dart'
@@ -36,6 +38,10 @@ class InitialBinding extends Bindings {
     Get.lazyPut(() => OrderController(
         orderRepo:
             OrderRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
+
+    Get.lazyPut(() => TagController(
+        tagRepo:
+            TagRepo(sharedPreferences: Get.find(), apiClient: Get.find())));
 
     Get.lazyPut(() => DashboardController(
         dashboardRepo: DashboardRepo(

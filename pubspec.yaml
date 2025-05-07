@@ -54,12 +54,17 @@ dependencies:
   shared_preferences:
   video_player:
   audioplayers:
+  share_plus:
 
   url_launcher:
   pin_code_fields:
   dropdown_button2:
 
   photo_view:
+
+
+  barcode_scan2:
+
 
 dev_dependencies:
   flutter_test:
@@ -101,23 +106,23 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Ubuntu
+    - family: JosefinSans
       fonts:
-        - asset: assets/fonts/Ubuntu/Ubuntu-Light.ttf
+        - asset: assets/fonts/JosefinSans/JosefinSans-Light.ttf
           weight: 300
-        - asset: assets/fonts/Ubuntu/Ubuntu-LightItalic.ttf
+        - asset: assets/fonts/JosefinSans/JosefinSans-LightItalic.ttf
           weight: 300
-        - asset: assets/fonts/Ubuntu/Ubuntu-Regular.ttf
+        - asset: assets/fonts/JosefinSans/JosefinSans-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Ubuntu/Ubuntu-Italic.ttf
+        - asset: assets/fonts/JosefinSans/JosefinSans-Italic.ttf
           weight: 400
-        - asset: assets/fonts/Ubuntu/Ubuntu-Medium.ttf
+        - asset: assets/fonts/JosefinSans/JosefinSans-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Ubuntu/Ubuntu-MediumItalic.ttf
+        - asset: assets/fonts/JosefinSans/JosefinSans-MediumItalic.ttf
           weight: 500
-        - asset: assets/fonts/Ubuntu/Ubuntu-Bold.ttf
+        - asset: assets/fonts/JosefinSans/JosefinSans-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Ubuntu/Ubuntu-BoldItalic.ttf
+        - asset: assets/fonts/JosefinSans/JosefinSans-BoldItalic.ttf
           weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

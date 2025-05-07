@@ -461,6 +461,7 @@ class OpenOrderData {
 }
 
 class PreviewImages {
+
   int? detOrderImgId;
   String? name;
   String? image;

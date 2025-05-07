@@ -68,7 +68,7 @@ class CustomButton extends StatelessWidget {
                   : const SizedBox(),
               Text(buttonText ?? '',
                   textAlign: TextAlign.center,
-                  style: ubuntuMedium.copyWith(
+                  style: JosefinSansMedium.copyWith(
                     color: transparent!
                         ? Theme.of(context).primaryColor
                         : buttonTextColor,

@@ -45,7 +45,7 @@ class RatingBar extends StatelessWidget {
             padding:
                 const EdgeInsets.only(left: Dimensions.paddingSizeExtraSmall),
             child: Text('($ratingCount)',
-                style: ubuntuRegular.copyWith(
+                style: JosefinRegular.copyWith(
                     fontSize: size! * 0.8,
                     color: Theme.of(context).disabledColor)),
           ))

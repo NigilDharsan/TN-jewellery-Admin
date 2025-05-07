@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -42,6 +43,30 @@ class OrderController extends GetxController implements GetxService {
   };
 
   OrderController({required this.orderRepo});
+
+  bool isCurrentPlaying = false; // Tracks if audio is currently playing
+  String? currentPlayingFile;
+  AudioPlayer audioPlayer = AudioPlayer(); // Initialize AudioPlayer
+
+  Future<void> playSegment(String filePath) async {
+    if (currentPlayingFile != filePath) {
+      if (isCurrentPlaying) {
+        await audioPlayer.stop();
+      }
+      await audioPlayer
+          .play(DeviceFileSource(filePath)); // Play the selected audio file
+      isCurrentPlaying = true;
+      currentPlayingFile = filePath; // Update current playing file
+      update();
+    }
+  }
+
+  Future<void> stopPlayback() async {
+    await audioPlayer.stop();
+    isCurrentPlaying = false;
+    currentPlayingFile = null; // Clear current playing file
+    update();
+  }
 
   Future<void> pickDate(OrderController controller) async {
     final DateTime? picked = await showDatePicker(

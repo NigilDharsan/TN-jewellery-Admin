@@ -12,14 +12,14 @@ class TitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(title!,
-          style:
-              ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
+          style: JosefinSansMedium.copyWith(
+              fontSize: Dimensions.fontSizeExtraLarge)),
       (onTap != null)
           ? InkWell(
               onTap: onTap,
               child: Text(
                 'see_all'.tr,
-                style: ubuntuMedium.copyWith(
+                style: JosefinSansMedium.copyWith(
                   decoration: TextDecoration.underline,
                   color: Get.isDarkMode
                       ? Theme.of(context)

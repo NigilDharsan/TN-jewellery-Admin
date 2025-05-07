@@ -134,9 +134,9 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Retailer Name", style: customer2),
+                  Text("Retailer Name", style: JosefinSansMedium),
                   Text(controller.selectNewOrderListData?.customerName ?? "",
-                      style: customer1),
+                      style: JosefinRegular),
                 ],
               ),
               Container(
@@ -166,9 +166,9 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Due Date", style: customer2),
+                  Text("Due Date", style: JosefinSansMedium),
                   Text(controller.selectNewOrderListData?.customerDueDate ?? "",
-                      style: customer1),
+                      style: JosefinRegular),
                 ],
               ),
               Column(
@@ -187,7 +187,7 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
               //   crossAxisAlignment: CrossAxisAlignment.start,
               //   children: const [
               //     Text("Work Order Type", style: customer2),
-              //     Text("New Size", style: customer1),
+              //     Text("New Size", style: JosefinRegular),
               //   ],
               // ),
             ],
@@ -212,14 +212,14 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Weight", style: customer2),
+                Text("Weight", style: JosefinSansMedium),
                 Text(controller.selectNewOrderListData?.grossWt ?? "",
-                    style: customer1),
+                    style: JosefinRegular),
               ]),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Design ", style: customer2),
+                Text("Design ", style: JosefinSansMedium),
                 Text(controller.selectNewOrderListData?.designName ?? "",
-                    style: customer1),
+                    style: JosefinRegular),
               ]),
             ],
           ),
@@ -228,14 +228,14 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Purity", style: customer2),
+                Text("Purity", style: JosefinSansMedium),
                 Text(controller.selectNewOrderListData?.purchaseTouch ?? "",
-                    style: customer1),
+                    style: JosefinRegular),
               ]),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Dimension", style: customer2),
+                Text("Dimension", style: JosefinSansMedium),
                 Text(controller.selectNewOrderListData?.size ?? "",
-                    style: customer1),
+                    style: JosefinRegular),
               ]),
             ],
           ),
@@ -244,16 +244,16 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Stone Type", style: customer2),
+                Text("Stone Type", style: JosefinSansMedium),
                 Text(
                     controller.selectNewOrderListData?.customizedStoneName ??
                         "",
-                    style: customer1),
+                    style: JosefinRegular),
               ]),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Stone Weight", style: customer2),
+                Text("Stone Weight", style: JosefinSansMedium),
                 Text(controller.selectNewOrderListData?.stoneWt ?? "",
-                    style: customer1),
+                    style: JosefinRegular),
               ]),
             ],
           ),
@@ -261,8 +261,8 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
           // Column(
           //   crossAxisAlignment: CrossAxisAlignment.start,
           //   children: const [
-          //     Text("Stone quantity", style: customer2),
-          //     Text("XXXXX123", style: customer1),
+          //     Text("Stone quantity", style: JosefinSansMedium),
+          //     Text("XXXXX123", style: JosefinRegular),
           //   ],
           // ),
           const SizedBox(height: 10),
@@ -485,7 +485,7 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
                   fontSize: 16,
                   fontWeight: FontWeight.bold)),
           Text(controller.selectNewOrderListData?.remarks ?? "",
-              style: customer1),
+              style: JosefinRegular),
           const SizedBox(height: 20),
 
           buildChangeStatus(controller),
@@ -511,14 +511,11 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
 
   Future<void> shareProductMedia() async {
     final controller = Get.find<OrderController>();
-
     final String productName = controller.selectNewOrderListData?.productName ?? "";
     final String weight = controller.selectNewOrderListData?.grossWt ?? "";
     final String design = controller.selectNewOrderListData?.designName ?? "";
-    final String purity = controller.selectNewOrderListData?.purchaseTouch ?? "";
-    final String dimension = controller.selectNewOrderListData?.size ?? "";
-    final String stoneType = controller.selectNewOrderListData?.customizedStoneName ?? "";
-    final String stoneWeight = controller.selectNewOrderListData?.stoneWt ?? "";
+    final String order = controller.selectNewOrderListData?.orderNo ?? "";
+    final String description = controller.selectNewOrderListData?.remarks ?? "";
 
     final List<String> imageUrls = (controller.selectNewOrderListData?.previewImages ?? [])
         .map<String>((e) => e.image ?? "")
@@ -540,18 +537,18 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
 
     final String message = '''
 Check out this product:
-
+Order No: $order
 Product Name: $productName
-Purity: $purity
 Design: $design
 Gross Weight: $weight
-Net Weight: $dimension
-Stone Type: $stoneType
-Stone Weight: $stoneWeight
+Description: $description
 ''';
 
     final tempDir = await getTemporaryDirectory();
-
+    Get.dialog(
+      Center(child: CircularProgressIndicator()),
+      barrierDismissible: true,
+    );
     for (final url in allUrls) {
       try {
         debugPrint('Downloading: $url');
@@ -579,7 +576,9 @@ Stone Weight: $stoneWeight
         debugPrint('Error downloading $url: $e');
       }
     }
-
+    if (Get.isDialogOpen ?? false) {
+      Get.back();
+    }
     if (filesToShare.isNotEmpty) {
       await Share.shareXFiles([filesToShare.first],text: message);
     } else {

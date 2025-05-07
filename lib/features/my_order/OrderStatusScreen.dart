@@ -43,7 +43,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(right: 5,bottom: 1),
                 child: customDropdown(
                     label: 'Work Status',
                     labelStyle: const TextStyle(
@@ -57,16 +57,13 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                     onChanged: (value) {
                       controller.selectedWorkStatus = value ?? "";
                       controller.update();
-
                       controller.filterBody = {
                         "id_supplier": "",
                         "id_customer": "",
                         "date": "",
                       };
-
                       controller.selectedVendor = null;
                       controller.selectedDate = null;
-
                       if (controller.selectedWorkStatus == "In Progress") {
                         controller.selectedWorkStatusID = "inprogress";
                         controller.currentStep = 2;
@@ -75,9 +72,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                       } else if (controller.selectedWorkStatus ==
                           "Delivery Ready") {
                         controller.selectedWorkStatusID = "delivery_ready";
-
                         controller.currentStep = 3;
-
                         controller.getOrderStatusList(
                             "delivery_ready", controller.filterBody);
                         Get.find<DashboardController>().getCustomerList("2");
@@ -96,32 +91,32 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                 padding: const EdgeInsets.only(right: 5),
                 child: controller.selectedWorkStatus == "In Progress"
                     ? customDropdown(
-                        label: 'Vendor Wise',
-                        labelStyle: const TextStyle(
-                          fontFamily: 'JosefinSans',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: brandGreyColor,
-                        ),
-                        selectedValue: controller.selectedVendor,
-                        items: controller.supplierListModel!.data!
-                            .map((e) => e.supplierName ?? '')
-                            .toList(),
-                        onChanged: (value) {
-                          controller.selectedVendor = value;
-                          var supplierID = controller.supplierListModel!.data!
-                              .firstWhere((e) => e.supplierName == value)
-                              .idSupplier;
-                          controller.filterBody = {
-                            "id_supplier": supplierID,
-                            "id_customer": "",
-                            "date": controller.formatDateToYMD(),
-                          };
+                    label: 'Vendor Wise',
+                    labelStyle: const TextStyle(
+                      fontFamily: 'JosefinSans',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: brandGreyColor,
+                    ),
+                    selectedValue: controller.selectedVendor,
+                    items: controller.supplierListModel!.data!
+                        .map((e) => e.supplierName ?? '')
+                        .toList(),
+                    onChanged: (value) {
+                      controller.selectedVendor = value;
+                      var supplierID = controller.supplierListModel!.data!
+                          .firstWhere((e) => e.supplierName == value)
+                          .idSupplier;
+                      controller.filterBody = {
+                        "id_supplier": supplierID,
+                        "id_customer": "",
+                        "date": controller.formatDateToYMD(),
+                      };
+                      controller.getOrderStatusList(
+                          controller.selectedWorkStatusID,
+                          controller.filterBody);
+                    })
 
-                          controller.getOrderStatusList(
-                              controller.selectedWorkStatusID,
-                              controller.filterBody);
-                        })
                     : customDropdown(
                         label: 'Customer Wise',
                         labelStyle: const TextStyle(
@@ -138,7 +133,6 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                             .toList(),
                         onChanged: (value) {
                           controller.selectedVendor = value;
-
                           var customerID = Get.find<DashboardController>()
                               .customerModel!
                               .data!
@@ -225,22 +219,32 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                   children: [
                     Row(
                       children: [
-                        Text('${inProgressOrderData?.customerName ?? ''} -',
+                        Text("${inProgressOrderData?.customerName ?? ''} - ",
                             style: const TextStyle(
                                 fontFamily: 'JosefinSans',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: textColor)),
-                        SizedBox(width: 10),
-                        Text(inProgressOrderData?.customerMobile ?? '',
+                        const SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: () {
+                            final phone =
+                                inProgressOrderData?.customerMobile ?? '';
+                            if (phone.isNotEmpty) {
+                              launchUrl(Uri.parse("tel:$phone"));
+                            }
+                          },
+                          child: Text(
+                            inProgressOrderData?.customerMobile ?? '',
                             style: const TextStyle(
-                                fontFamily: 'JosefinSans',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: textColor)),
+                              fontFamily: 'JosefinSans',
+                              fontSize: 14,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -474,8 +478,7 @@ Widget customDropdown({
             style: labelStyle,
           ),
         ),
-
-          items: items.map((value) {
+        items: items.map((value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Align(
@@ -499,7 +502,7 @@ Widget customDropdown({
           ),
         ),
         menuItemStyleData: const MenuItemStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 6),
+          padding: EdgeInsets.symmetric(horizontal: 6,vertical: 1),
         ),
       ),
     ),

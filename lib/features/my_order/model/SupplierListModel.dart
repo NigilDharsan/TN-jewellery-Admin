@@ -26,7 +26,7 @@ class SupplierListData {
   int? isVendor;
   String? shortCode;
   String? supplierName;
-  Null? supplierSign;
+  String? supplierSign;
   String? address1;
   String? address2;
   String? address3;
@@ -48,7 +48,7 @@ class SupplierListData {
   int? idState;
   int? idCity;
   int? createdBy;
- int? updatedBy;
+  int? updatedBy;
 
   SupplierListData({
     this.idSupplier,

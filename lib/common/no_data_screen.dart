@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/utils/dimensions.dart' show Dimensions;
 import 'package:tn_jewellery_admin/utils/images.dart' show Images;
 import 'package:tn_jewellery_admin/utils/styles.dart';
-import 'package:tn_jewellery_admin/utils/widgets/custom_button.dart' show CustomButton;
-
+import 'package:tn_jewellery_admin/utils/widgets/custom_button.dart'
+    show CustomButton;
 
 enum NoDataType {
   cart,
@@ -82,7 +82,7 @@ class NoDataScreen extends StatelessWidget {
                     : type == NoDataType.notification
                         ? 'empty_notifications'.tr
                         : text!,
-            style: ubuntuMedium.copyWith(
+            style: JosefinSansMedium.copyWith(
               fontSize: Dimensions.fontSizeDefault,
               color:
                   Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(.6),

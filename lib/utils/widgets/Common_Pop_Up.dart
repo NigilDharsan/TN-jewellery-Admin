@@ -27,8 +27,8 @@ Widget Common_Pop_Up(
           Padding(
             padding: const EdgeInsets.all(20),
             child: Text(PopUpDescription ?? "",
-                style:
-                    ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
+                style: JosefinSansMedium.copyWith(
+                    fontSize: Dimensions.fontSizeLarge),
                 textAlign: TextAlign.center),
           ),
           Padding(
@@ -48,7 +48,7 @@ Widget Common_Pop_Up(
                       child: Text(
                         backText ?? "",
                         textAlign: TextAlign.center,
-                        style: ubuntuBold.copyWith(color: buttonTextColor),
+                        style: JosefinSansBold.copyWith(color: buttonTextColor),
                       ),
                     ),
                   ),
@@ -65,7 +65,7 @@ Widget Common_Pop_Up(
                       child: Text(
                         confirmText ?? "",
                         textAlign: TextAlign.center,
-                        style: ubuntuBold.copyWith(color: buttonTextColor),
+                        style: JosefinSansBold.copyWith(color: buttonTextColor),
                       ),
                     ),
                   ),
@@ -98,8 +98,8 @@ Widget Single_Common_PopUp(
           Padding(
             padding: const EdgeInsets.all(20),
             child: Text(PopUpDescription ?? "",
-                style:
-                    ubuntuMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
+                style: JosefinSansMedium.copyWith(
+                    fontSize: Dimensions.fontSizeLarge),
                 textAlign: TextAlign.center),
           ),
           Padding(
@@ -116,7 +116,7 @@ Widget Single_Common_PopUp(
                   child: Text(
                     backText ?? "",
                     textAlign: TextAlign.center,
-                    style: ubuntuBold.copyWith(color: buttonTextColor),
+                    style: JosefinSansBold.copyWith(color: buttonTextColor),
                   ),
                 ),
               ),

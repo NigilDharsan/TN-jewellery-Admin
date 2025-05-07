@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
@@ -81,7 +82,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _resetToPortrait() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -110,57 +112,57 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       body: Center(
         child: _controller.value.isInitialized
             ? Stack(
-          children: [
-            GestureDetector(
-              onTap: _togglePlayPause,
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              ),
-            ),
-            Positioned(
-              top: 40,
-              right: 20,
-              child: IconButton(
-                icon: Icon(Icons.close, color: Colors.white, size: 30),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            if (_isPlaying)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  color: Colors.black54,
-                  child: VideoPlayerControls(
-                    controller: _controller,
-                    isPlaying: _isPlaying,
-                    onPlayPause: _togglePlayPause,
-                    onVolumeChanged: _onVolumeChanged,
-                    onProgressChanged: _onProgressChanged,
-                    onFullScreen: _toggleFullScreen,
-                    isVolumeMute: _isVolumeMute,
+                children: [
+                  GestureDetector(
+                    onTap: _togglePlayPause,
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: 40,
+                    right: 20,
+                    child: IconButton(
+                      icon: Icon(Icons.close, color: Colors.white, size: 30),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  if (_isPlaying)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        color: Colors.black54,
+                        child: VideoPlayerControls(
+                          controller: _controller,
+                          isPlaying: _isPlaying,
+                          onPlayPause: _togglePlayPause,
+                          onVolumeChanged: _onVolumeChanged,
+                          onProgressChanged: _onProgressChanged,
+                          onFullScreen: _toggleFullScreen,
+                          isVolumeMute: _isVolumeMute,
+                        ),
+                      ),
+                    )
+                  else
+                    Center(
+                      child: IconButton(
+                        icon: Icon(Icons.play_arrow,
+                            color: Colors.white, size: 60),
+                        onPressed: _togglePlayPause,
+                      ),
+                    ),
+                ],
               )
-            else
-              Center(
-                child: IconButton(
-                  icon: Icon(Icons.play_arrow, color: Colors.white, size: 60),
-                  onPressed: _togglePlayPause,
-                ),
-              ),
-          ],
-        )
             : CircularProgressIndicator(),
       ),
     );
   }
 }
-
 
 class VideoPlayerControls extends StatelessWidget {
   final VideoPlayerController controller;
@@ -171,7 +173,8 @@ class VideoPlayerControls extends StatelessWidget {
   final Function onFullScreen;
   final bool isVolumeMute;
 
-  const VideoPlayerControls({super.key,
+  const VideoPlayerControls({
+    super.key,
     required this.controller,
     required this.isPlaying,
     required this.onPlayPause,
@@ -236,4 +239,3 @@ class VideoPlayerControls extends StatelessWidget {
     return "$minutes:$seconds";
   }
 }
-

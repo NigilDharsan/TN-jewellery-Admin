@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_controller.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomerNameList extends StatefulWidget {
   const CustomerNameList({super.key});
@@ -95,7 +96,15 @@ class _CustomerNameListState extends State<CustomerNameList>
               itemCount: customerList.length,
               itemBuilder: (context, index) {
                 final customer = customerList[index];
-                return Card(
+                return GestureDetector(
+                  onTap: () {
+                    final phone =
+                        customer.mobile ?? '';
+                    if (phone.isNotEmpty) {
+                      launchUrl(Uri.parse("tel:$phone"));
+                    }
+                  },
+                  child:Card(
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   elevation: 3,
                   shape: RoundedRectangleBorder(
@@ -126,15 +135,28 @@ class _CustomerNameListState extends State<CustomerNameList>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                customer.name ?? 'No Name',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                  fontFamily: 'JosefinSans',
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    customer.name ?? 'No Name',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                      fontFamily: 'JosefinSans',
+                                    ),
+                                  ),
+                                  SizedBox(width: 2),
+                                  Text(
+                                    ' - ${customer.companyName ?? ''}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                      fontFamily: 'JosefinSans',
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 6),
+                              const SizedBox(height: 4),
                               Text(
                                 customer.mobile ?? 'No Mobile',
                                 style: const TextStyle(
@@ -143,13 +165,22 @@ class _CustomerNameListState extends State<CustomerNameList>
                                   color: Colors.black54,
                                 ),
                               ),
+                              const SizedBox(height: 4),
+                              Text(
+                                customer.gstNumber ?? '',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                  fontFamily: 'JosefinSans',
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
+                ),);
               },
             ),
             if (isApprovalTab) const SizedBox(height: 20),
@@ -226,3 +257,13 @@ class _CustomerNameListState extends State<CustomerNameList>
     );
   }
 }
+
+
+// Future<void> callNumber(String phoneNumber) async {
+//   final Uri phoneUri = Uri(scheme: mobile, path: phoneNumber);
+//   if (await canLaunchUrl(phoneUri)) {
+//     await launchUrl(phoneUri);
+//   } else {
+//     throw 'Could not launch $phoneNumber';
+//   }
+// }
