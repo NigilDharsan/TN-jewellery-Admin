@@ -1,11 +1,9 @@
 import 'dart:convert';
 
-import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tn_jewellery_admin/features/tagSearch/controller/tag_controller.dart';
-import 'package:tn_jewellery_admin/utils/colors.dart';
 
 class TagSearchScreen extends StatelessWidget {
   @override
@@ -18,7 +16,7 @@ class TagSearchScreen extends StatelessWidget {
             padding: EdgeInsets.all(16),
             child: Column(
               children: [
-                // Search Row
+                // 🔍 Search Row
                 Row(
                   children: [
                     Expanded(
@@ -40,44 +38,89 @@ class TagSearchScreen extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.qr_code_scanner),
-                      onPressed: () async {
-                        var result = await BarcodeScanner.scan();
-                        if (result.rawContent.isNotEmpty) {
-                          controller.searchTextController.text =
-                              result.rawContent;
-                          controller.getTagSearch(
-                            tagCode:
-                                controller.searchTextController.text.trim(),
-                          );
-                        }
+                      onPressed: () {
+                        // Add scanner logic
                       },
                     ),
                   ],
                 ),
                 SizedBox(height: 16),
 
-                // Tag Info
-                if (controller.tagDetails != null) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          "Product: ${controller.tagDetails!['product_name']}"),
-                      Text("Design: ${controller.tagDetails!['design']}"),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Qty: ${controller.tagDetails!['qty']}"),
-                      Text("PML: ${controller.tagDetails!['pml']}"),
-                    ],
+                // 🪨 Stone Details Table View
+                if (controller.tagModel?.data?.stoneDetails != null &&
+                    controller.tagModel!.data!.stoneDetails!.isNotEmpty) ...[
+                  Text('Stone Details',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      children: [
+                        // Header Row
+                        Container(
+                          color: Colors.grey[300],
+                          padding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Expanded(
+                                  child: Text('Product',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))),
+                              Expanded(
+                                  child: Text('Design',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))),
+                              Expanded(
+                                  child: Text('Qty',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))),
+                              Expanded(
+                                  child: Text('Amount',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))),
+                            ],
+                          ),
+                        ),
+
+                        // Data Rows
+                        ...controller.tagModel!.data!.stoneDetails!
+                            .map((stone) {
+                          return Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                  top: BorderSide(color: Colors.grey[300]!)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(child: Text(stone.stoneName ?? '-')),
+                                Expanded(child: Text(stone.uomName ?? '-')),
+                                Expanded(
+                                    child:
+                                        Text(stone.stoneWt?.toString() ?? '-')),
+                                Expanded(
+                                    child: Text(
+                                        stone.stoneAmount?.toString() ?? '-')),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 16),
                 ],
 
-                // Image Row
-                if (controller.tagDetails != null)
+                // 🖼️ Image Row
+                if (controller.tagModel != null)
                   SizedBox(
                     height: 100,
                     child: ListView(
@@ -112,7 +155,7 @@ class TagSearchScreen extends StatelessWidget {
                             ],
                           );
                         }).toList(),
-                        // Add Image Button
+                        // ➕ Add Image Button
                         GestureDetector(
                           onTap: () {
                             Get.bottomSheet(
@@ -156,35 +199,12 @@ class TagSearchScreen extends StatelessWidget {
 
                 SizedBox(height: 20),
 
-                // Submit Button
+                // ✅ Submit Button
                 if (controller.images.isNotEmpty)
-                  GestureDetector(
-                    onTap: () {
-                      controller.uploadImages();
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: brandGoldDarkColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          child: Text(
-                            "SUBMIT",
-                            style: const TextStyle(
-                              fontFamily: 'JosefinSans',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                  ElevatedButton(
+                    onPressed: () => controller.uploadImages(),
+                    child: Text("Submit"),
+                  ),
               ],
             ),
           );
