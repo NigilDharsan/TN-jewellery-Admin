@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_controller.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,8 +14,48 @@ class CustomerNameList extends StatefulWidget {
 
 class _CustomerNameListState extends State<CustomerNameList>
     with SingleTickerProviderStateMixin {
+  String isSelectButton = 'LifeTime';
+  DateTime? selectedDateTime; // Define the selectedDateTime variable
+  bool isEditMode = false;
   late TabController _tabController;
   final List<String> _tabs = ['Yet to Approve', 'Rejected', 'Total Approved'];
+  bool showApproveBtnInThirdTab = false;
+
+  Future<void> pickDateTime() async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: selectedDateTime ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+
+    if (date != null) {
+      final time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(selectedDateTime ?? DateTime.now()),
+      );
+
+      if (time != null) {
+        setState(() {
+          // Update the selected date and time
+          selectedDateTime =
+              DateTime(date.year, date.month, date.day, time.hour, time.minute);
+        });
+      }
+    }
+  }
+
+  Widget buildSelectedDateTime() {
+    return selectedDateTime == null
+        ? const SizedBox.shrink() // Hide if no date is selected
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Selected: ${DateFormat('yyyy-MM-dd HH:mm').format(selectedDateTime!)}',
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          );
+  }
 
   @override
   void initState() {
@@ -81,9 +122,8 @@ class _CustomerNameListState extends State<CustomerNameList>
   Widget _buildCustomerList(DashboardController controller,
       {required int statusFilter}) {
     final customerList = controller.customerModel?.data ?? [];
-
     final isApprovalTab = statusFilter == 1;
-
+    final isSelectButton = statusFilter == 1;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
@@ -98,89 +138,103 @@ class _CustomerNameListState extends State<CustomerNameList>
                 final customer = customerList[index];
                 return GestureDetector(
                   onTap: () {
-                    final phone =
-                        customer.mobile ?? '';
+                    final phone = customer.mobile ?? '';
                     if (phone.isNotEmpty) {
                       launchUrl(Uri.parse("tel:$phone"));
                     }
                   },
-                  child:Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 16),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (isApprovalTab)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: Checkbox(
-                              value:
-                                  controller.selectedCustomers[customer.pkId] ??
-                                      false,
-                              onChanged: (bool? newValue) {
-                                setState(() {
-                                  controller.selectedCustomers[customer.pkId!] =
-                                      newValue!;
-                                });
-                              },
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (isApprovalTab)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: Checkbox(
+                                value: controller
+                                        .selectedCustomers[customer.pkId] ??
+                                    false,
+                                onChanged: (bool? newValue) {
+                                  setState(() {
+                                    controller
+                                            .selectedCustomers[customer.pkId!] =
+                                        newValue!;
+                                  });
+                                },
+                              ),
+                            ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      customer.name ?? 'No Name',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                        fontFamily: 'JosefinSans',
+                                      ),
+                                    ),
+                                    SizedBox(width: 2),
+                                    Text(
+                                      ' - ${customer.companyName ?? ''}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                        fontFamily: 'JosefinSans',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  customer.mobile ?? 'No Mobile',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'JosefinSans',
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  customer.gstNumber ?? '',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                    fontFamily: 'JosefinSans',
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  'Catalogue Field',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                    fontFamily: 'JosefinSans',
+                                  ),
+                                ),
+                                const SizedBox(height: 1),
+                                if (isSelectButton) buildFirstTab(),
+                                if (statusFilter == 3) buildSecondTab(),
+                                if (statusFilter == 2) buildThirdTab(),
+                              ],
                             ),
                           ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    customer.name ?? 'No Name',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18,
-                                      fontFamily: 'JosefinSans',
-                                    ),
-                                  ),
-                                  SizedBox(width: 2),
-                                  Text(
-                                    ' - ${customer.companyName ?? ''}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18,
-                                      fontFamily: 'JosefinSans',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                customer.mobile ?? 'No Mobile',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: 'JosefinSans',
-                                  color: Colors.black54,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                customer.gstNumber ?? '',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                  fontFamily: 'JosefinSans',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),);
+                );
               },
             ),
             if (isApprovalTab) const SizedBox(height: 20),
@@ -256,8 +310,148 @@ class _CustomerNameListState extends State<CustomerNameList>
       ),
     );
   }
-}
 
+  Widget buildFirstTab() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Flexible(
+              flex: 1,
+              child: RadioListTile<String>(
+                contentPadding: EdgeInsets.zero,
+                title: const Text(
+                  'LifeTime',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontFamily: 'JosefinSans',
+                  ),
+                ),
+                value: 'LifeTime',
+                groupValue: isSelectButton,
+                onChanged: (value) {
+                  setState(() {
+                    isSelectButton = value!;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(width: 1),
+            Flexible(
+              flex: 1,
+              child: RadioListTile<String>(
+                contentPadding: EdgeInsets.zero,
+                title: const Text(
+                  'Limited',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontFamily: 'JosefinSans',
+                  ),
+                ),
+                value: 'Limited',
+                groupValue: isSelectButton,
+                onChanged: (value) async {
+                  setState(() {
+                    isSelectButton = value!;
+                  });
+                  await pickDateTime();
+                },
+              ),
+            ),
+          ],
+        ),
+        if (isSelectButton == 'Limited' && selectedDateTime != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Selected: ${DateFormat('yyyy-MM-dd HH:mm').format(selectedDateTime!)}',
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () {},
+          child: const Text('Approve'),
+        ),
+      ],
+    );
+  }
+
+  Widget buildSecondTab() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 80),
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              const SizedBox(height: 40),
+              // Add spacing below the icon if needed
+              if (isEditMode)
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isEditMode = false;
+                    });
+                  },
+                  child: const Text('Approve'),
+                ),
+            ],
+          ),
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  isEditMode = true;
+                });
+              },
+              child: Text(
+                'Edit',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
+                  fontFamily: 'JosefinSans',
+                ),
+              ))
+        ],
+      ),
+    );
+  }
+
+  Widget buildThirdTab() {
+    return Column(
+      children: [
+        Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    showApproveBtnInThirdTab = true;
+                  });
+                },
+                child: Text(
+                  'Reject',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontFamily: 'JosefinSans',
+                  ),
+                ))),
+        if (showApproveBtnInThirdTab)
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                showApproveBtnInThirdTab = false;
+              });
+            },
+            child: const Text('Approve Again'),
+          ),
+      ],
+    );
+  }
+}
 
 // Future<void> callNumber(String phoneNumber) async {
 //   final Uri phoneUri = Uri(scheme: mobile, path: phoneNumber);

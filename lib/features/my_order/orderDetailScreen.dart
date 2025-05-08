@@ -15,7 +15,6 @@ import 'package:tn_jewellery_admin/utils/styles.dart';
 import 'package:tn_jewellery_admin/utils/widgets/custom_app_bar.dart';
 import 'package:http/http.dart' as http;
 
-
 class orderDetailScreen extends StatefulWidget {
   const orderDetailScreen({super.key});
 
@@ -108,11 +107,14 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: CustomAppBar(
-            title: 'SPARKLE RING',
+        preferredSize: Size.fromHeight(50),
+        child: GetBuilder<OrderController>(
+          builder: (controller) => CustomAppBar(
+            title: controller.selectNewOrderListData?.productName ?? "",
             isBackButtonExist: true,
-          )),
+          ),
+        ),
+      ),
       body: GetBuilder<OrderController>(builder: (controller) {
         return controller.isLoading
             ? Container()
@@ -175,12 +177,10 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.share, color: Colors.grey),
+                      icon: Icon(Icons.share, color: Colors.grey),
                       onPressed: () async {
                         await shareProductMedia();
-                      }
-                  ),
-
+                      }),
                 ],
               ),
               // Column(
@@ -209,52 +209,86 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
 
           const SizedBox(height: 10),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Weight", style: JosefinSansMedium),
-                Text(controller.selectNewOrderListData?.grossWt ?? "",
-                    style: JosefinRegular),
-              ]),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Design ", style: JosefinSansMedium),
-                Text(controller.selectNewOrderListData?.designName ?? "",
-                    style: JosefinRegular),
-              ]),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Weight", style: JosefinSansMedium),
+                    Text(
+                      controller.selectNewOrderListData?.grossWt ?? "",
+                      style: JosefinRegular,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 100),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Design", style: JosefinSansMedium),
+                    Text(
+                      controller.selectNewOrderListData?.designName ?? "",
+                      style: JosefinRegular,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Purity", style: JosefinSansMedium),
-                Text(controller.selectNewOrderListData?.purchaseTouch ?? "",
-                    style: JosefinRegular),
-              ]),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Dimension", style: JosefinSansMedium),
-                Text(controller.selectNewOrderListData?.size ?? "",
-                    style: JosefinRegular),
-              ]),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Purity", style: JosefinSansMedium),
+                    Text(
+                      controller.selectNewOrderListData?.purchaseTouch ?? "",
+                      style: JosefinRegular,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 100),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Dimension", style: JosefinSansMedium),
+                    Text(
+                      controller.selectNewOrderListData?.size ?? "",
+                      style: JosefinRegular,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 15),
+
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Expanded(
+                child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text("Stone Type", style: JosefinSansMedium),
                 Text(
                     controller.selectNewOrderListData?.customizedStoneName ??
                         "",
                     style: JosefinRegular),
-              ]),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              ]),),
+              SizedBox(width: 100),
+              Expanded(
+                child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text("Stone Weight", style: JosefinSansMedium),
                 Text(controller.selectNewOrderListData?.stoneWt ?? "",
                     style: JosefinRegular),
-              ]),
+              ]),),
             ],
           ),
           // const SizedBox(height: 15),
@@ -505,32 +539,32 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
     );
   }
 
-
-
-
-
   Future<void> shareProductMedia() async {
     final controller = Get.find<OrderController>();
-    final String productName = controller.selectNewOrderListData?.productName ?? "";
+    final String productName =
+        controller.selectNewOrderListData?.productName ?? "";
     final String weight = controller.selectNewOrderListData?.grossWt ?? "";
     final String design = controller.selectNewOrderListData?.designName ?? "";
     final String order = controller.selectNewOrderListData?.orderNo ?? "";
     final String description = controller.selectNewOrderListData?.remarks ?? "";
 
-    final List<String> imageUrls = (controller.selectNewOrderListData?.previewImages ?? [])
-        .map<String>((e) => e.image ?? "")
-        .where((url) => url.isNotEmpty)
-        .toList();
+    final List<String> imageUrls =
+        (controller.selectNewOrderListData?.previewImages ?? [])
+            .map<String>((e) => e.image ?? "")
+            .where((url) => url.isNotEmpty)
+            .toList();
 
-    final List<String> videoUrls = (controller.selectNewOrderListData?.previewVideos ?? [])
-        .map<String>((e) => e.video ?? "")
-        .where((url) => url.isNotEmpty)
-        .toList();
+    final List<String> videoUrls =
+        (controller.selectNewOrderListData?.previewVideos ?? [])
+            .map<String>((e) => e.video ?? "")
+            .where((url) => url.isNotEmpty)
+            .toList();
 
-    final List<String> audioUrls = (controller.selectNewOrderListData?.previewVoices ?? [])
-        .map<String>((e) => e.audio ?? "")
-        .where((url) => url.isNotEmpty)
-        .toList();
+    final List<String> audioUrls =
+        (controller.selectNewOrderListData?.previewVoices ?? [])
+            .map<String>((e) => e.audio ?? "")
+            .where((url) => url.isNotEmpty)
+            .toList();
 
     final List<String> allUrls = [...imageUrls, ...videoUrls, ...audioUrls];
     final List<XFile> filesToShare = [];
@@ -564,13 +598,16 @@ Description: $description
           String mimeType = 'application/octet-stream'; // default fallback
           if (['jpg', 'jpeg'].contains(ext)) {
             mimeType = 'image/jpeg';
-          } else if (ext == 'png') mimeType = 'image/png';
-          else if (ext == 'mp4') mimeType = 'video/mp4';
+          } else if (ext == 'png')
+            mimeType = 'image/png';
+          else if (ext == 'mp4')
+            mimeType = 'video/mp4';
           else if (['mp3', 'aac', 'wav'].contains(ext)) mimeType = 'audio/mpeg';
 
           filesToShare.add(XFile(filePath, mimeType: mimeType, name: fileName));
         } else {
-          debugPrint('Failed to download $url with status code ${response.statusCode}');
+          debugPrint(
+              'Failed to download $url with status code ${response.statusCode}');
         }
       } catch (e) {
         debugPrint('Error downloading $url: $e');
@@ -580,10 +617,9 @@ Description: $description
       Get.back();
     }
     if (filesToShare.isNotEmpty) {
-      await Share.shareXFiles([filesToShare.first],text: message);
+      await Share.shareXFiles([filesToShare.first], text: message);
     } else {
       await Share.share(message);
     }
   }
-
 }
