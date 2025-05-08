@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tn_jewellery_admin/Utils/core/helper/route_helper.dart';
 import 'package:tn_jewellery_admin/features/splash/controller/splash_controller.dart';
 import 'package:tn_jewellery_admin/utils/Loader/Loader.dart';
-import 'package:tn_jewellery_admin/utils/Loader/LoaderController.dart';
 import 'package:tn_jewellery_admin/utils/app_constants.dart';
 import 'package:tn_jewellery_admin/utils/core/initial_binding/initial_binding.dart';
 import 'package:tn_jewellery_admin/utils/core/theme/controller/theme_controller.dart';
@@ -15,7 +15,6 @@ import 'package:tn_jewellery_admin/utils/core/theme/light_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.put(LoaderController());
   await initControllers();
   await GetStorage.init();
   HttpOverrides.global = MyHttpOverrides();

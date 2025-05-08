@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,12 +30,14 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
     controller.images.clear();
     controller.update();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new_sharp, color: brandPrimaryColor),
+            icon:
+                Icon(Icons.arrow_back_ios_new_sharp, color: brandPrimaryColor),
             onPressed: () {
               Navigator.pop(context); // or Get.back() if using GetX
             },
@@ -70,7 +73,8 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                           ),
                           filled: true,
                           fillColor: Colors.white, // White background
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 14),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
@@ -81,7 +85,8 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color: brandGreyColor, // Border color when focused
+                              color:
+                                  brandGreyColor, // Border color when focused
                               width: 1,
                             ),
                           ),
@@ -89,7 +94,10 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.search,color: brandGreyColor,),
+                      icon: Icon(
+                        Icons.search,
+                        color: brandGreyColor,
+                      ),
                       onPressed: () {
                         controller.getTagSearch(
                           tagCode: controller.searchTextController.text.trim(),
@@ -98,8 +106,17 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                     ),
                     IconButton(
                       icon: Icon(Icons.qr_code_scanner),
-                      onPressed: () {
+                      onPressed: () async {
                         // Add scanner logic
+                        var result = await BarcodeScanner.scan();
+                        if (result.rawContent.isNotEmpty) {
+                          controller.searchTextController.text =
+                              result.rawContent;
+                          controller.getTagSearch(
+                            tagCode:
+                                controller.searchTextController.text.trim(),
+                          );
+                        }
                       },
                     ),
                   ],
@@ -108,11 +125,11 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
 
                 if (controller.tagModel?.data != null &&
                     controller.tagModel!.data?.tagCode != null) ...[
-
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('JEWEL DETAILS - ${controller.tagModel?.data?.tagCode ?? ''}',
+                      Text(
+                          'JEWEL DETAILS - ${controller.tagModel?.data?.tagCode ?? ''}',
                           style: TextStyle(
                               color: brandPrimaryColor,
                               fontFamily: 'JosefinSans',
@@ -135,32 +152,40 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text("Weight", style: JosefinSansMedium),
-                        Text(controller.tagModel?.data?.tagGwt ?? "",
-                            style: JosefinRegular),
-                      ]),
-                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text("Design ", style: JosefinSansMedium),
-                        Text(controller.tagModel?.data?.designName ?? "",
-                            style: JosefinRegular),
-                      ]),
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Weight", style: JosefinSansMedium),
+                            Text(controller.tagModel?.data?.tagGwt ?? "",
+                                style: JosefinRegular),
+                          ]),
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Design ", style: JosefinSansMedium),
+                            Text(controller.tagModel?.data?.designName ?? "",
+                                style: JosefinRegular),
+                          ]),
                     ],
                   ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text("Purity", style: JosefinSansMedium),
-                        Text(controller.tagModel?.data?.purityName ?? "",
-                            style: JosefinRegular),
-                      ]),
-                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text("Metal", style: JosefinSansMedium),
-                        Text(controller.tagModel?.data?.metalName ?? "",
-                            style: JosefinRegular),
-                      ]),
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Purity", style: JosefinSansMedium),
+                            Text(controller.tagModel?.data?.purityName ?? "",
+                                style: JosefinRegular),
+                          ]),
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Metal", style: JosefinSansMedium),
+                            Text(controller.tagModel?.data?.metalName ?? "",
+                                style: JosefinRegular),
+                          ]),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -169,8 +194,8 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                   if (controller.tagModel?.data?.stoneDetails != null &&
                       controller.tagModel!.data!.stoneDetails!.isNotEmpty) ...[
                     Text('Stone Details',
-                        style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 8),
                     Container(
                       decoration: BoxDecoration(
@@ -182,8 +207,8 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                           // Header Row
                           Container(
                             color: Colors.grey[300],
-                            padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
@@ -218,16 +243,18 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                                     top: BorderSide(color: Colors.grey[300]!)),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(child: Text(stone.stoneName ?? '-')),
                                   Expanded(child: Text(stone.uomName ?? '-')),
                                   Expanded(
-                                      child:
-                                      Text(stone.stoneWt?.toString() ?? '-')),
+                                      child: Text(
+                                          stone.stoneWt?.toString() ?? '-')),
                                   Expanded(
                                       child: Text(
-                                          stone.stoneAmount?.toString() ?? '-')),
+                                          stone.stoneAmount?.toString() ??
+                                              '-')),
                                 ],
                               ),
                             );
@@ -255,9 +282,9 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                                 height: 100,
                                 child: img['isNew']
                                     ? Image.memory(base64Decode(img['img']),
-                                    fit: BoxFit.cover)
+                                        fit: BoxFit.cover)
                                     : Image.network(img['img'],
-                                    fit: BoxFit.cover),
+                                        fit: BoxFit.cover),
                               ),
                               Positioned(
                                 top: 0,
@@ -268,7 +295,7 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                                   child: Container(
                                     color: Colors.black45,
                                     child:
-                                    Icon(Icons.close, color: Colors.white),
+                                        Icon(Icons.close, color: Colors.white),
                                   ),
                                 ),
                               ),
