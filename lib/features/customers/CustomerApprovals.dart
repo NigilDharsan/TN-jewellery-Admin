@@ -15,13 +15,13 @@ class CustomerNameList extends StatefulWidget {
 class _CustomerNameListState extends State<CustomerNameList>
     with SingleTickerProviderStateMixin {
   String isSelectButton = 'LifeTime';
-  DateTime? selectedDateTime; // Define the selectedDateTime variable
-  bool isEditMode = false;
+  DateTime? selectedDateTime;
   late TabController _tabController;
   final List<String> _tabs = ['Yet to Approve', 'Rejected', 'Total Approved'];
-  bool showApproveBtnInThirdTab = false;
+  Map<int, Map<String, dynamic>> catalogSelections = {};
+  Map<int, bool> editModes = {}; // Track edit mode per customer in Rejected tab
 
-  Future<void> pickDateTime() async {
+  Future<void> pickDateTime(int customerId) async {
     final date = await showDatePicker(
       context: context,
       initialDate: selectedDateTime ?? DateTime.now(),
@@ -37,24 +37,26 @@ class _CustomerNameListState extends State<CustomerNameList>
 
       if (time != null) {
         setState(() {
-          // Update the selected date and time
           selectedDateTime =
               DateTime(date.year, date.month, date.day, time.hour, time.minute);
+          catalogSelections[customerId] = {
+            'show_catalogue': '1',
+            'show_catalogue_date':
+                DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!)
+          };
+        });
+      } else {
+        setState(() {
+          isSelectButton = 'LifeTime';
+          catalogSelections.remove(customerId);
         });
       }
+    } else {
+      setState(() {
+        isSelectButton = 'LifeTime';
+        catalogSelections.remove(customerId);
+      });
     }
-  }
-
-  Widget buildSelectedDateTime() {
-    return selectedDateTime == null
-        ? const SizedBox.shrink() // Hide if no date is selected
-        : Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Selected: ${DateFormat('yyyy-MM-dd HH:mm').format(selectedDateTime!)}',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          );
   }
 
   @override
@@ -62,7 +64,7 @@ class _CustomerNameListState extends State<CustomerNameList>
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
     _tabController.addListener(_handleTabChange);
-    Get.find<DashboardController>().getCustomerList("1"); // Default first tab
+    Get.find<DashboardController>().getCustomerList("1");
   }
 
   void _handleTabChange() {
@@ -70,16 +72,21 @@ class _CustomerNameListState extends State<CustomerNameList>
 
     final status = _getStatusByTabIndex(_tabController.index);
     Get.find<DashboardController>().getCustomerList(status.toString());
+    setState(() {
+      Get.find<DashboardController>().selectedCustomers.clear();
+
+      editModes.clear(); // Clear all edit modes when changing tabs
+    });
   }
 
   int _getStatusByTabIndex(int index) {
     switch (index) {
       case 0:
-        return 1; // Yet to Approve
+        return 1;
       case 1:
-        return 3; // Rejected
+        return 3;
       case 2:
-        return 2; // Approved
+        return 2;
       default:
         return 1;
     }
@@ -109,9 +116,9 @@ class _CustomerNameListState extends State<CustomerNameList>
           return TabBarView(
             controller: _tabController,
             children: [
-              _buildCustomerList(controller, statusFilter: 1), // Yet to Approve
-              _buildCustomerList(controller, statusFilter: 3), // Rejected
-              _buildCustomerList(controller, statusFilter: 2), // Approved
+              _buildCustomerList(controller, statusFilter: 1),
+              _buildCustomerList(controller, statusFilter: 3),
+              _buildCustomerList(controller, statusFilter: 2),
             ],
           );
         },
@@ -123,7 +130,9 @@ class _CustomerNameListState extends State<CustomerNameList>
       {required int statusFilter}) {
     final customerList = controller.customerModel?.data ?? [];
     final isApprovalTab = statusFilter == 1;
-    final isSelectButton = statusFilter == 1;
+    final isRejectedTab = statusFilter == 3;
+    final isApprovedTab = statusFilter == 2;
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
@@ -136,6 +145,10 @@ class _CustomerNameListState extends State<CustomerNameList>
               itemCount: customerList.length,
               itemBuilder: (context, index) {
                 final customer = customerList[index];
+                final isSelected =
+                    controller.selectedCustomers[customer.pkId] ?? false;
+                final isEditing = editModes[customer.pkId] ?? false;
+
                 return GestureDetector(
                   onTap: () {
                     final phone = customer.mobile ?? '';
@@ -155,18 +168,22 @@ class _CustomerNameListState extends State<CustomerNameList>
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (isApprovalTab)
+                          if (isApprovalTab || (isRejectedTab && isEditing))
                             Padding(
                               padding: const EdgeInsets.only(right: 12),
                               child: Checkbox(
-                                value: controller
-                                        .selectedCustomers[customer.pkId] ??
-                                    false,
+                                value: isSelected,
                                 onChanged: (bool? newValue) {
                                   setState(() {
                                     controller
                                             .selectedCustomers[customer.pkId!] =
                                         newValue!;
+                                    if (!newValue) {
+                                      catalogSelections.remove(customer.pkId);
+                                      if (isEditing) {
+                                        editModes[customer.pkId!] = false;
+                                      }
+                                    }
                                   });
                                 },
                               ),
@@ -185,7 +202,7 @@ class _CustomerNameListState extends State<CustomerNameList>
                                         fontFamily: 'JosefinSans',
                                       ),
                                     ),
-                                    SizedBox(width: 2),
+                                    const SizedBox(width: 2),
                                     Text(
                                       ' - ${customer.companyName ?? ''}',
                                       style: const TextStyle(
@@ -215,18 +232,36 @@ class _CustomerNameListState extends State<CustomerNameList>
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Text(
-                                  'Catalogue Field',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15,
-                                    fontFamily: 'JosefinSans',
+                                if ((isSelected &&
+                                        (isApprovalTab ||
+                                            (isRejectedTab && isEditing))) ||
+                                    (isApprovedTab &&
+                                        controller.selectedCustomers[
+                                                customer.pkId] ==
+                                            true))
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Catalogue Field',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          fontFamily: 'JosefinSans',
+                                        ),
+                                      ),
+                                      const SizedBox(height: 1),
+                                      _buildCatalogOptions(customer.pkId!),
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(height: 1),
-                                if (isSelectButton) buildFirstTab(),
-                                if (statusFilter == 3) buildSecondTab(),
-                                if (statusFilter == 2) buildThirdTab(),
+                                if (isRejectedTab && !isEditing)
+                                  _buildRejectedTab(customer, controller),
+                                // if (isApprovedTab &&
+                                //     !(controller
+                                //             .selectedCustomers[customer.pkId] ??
+                                //         false))
+                                // _buildApprovedTab(customer, controller),
                               ],
                             ),
                           ),
@@ -237,24 +272,24 @@ class _CustomerNameListState extends State<CustomerNameList>
                 );
               },
             ),
-            if (isApprovalTab) const SizedBox(height: 20),
-            if (isApprovalTab)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      _submitCustomerStatus(controller, 2); // Approved
-                    },
-                    child: _optionButton('Approve'),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _submitCustomerStatus(controller, 3); // Reject
-                    },
-                    child: _optionButton('Reject'),
-                  ),
-                ],
+            if ((isApprovalTab || editModes.values.any((mode) => mode)) &&
+                controller.selectedCustomers.values.any((selected) => selected))
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    InkWell(
+                      onTap: () => _submitCustomerStatus(controller, 2),
+                      child: _optionButton('Approve'),
+                    ),
+                    if (isApprovalTab)
+                      InkWell(
+                        onTap: () => _submitCustomerStatus(controller, 3),
+                        child: _optionButton('Reject'),
+                      ),
+                  ],
+                ),
               ),
           ],
         ),
@@ -262,12 +297,144 @@ class _CustomerNameListState extends State<CustomerNameList>
     );
   }
 
+  Widget _buildCatalogOptions(int customerId) {
+    final currentSelection =
+        catalogSelections[customerId]?['show_catalogue'] == '1'
+            ? 'Limited'
+            : 'LifeTime';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Flexible(
+              flex: 1,
+              child: RadioListTile<String>(
+                contentPadding: EdgeInsets.zero,
+                title: const Text(
+                  'LifeTime',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontFamily: 'JosefinSans',
+                  ),
+                ),
+                value: 'LifeTime',
+                groupValue: currentSelection,
+                onChanged: (value) {
+                  setState(() {
+                    catalogSelections.remove(customerId);
+                  });
+                },
+              ),
+            ),
+            const SizedBox(width: 1),
+            Flexible(
+              flex: 1,
+              child: RadioListTile<String>(
+                contentPadding: EdgeInsets.zero,
+                title: const Text(
+                  'Limited',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontFamily: 'JosefinSans',
+                  ),
+                ),
+                value: 'Limited',
+                groupValue: currentSelection,
+                onChanged: (value) async {
+                  await pickDateTime(customerId);
+                },
+              ),
+            ),
+          ],
+        ),
+        if (currentSelection == 'Limited' &&
+            catalogSelections[customerId] != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Selected: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!)}',
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildRejectedTab(customer, controller) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 80),
+      child: Stack(
+        children: [
+          const SizedBox(height: 40),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                editModes[customer.pkId!] = true;
+                controller.selectedCustomers[customer.pkId!] = true;
+              });
+            },
+            child: const Text(
+              'Edit',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+                fontFamily: 'JosefinSans',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildApprovedTab(customer, DashboardController controller) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: TextButton(
+            onPressed: () {
+              setState(() {
+                controller.selectedCustomers[customer.pkId!] = true;
+              });
+            },
+            child: const Text(
+              'Reject',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 15,
+                fontFamily: 'JosefinSans',
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   void _submitCustomerStatus(DashboardController controller, int status) {
-    final List<Map<String, dynamic>> selectedIds = controller
-        .selectedCustomers.entries
-        .where((entry) => entry.value == true)
-        .map((entry) => {"pk_id": entry.key})
-        .toList();
+    final List<Map<String, dynamic>> selectedIds = [];
+
+    controller.selectedCustomers.forEach((customerId, isSelected) {
+      if (isSelected) {
+        final customerData = <String, dynamic>{'pk_id': customerId};
+
+        if (catalogSelections.containsKey(customerId) && status == 3) {
+          // Explicitly cast or convert the values to ensure type safety
+          customerData['show_catalogue'] =
+              catalogSelections[customerId]!['show_catalogue'];
+          customerData['show_catalogue_date'] =
+              catalogSelections[customerId]!['show_catalogue_date'];
+        }
+
+        selectedIds.add(customerData);
+      }
+    });
 
     if (selectedIds.isEmpty) {
       Get.snackbar("No Selection", "Please select at least one customer.");
@@ -280,8 +447,10 @@ class _CustomerNameListState extends State<CustomerNameList>
       "approve_ids": selectedIds,
     }).then((_) {
       final currentStatus = _getStatusByTabIndex(_tabController.index);
-      controller.getCustomerList(currentStatus.toString()); // Refresh list
-      controller.selectedCustomers.clear(); // Clear selections
+      controller.getCustomerList(currentStatus.toString());
+      controller.selectedCustomers.clear();
+      catalogSelections.clear();
+      editModes.clear();
     });
   }
 
@@ -310,154 +479,4 @@ class _CustomerNameListState extends State<CustomerNameList>
       ),
     );
   }
-
-  Widget buildFirstTab() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              flex: 1,
-              child: RadioListTile<String>(
-                contentPadding: EdgeInsets.zero,
-                title: const Text(
-                  'LifeTime',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                    fontFamily: 'JosefinSans',
-                  ),
-                ),
-                value: 'LifeTime',
-                groupValue: isSelectButton,
-                onChanged: (value) {
-                  setState(() {
-                    isSelectButton = value!;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 1),
-            Flexible(
-              flex: 1,
-              child: RadioListTile<String>(
-                contentPadding: EdgeInsets.zero,
-                title: const Text(
-                  'Limited',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                    fontFamily: 'JosefinSans',
-                  ),
-                ),
-                value: 'Limited',
-                groupValue: isSelectButton,
-                onChanged: (value) async {
-                  setState(() {
-                    isSelectButton = value!;
-                  });
-                  await pickDateTime();
-                },
-              ),
-            ),
-          ],
-        ),
-        if (isSelectButton == 'Limited' && selectedDateTime != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Selected: ${DateFormat('yyyy-MM-dd HH:mm').format(selectedDateTime!)}',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ),
-        const SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: () {},
-          child: const Text('Approve'),
-        ),
-      ],
-    );
-  }
-
-  Widget buildSecondTab() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 80),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 40),
-              // Add spacing below the icon if needed
-              if (isEditMode)
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isEditMode = false;
-                    });
-                  },
-                  child: const Text('Approve'),
-                ),
-            ],
-          ),
-          TextButton(
-              onPressed: () {
-                setState(() {
-                  isEditMode = true;
-                });
-              },
-              child: Text(
-                'Edit',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15,
-                  fontFamily: 'JosefinSans',
-                ),
-              ))
-        ],
-      ),
-    );
-  }
-
-  Widget buildThirdTab() {
-    return Column(
-      children: [
-        Align(
-            alignment: Alignment.topRight,
-            child: TextButton(
-                onPressed: () {
-                  setState(() {
-                    showApproveBtnInThirdTab = true;
-                  });
-                },
-                child: Text(
-                  'Reject',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                    fontFamily: 'JosefinSans',
-                  ),
-                ))),
-        if (showApproveBtnInThirdTab)
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                showApproveBtnInThirdTab = false;
-              });
-            },
-            child: const Text('Approve Again'),
-          ),
-      ],
-    );
-  }
 }
-
-// Future<void> callNumber(String phoneNumber) async {
-//   final Uri phoneUri = Uri(scheme: mobile, path: phoneNumber);
-//   if (await canLaunchUrl(phoneUri)) {
-//     await launchUrl(phoneUri);
-//   } else {
-//     throw 'Could not launch $phoneNumber';
-//   }
-// }
