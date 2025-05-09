@@ -39,7 +39,12 @@ const jewellery = TextStyle(
   color: brandGoldColor,
   fontSize: 15,
 );
-
+const remberText = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontWeight: FontWeight.bold,
+  color: brandGreyColor,
+  fontSize: 15,
+);
 const JosefinRegular = TextStyle(
     color: white8,
     fontSize: 16,

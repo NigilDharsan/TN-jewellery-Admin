@@ -19,7 +19,8 @@ class _CustomerNameListState extends State<CustomerNameList>
   late TabController _tabController;
   final List<String> _tabs = ['Yet to Approve', 'Rejected', 'Total Approved'];
   Map<int, Map<String, dynamic>> catalogSelections = {};
-  Map<int, bool> editModes = {}; // Track edit mode per customer in Rejected tab
+  Map<int, bool> editModes = {};
+  bool isApprovalTab = true;
 
   Future<void> pickDateTime(int customerId) async {
     final date = await showDatePicker(
@@ -89,7 +90,9 @@ class _CustomerNameListState extends State<CustomerNameList>
         return 2;
       default:
         return 1;
+
     }
+
   }
 
   @override
@@ -109,16 +112,51 @@ class _CustomerNameListState extends State<CustomerNameList>
       body: GetBuilder<DashboardController>(
         autoRemove: false,
         builder: (controller) {
-          if (controller.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return TabBarView(
-            controller: _tabController,
+          return Column(
             children: [
-              _buildCustomerList(controller, statusFilter: 1),
-              _buildCustomerList(controller, statusFilter: 3),
-              _buildCustomerList(controller, statusFilter: 2),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildCustomerList(controller, statusFilter: 1),
+                    _buildCustomerList(controller, statusFilter: 3),
+                    _buildCustomerList(controller, statusFilter: 2),
+                  ],
+                ),
+              ),
+              if ((isApprovalTab || editModes.values.any((mode) => mode)) &&
+                  controller.selectedCustomers.values.any((selected) => selected))
+                BottomAppBar(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 1),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        if (_tabController.index == 0) ...[
+                          InkWell(
+                            onTap: () => _submitCustomerStatus(controller, 2),
+                            child: _optionButton('Approve'),
+                          ),
+                          InkWell(
+                            onTap: () => _submitCustomerStatus(controller, 3),
+                            child: _optionButton('Reject'),
+                          ),
+                        ] else if (_tabController.index == 1) ...[
+                          InkWell(
+                            onTap: () => _submitCustomerStatus(controller, 2),
+                            child: _optionButton('Approve'),
+                          ),
+                        ] else if (_tabController.index == 2) ...[
+                          InkWell(
+                            onTap: () => _submitCustomerStatus(controller, 3),
+                            child: _optionButton('Update'),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+
             ],
           );
         },
@@ -149,6 +187,7 @@ class _CustomerNameListState extends State<CustomerNameList>
                     controller.selectedCustomers[customer.pkId] ?? false;
                 final isEditing = editModes[customer.pkId] ?? false;
 
+
                 return GestureDetector(
                   onTap: () {
                     final phone = customer.mobile ?? '';
@@ -164,13 +203,13 @@ class _CustomerNameListState extends State<CustomerNameList>
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 16),
+                          vertical: 8, horizontal: 8),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (isApprovalTab || (isRejectedTab && isEditing))
+                          if (isApprovalTab || ((isRejectedTab || isApprovedTab) && isEditing))
                             Padding(
-                              padding: const EdgeInsets.only(right: 12),
+                              padding: const EdgeInsets.only(right: 2),
                               child: Checkbox(
                                 value: isSelected,
                                 onChanged: (bool? newValue) {
@@ -189,79 +228,116 @@ class _CustomerNameListState extends State<CustomerNameList>
                               ),
                             ),
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Stack(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      customer.name ?? 'No Name',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                        fontFamily: 'JosefinSans',
-                                      ),
-                                    ),
-                                    const SizedBox(width: 2),
-                                    Text(
-                                      ' - ${customer.companyName ?? ''}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                        fontFamily: 'JosefinSans',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  customer.mobile ?? 'No Mobile',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'JosefinSans',
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  customer.gstNumber ?? '',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15,
-                                    fontFamily: 'JosefinSans',
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                if ((isSelected &&
-                                        (isApprovalTab ||
-                                            (isRejectedTab && isEditing))) ||
-                                    (isApprovedTab &&
-                                        controller.selectedCustomers[
-                                                customer.pkId] ==
-                                            true))
-                                  Column(
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        'Catalogue Field',
-                                        style: TextStyle(
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                customer.name ?? 'No Name',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  fontFamily: 'JosefinSans',
+                                                ),
+                                              ),
+                                              const SizedBox(width: 2),
+                                              Expanded(
+                                             child:  Text(
+                                                  ' - ${customer.companyName ?? ''}',
+                                                  style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  fontFamily: 'JosefinSans',
+                                                ),
+                                              ),),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        customer.mobile ?? 'No Mobile',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: 'JosefinSans',
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        customer.gstNumber ?? '',
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 15,
                                           fontFamily: 'JosefinSans',
                                         ),
                                       ),
-                                      const SizedBox(height: 1),
-                                      _buildCatalogOptions(customer.pkId!),
+                                      const SizedBox(height: 10),
+                                      if ((isSelected &&
+                                              (isApprovalTab ||
+                                                  (isRejectedTab &&
+                                                      isEditing) ||  (isApprovedTab &&
+                                                  isEditing))) ||
+                                          (isApprovedTab &&
+                                              controller.selectedCustomers[
+                                                      customer.pkId] ==
+                                                  true))
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Show Catalogue',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 15,
+                                                fontFamily: 'JosefinSans',
+                                              ),
+                                            ),
+                                            const SizedBox(height: 1),
+                                            _buildCatalogOptions(
+                                                customer.pkId!),
+                                          ],
+                                        ),
+                                      /* if (isRejectedTab && !isEditing)
+                                  _buildRejectedTab(customer, controller), */
+                                      // if (isApprovedTab &&
+                                      //     !(controller
+                                      //             .selectedCustomers[customer.pkId] ??
+                                      //         false))
+                                      // _buildApprovedTab(customer, controller),
                                     ],
                                   ),
-                                if (isRejectedTab && !isEditing)
-                                  _buildRejectedTab(customer, controller),
-                                // if (isApprovedTab &&
-                                //     !(controller
-                                //             .selectedCustomers[customer.pkId] ??
-                                //         false))
-                                // _buildApprovedTab(customer, controller),
+                                ),
+                                if ((isRejectedTab || isApprovedTab) && !isEditing)
+                                  Positioned(
+                                    top: 30,
+                                    right: 10,
+                                    child: ElevatedButton.icon(
+                                      icon: const Icon(Icons.edit, size: 18,color: Colors.black,),
+                                      label: const Text('Edit',style: TextStyle(color: brandPrimaryColor,fontSize: 15,fontWeight:FontWeight.bold),),
+                                      onPressed: () {
+                                        setState(() {
+                                          editModes[customer.pkId!] = true;
+                                          controller.selectedCustomers[
+                                              customer.pkId!] = true;
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                      ),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
@@ -272,25 +348,25 @@ class _CustomerNameListState extends State<CustomerNameList>
                 );
               },
             ),
-            if ((isApprovalTab || editModes.values.any((mode) => mode)) &&
-                controller.selectedCustomers.values.any((selected) => selected))
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    InkWell(
-                      onTap: () => _submitCustomerStatus(controller, 2),
-                      child: _optionButton('Approve'),
-                    ),
-                    if (isApprovalTab)
-                      InkWell(
-                        onTap: () => _submitCustomerStatus(controller, 3),
-                        child: _optionButton('Reject'),
-                      ),
-                  ],
-                ),
-              ),
+            // if ((isApprovalTab || editModes.values.any((mode) => mode)) &&
+            //     controller.selectedCustomers.values.any((selected) => selected))
+            //   Padding(
+            //     padding: const EdgeInsets.only(top: 20),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //       children: [
+            //         InkWell(
+            //           onTap: () => _submitCustomerStatus(controller,  2),
+            //           child: _optionButton('Approve'),
+            //         ),
+            //         if (isApprovalTab)
+            //           InkWell(
+            //             onTap: () => _submitCustomerStatus(controller, 3),
+            //             child: _optionButton('Reject'),
+            //           ),
+            //       ],
+            //     ),
+            //   ),
           ],
         ),
       ),
@@ -355,9 +431,9 @@ class _CustomerNameListState extends State<CustomerNameList>
         if (currentSelection == 'Limited' &&
             catalogSelections[customerId] != null)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 0),
             child: Text(
-              'Selected: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!)}',
+              'Show until : ${DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!)}',
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
@@ -365,57 +441,75 @@ class _CustomerNameListState extends State<CustomerNameList>
     );
   }
 
-  Widget _buildRejectedTab(customer, controller) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 80),
-      child: Stack(
-        children: [
-          const SizedBox(height: 40),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                editModes[customer.pkId!] = true;
-                controller.selectedCustomers[customer.pkId!] = true;
-              });
-            },
-            child: const Text(
-              'Edit',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                fontFamily: 'JosefinSans',
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildApprovedTab(customer, DashboardController controller) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: TextButton(
-            onPressed: () {
-              setState(() {
-                controller.selectedCustomers[customer.pkId!] = true;
-              });
-            },
-            child: const Text(
-              'Reject',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                fontFamily: 'JosefinSans',
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildRejectedTab(customer, controller) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(right: 80),
+  //     child: Stack(
+  //       children: [
+  //         const SizedBox(height: 40),
+  //         /* TextButton(
+  //           onPressed: () {
+  //             setState(() {
+  //               editModes[customer.pkId!] = true;
+  //               controller.selectedCustomers[customer.pkId!] = true;
+  //             });
+  //           },
+  //           child: const Text(
+  //             'Edit',
+  //             style: TextStyle(
+  //               fontWeight: FontWeight.w500,
+  //               fontSize: 15,
+  //               fontFamily: 'JosefinSans',
+  //             ),
+  //           ),
+  //         ), */
+  //
+  //         Align(
+  //           alignment: Alignment.centerRight,
+  //           child: ElevatedButton.icon(
+  //             icon: const Icon(Icons.edit, size: 18),
+  //             label: const Text(''),
+  //             onPressed: () {
+  //               setState(() {
+  //                 editModes[customer.pkId!] = true;
+  //                 controller.selectedCustomers[customer.pkId!] = true;
+  //               });
+  //             },
+  //             style: ElevatedButton.styleFrom(
+  //               shape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.circular(8)),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  //
+  // Widget _buildApprovedTab(customer, DashboardController controller) {
+  //   return Column(
+  //     children: [
+  //       Align(
+  //         alignment: Alignment.topRight,
+  //         child: TextButton(
+  //           onPressed: () {
+  //             setState(() {
+  //               controller.selectedCustomers[customer.pkId!] = true;
+  //             });
+  //           },
+  //           child: const Text(
+  //             'Reject',
+  //             style: TextStyle(
+  //               fontWeight: FontWeight.w500,
+  //               fontSize: 15,
+  //               fontFamily: 'JosefinSans',
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   void _submitCustomerStatus(DashboardController controller, int status) {
     final List<Map<String, dynamic>> selectedIds = [];
@@ -424,8 +518,7 @@ class _CustomerNameListState extends State<CustomerNameList>
       if (isSelected) {
         final customerData = <String, dynamic>{'pk_id': customerId};
 
-        if (catalogSelections.containsKey(customerId) && status == 3) {
-          // Explicitly cast or convert the values to ensure type safety
+        if (catalogSelections.containsKey(customerId)) {
           customerData['show_catalogue'] =
               catalogSelections[customerId]!['show_catalogue'];
           customerData['show_catalogue_date'] =

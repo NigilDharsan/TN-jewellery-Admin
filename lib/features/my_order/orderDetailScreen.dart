@@ -585,7 +585,6 @@ Description: $description
     );
     for (final url in allUrls) {
       try {
-        debugPrint('Downloading: $url');
         final response = await http.get(Uri.parse(url));
         if (response.statusCode == 200) {
           final fileName = basename(Uri.parse(url).path);
@@ -593,33 +592,28 @@ Description: $description
           final file = File(filePath);
           await file.writeAsBytes(response.bodyBytes);
 
-          // Determine MIME type based on file extension
+          // Detect MIME type
           final ext = fileName.split('.').last.toLowerCase();
-          String mimeType = 'application/octet-stream'; // default fallback
-          if (['jpg', 'jpeg'].contains(ext)) {
-            mimeType = 'image/jpeg';
-          } else if (ext == 'png')
-            mimeType = 'image/png';
-          else if (ext == 'mp4')
-            mimeType = 'video/mp4';
+          String mimeType = 'application/octet-stream';
+          if (['jpg', 'jpeg'].contains(ext)) mimeType = 'image/jpeg';
+          else if (ext == 'png') mimeType = 'image/png';
+          else if (ext == 'mp4') mimeType = 'video/mp4';
           else if (['mp3', 'aac', 'wav'].contains(ext)) mimeType = 'audio/mpeg';
 
           filesToShare.add(XFile(filePath, mimeType: mimeType, name: fileName));
-        } else {
-          debugPrint(
-              'Failed to download $url with status code ${response.statusCode}');
         }
       } catch (e) {
-        debugPrint('Error downloading $url: $e');
+        print('Download failed for $url: $e');
       }
-    }
-    if (Get.isDialogOpen ?? false) {
+    }    if (Get.isDialogOpen ?? false) {
       Get.back();
     }
     if (filesToShare.isNotEmpty) {
+      // await Share.shareXFiles(filesToShare, text: message);
       await Share.shareXFiles([filesToShare.first], text: message);
     } else {
       await Share.share(message);
     }
   }
+
 }

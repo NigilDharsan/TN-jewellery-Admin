@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
@@ -278,21 +283,21 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                /// Customer Info (Left Aligned)
                 Expanded(
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Icon(Icons.person, size: 18, color: Colors.black54),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               "${inProgressOrderData?.supplierName ?? ''} - ",
@@ -306,8 +311,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                             const SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
-                                final phone =
-                                    inProgressOrderData?.supplierMobile ?? '';
+                                final phone = inProgressOrderData?.supplierMobile ?? '';
                                 if (phone.isNotEmpty) {
                                   launchUrl(Uri.parse("tel:$phone"));
                                 }
@@ -321,14 +325,25 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                                 ),
                               ),
                             ),
+
+
                           ],
                         ),
                       ),
+                      IconButton(
+                        icon: Icon(Icons.share, color: Colors.grey),
+                        onPressed: () async {
+                          // Uncomment and use your share function here
+                          await shareProductMedia();
+                        },
+                      )
                     ],
                   ),
                 ),
+
               ],
-            ),
+            )
+
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -378,6 +393,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
               : inProgressOrderData?.orderStatus == 3
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: List.generate(labels.length, (index) {
                         return GestureDetector(
                           onTap: () async {
@@ -433,7 +449,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
   Widget actionButton(String label, Color borderColor,
       {required bool isSelected}) {
     return Container(
-        margin: const EdgeInsets.only(right: 8),
+        margin: const EdgeInsets.only(right: 1),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         decoration: BoxDecoration(
           color: isSelected ? borderColor : Colors.white,
@@ -507,4 +523,80 @@ Widget customDropdown({
       ),
     ),
   );
+}
+Future<void> shareProductMedia() async {
+  final controller = Get.find<OrderController>();
+  final String productName =
+      controller.selectNewOrderListData?.productName ?? "";
+  final String weight = controller.selectNewOrderListData?.grossWt ?? "";
+  final String design = controller.selectNewOrderListData?.designName ?? "";
+  final String order = controller.selectNewOrderListData?.orderNo ?? "";
+  final String description = controller.selectNewOrderListData?.remarks ?? "";
+
+  final List<String> imageUrls =
+  (controller.selectNewOrderListData?.previewImages ?? [])
+      .map<String>((e) => e.image ?? "")
+      .where((url) => url.isNotEmpty)
+      .toList();
+
+  final List<String> videoUrls =
+  (controller.selectNewOrderListData?.previewVideos ?? [])
+      .map<String>((e) => e.video ?? "")
+      .where((url) => url.isNotEmpty)
+      .toList();
+
+  final List<String> audioUrls =
+  (controller.selectNewOrderListData?.previewVoices ?? [])
+      .map<String>((e) => e.audio ?? "")
+      .where((url) => url.isNotEmpty)
+      .toList();
+
+  final List<String> allUrls = [...imageUrls, ...videoUrls, ...audioUrls];
+  final List<XFile> filesToShare = [];
+
+  final String message = '''
+Check out this product:
+Order No: $order
+Product Name: $productName
+Design: $design
+Gross Weight: $weight
+Description: $description
+''';
+
+  final tempDir = await getTemporaryDirectory();
+  Get.dialog(
+    Center(child: CircularProgressIndicator()),
+    barrierDismissible: true,
+  );
+  for (final url in allUrls) {
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final fileName = basename(Uri.parse(url).path);
+        final filePath = '${tempDir.path}/$fileName';
+        final file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        // Detect MIME type
+        final ext = fileName.split('.').last.toLowerCase();
+        String mimeType = 'application/octet-stream';
+        if (['jpg', 'jpeg'].contains(ext)) mimeType = 'image/jpeg';
+        else if (ext == 'png') mimeType = 'image/png';
+        else if (ext == 'mp4') mimeType = 'video/mp4';
+        else if (['mp3', 'aac', 'wav'].contains(ext)) mimeType = 'audio/mpeg';
+
+        filesToShare.add(XFile(filePath, mimeType: mimeType, name: fileName));
+      }
+    } catch (e) {
+      print('Download failed for $url: $e');
+    }
+  }    if (Get.isDialogOpen ?? false) {
+    Get.back();
+  }
+  if (filesToShare.isNotEmpty) {
+    // await Share.shareXFiles(filesToShare, text: message);
+    await Share.shareXFiles([filesToShare.first], text: message);
+  } else {
+    await Share.share(message);
+  }
 }

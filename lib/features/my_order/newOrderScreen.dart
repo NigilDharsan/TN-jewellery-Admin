@@ -29,7 +29,7 @@ class _newOrderScreenState extends State<newOrderScreen> {
   }
 
   Widget buildOrderDetail(OrderController controller) {
-    return Padding(
+    return SingleChildScrollView(child: Padding(
       padding: const EdgeInsets.all(15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -65,6 +65,7 @@ class _newOrderScreenState extends State<newOrderScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<int>(
+                          hint: const Text("Select Supplier",style: TextStyle(color: brandGreyColor,fontSize: 14),),
                           padding: const EdgeInsets.only(
                               top: 8.0, bottom: 8.0, left: 8, right: 2.0),
                           value: controller.SupplierId, // Now comparing by id
@@ -85,6 +86,7 @@ class _newOrderScreenState extends State<newOrderScreen> {
                             return DropdownMenuItem<int>(
                               value: supplier.idSupplier,
                               child: Text(
+
                                   supplier.supplierName ?? "Select Supplier"),
                             );
                           }).toList(),
@@ -162,8 +164,8 @@ class _newOrderScreenState extends State<newOrderScreen> {
                             "Some Text describing the changes the cusopmer looking for the retailer",
                         hintStyle: TextStyle(
                             fontFamily: 'JosefinSans',
-                            color: Colors.black,
-                            fontSize: 13,
+                            color: brandGreyColor,
+                            fontSize: 14,
                             fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         contentPadding:
@@ -238,6 +240,6 @@ class _newOrderScreenState extends State<newOrderScreen> {
           ),
         ],
       ),
-    );
+    ),);
   }
 }

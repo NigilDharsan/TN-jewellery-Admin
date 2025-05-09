@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tn_jewellery_admin/features/auth/controller/auth_controller.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/images.dart';
+import 'package:tn_jewellery_admin/utils/styles.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +14,37 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController signInEmailController = TextEditingController();
+  final TextEditingController signInPasswordController = TextEditingController();
+  bool _isChecked = false; // Initially hide the password
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  void _loadSavedCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isChecked = prefs.getBool('rememberMe') ?? false;
+      if (_isChecked) {
+        signInEmailController.text = prefs.getString('username') ?? "";
+        signInPasswordController.text = prefs.getString('password') ?? "";
+      }
+    });
+  }
+  void _saveCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_isChecked) {
+      await prefs.setString('username', signInEmailController.value.text);
+      await prefs.setString('password', signInPasswordController.value.text);
+      await prefs.setBool('rememberMe', true);
+    } else {
+      await prefs.remove('phoneNumber');
+      await prefs.remove('password');
+      await prefs.setBool('rememberMe', false);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +79,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 20),
                     _buildTextField('Enter your text here', 'PASSWORD',
                         controller.signInPasswordController, true, controller),
-                    SizedBox(height: 5),
+                    SizedBox(height: 7),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CheckBoxes(context, value: _isChecked, onChanged: (value) {
+                          setState(() {
+                            setState(() => _isChecked = !_isChecked);
+                          });
+                          _saveCredentials();
+                        }, onTap: () {
+                          _saveCredentials();
+
+                        }, checkBoxText: 'Remember me', width: null),
+                      ],
+                    ),
                     const SizedBox(height: 30),
                     _buildSignInButton(controller),
                     const SizedBox(height: 30),
@@ -167,4 +215,41 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+Widget CheckBoxes(context,
+    {required bool? value,
+      required void Function(bool?)? onChanged,
+      required String checkBoxText,
+      void Function()? onTap,
+      required double? width}) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 20),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Checkbox(
+          value: value,
+          activeColor: brandGreyColor,
+          onChanged: onChanged,
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        InkWell(onTap: onTap, child: RemberText(checkBoxText, width: width)),
+      ],
+    ),
+  );
+}
+Widget RemberText(String txt, {required double? width}) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 5, top: 3),
+    child: Container(
+      width: width,
+      child: Text(
+        txt,
+        style: remberText,
+        maxLines: 2,
+      ),
+    ),
+  );
 }

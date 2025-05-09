@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/auth/controller/auth_controller.dart';
 import 'package:tn_jewellery_admin/features/customers/CustomerApprovals.dart';
 import 'package:tn_jewellery_admin/features/dashboard/dashboard.dart';
 import 'package:tn_jewellery_admin/features/my_order/myOrderScreen.dart';
@@ -24,9 +25,60 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _selectPage(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
+    if (index == 3) {
+      _showLogoutConfirmation(context);
+    } else {
+      setState(() {
+        _selectedPageIndex = index;
+      });
+    }
+  }
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Logout",
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'JosefinSans',
+                fontSize: 14,
+              )),
+          content: Text("Are you sure you want to logout?",
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'JosefinSans',
+                fontSize: 14,
+              )),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text("Cancel",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: 'JosefinSans',
+                    fontSize: 15,
+                  )),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.find<AuthController>().clearSharedData();
+                Navigator.pop(context); // Close the dialog
+                Get.offAllNamed(RouteHelper.getSignInRoute());
+              },
+              child: Text("Yes",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: 'JosefinSans',
+                    fontSize: 15,
+                  )),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _getScreen(int index) {
@@ -36,8 +88,6 @@ class _MainScreenState extends State<MainScreen> {
       case 1:
         return CustomerNameList();
       case 2:
-        return myOrderScreen();
-      case 3:
         return myOrderScreen();
       default:
         return dashboardScreen();
@@ -68,12 +118,29 @@ class _MainScreenState extends State<MainScreen> {
               icon: Icon(Icons.verified), label: 'CUSTOMERS'),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart), label: 'ORDERS'),
-          BottomNavigationBarItem(icon: Icon(Icons.image), label: 'IMAGE'),
+          BottomNavigationBarItem(icon: Icon(Icons.logout_rounded), label: 'Logout'),
         ],
       ),
     );
   }
-  // bool _doubleBackToExitPressedOnce = false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// bool _doubleBackToExitPressedOnce = false;
   // PageController? _pageController;
   // int _currentIndex = 0;
   // late List<Widget> _screens;
