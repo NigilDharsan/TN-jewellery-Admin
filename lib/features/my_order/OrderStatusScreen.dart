@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
+import 'package:tn_jewellery_admin/features/my_order/widgets/Orders_Drop_Down.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/StepIndicator.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -122,37 +123,51 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                           controller.filterBody);
                     })
 
-                    : customDropdown(
-                        label: 'Customer Wise',
-                        labelStyle: const TextStyle(
-                          fontFamily: 'JosefinSans',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: brandGreyColor,
-                        ),
-                        selectedValue: controller.selectedVendor,
-                        items: Get.find<DashboardController>()
-                            .customerModel!
-                            .data!
-                            .map((e) => e.name ?? '')
-                            .toList(),
-                        onChanged: (value) {
-                          controller.selectedVendor = value;
-                          var customerID = Get.find<DashboardController>()
-                              .customerModel!
-                              .data!
-                              .firstWhere((e) => e.name == value)
-                              .idCustomer;
-                          controller.filterBody = {
-                            "id_supplier": "",
-                            "id_customer": customerID,
-                            "date": controller.formatDateToYMD(),
-                          };
-                          controller.getOrderStatusList(
-                              controller.selectedWorkStatusID,
-                              controller.filterBody);
-                        },
-                      ),
+                    :customDropdownDetails(
+                  label: 'Customer Wise',
+                  labelStyle: const TextStyle(
+                    fontFamily: 'JosefinSans',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: brandGreyColor,
+                  ),
+                  onPressed: () {
+                    // Navigate to dropdown page or open a bottom sheet
+                    Get.to(() => OrdersDropDown());
+                  },
+                ),
+
+                // customDropdown(
+                //         label: 'Customer Wise',
+                //         labelStyle: const TextStyle(
+                //           fontFamily: 'JosefinSans',
+                //           fontSize: 12,
+                //           fontWeight: FontWeight.w500,
+                //           color: brandGreyColor,
+                //         ),
+                //         selectedValue: controller.selectedVendor,
+                //         items: Get.find<DashboardController>()
+                //             .customerModel!
+                //             .data!
+                //             .map((e) => e.name ?? '')
+                //             .toList(),
+                //         onChanged: (value) {
+                //           controller.selectedVendor = value;
+                //           var customerID = Get.find<DashboardController>()
+                //               .customerModel!
+                //               .data!
+                //               .firstWhere((e) => e.name == value)
+                //               .idCustomer;
+                //           controller.filterBody = {
+                //             "id_supplier": "",
+                //             "id_customer": customerID,
+                //             "date": controller.formatDateToYMD(),
+                //           };
+                //           controller.getOrderStatusList(
+                //               controller.selectedWorkStatusID,
+                //               controller.filterBody);
+                //         },
+                //       ),
               ),
             ),
             Container(
@@ -524,6 +539,37 @@ Widget customDropdown({
     ),
   );
 }
+
+Widget customDropdownDetails({
+  required String label,
+  required TextStyle labelStyle,
+  required VoidCallback onPressed,
+}) {
+  return InkWell(
+    onTap: onPressed,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade400),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: labelStyle,
+          ),
+          const Icon(Icons.arrow_drop_down, color: Colors.black),
+        ],
+      ),
+    ),
+  );
+}
+
+
+
+
 Future<void> shareProductMedia() async {
   final controller = Get.find<OrderController>();
   final String productName =
