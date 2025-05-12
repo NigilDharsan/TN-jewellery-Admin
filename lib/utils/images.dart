@@ -2,7 +2,6 @@ class Images {
   static const String logo = 'assets/logo/logo.png';
 
   static const String logoPng = 'assets/logo/logo.png';
-  static const String logolpeg = 'assets/logo/logo.jpeg';
 
   static String get user => 'user'.png;
   static String get splash => 'Splash'.png;

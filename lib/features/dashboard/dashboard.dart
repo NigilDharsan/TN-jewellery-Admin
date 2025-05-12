@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
+import 'package:tn_jewellery_admin/utils/app_constants.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
@@ -32,7 +33,8 @@ class _dashboardScreenState extends State<dashboardScreen> {
                   const SizedBox(width: 15),
                   Text('Welcome', style: order_style2),
                   const SizedBox(width: 10),
-                  Text('TN JEWELLERY', style: jewellery_style),
+                  Text(AppConstants.appName.toUpperCase(),
+                      style: jewellery_style),
                 ],
               ),
             ],
