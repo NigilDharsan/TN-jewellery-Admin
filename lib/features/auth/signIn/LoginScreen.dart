@@ -15,7 +15,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController signInEmailController = TextEditingController();
-  final TextEditingController signInPasswordController = TextEditingController();
+  final TextEditingController signInPasswordController =
+      TextEditingController();
   bool _isChecked = false; // Initially hide the password
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     });
   }
+
   void _saveCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_isChecked) {
@@ -45,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setBool('rememberMe', false);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(Images.logolpeg, height: 100),
+                    Image.asset(Images.logoPng, height: 100),
                     const SizedBox(height: 20),
                     const Text(
                       'SIGN IN',
@@ -84,14 +87,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CheckBoxes(context, value: _isChecked, onChanged: (value) {
+                        CheckBoxes(context, value: _isChecked,
+                            onChanged: (value) {
                           setState(() {
                             setState(() => _isChecked = !_isChecked);
                           });
                           _saveCredentials();
                         }, onTap: () {
                           _saveCredentials();
-
                         }, checkBoxText: 'Remember me', width: null),
                       ],
                     ),
@@ -216,12 +219,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
 Widget CheckBoxes(context,
     {required bool? value,
-      required void Function(bool?)? onChanged,
-      required String checkBoxText,
-      void Function()? onTap,
-      required double? width}) {
+    required void Function(bool?)? onChanged,
+    required String checkBoxText,
+    void Function()? onTap,
+    required double? width}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: Row(
@@ -240,6 +244,7 @@ Widget CheckBoxes(context,
     ),
   );
 }
+
 Widget RemberText(String txt, {required double? width}) {
   return Padding(
     padding: const EdgeInsets.only(left: 5, top: 3),
