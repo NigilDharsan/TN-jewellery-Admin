@@ -14,11 +14,6 @@ class dashboardScreen extends StatefulWidget {
 }
 
 class _dashboardScreenState extends State<dashboardScreen> {
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,6 +179,7 @@ Widget buildApprovedButtons(DashboardController controller) {
         children: [
           Expanded(
             child: buildApprovalCard(
+              titleColor: Colors.white,
               title: 'Yet To Assign',
               subtitle: '',
               badgeCount: controller
@@ -200,6 +196,7 @@ Widget buildApprovedButtons(DashboardController controller) {
           const SizedBox(width: 10),
           Expanded(
             child: buildApprovalCard(
+              titleColor: Colors.white,
               title: 'Work in Progress',
               subtitle: '',
               badgeCount: controller
@@ -224,6 +221,7 @@ Widget buildApprovedButtons(DashboardController controller) {
         children: [
           Expanded(
             child: buildApprovalCard(
+              titleColor: Colors.white,
               title: 'Delivery Ready',
               subtitle: '',
               badgeCount: controller
@@ -245,6 +243,7 @@ Widget buildApprovedButtons(DashboardController controller) {
           const SizedBox(width: 10),
           Expanded(
             child: buildApprovalCard(
+              titleColor: Colors.white,
               title: 'Over Due Orders',
               subtitle: '',
               badgeCount: controller.dashboardModel?.data?.overdueOrdersCount
@@ -264,6 +263,26 @@ Widget buildApprovedButtons(DashboardController controller) {
           ),
         ],
       ),
+      SizedBox(height: 20),
+      Row(
+        children: [
+          Expanded(
+            child: buildApprovalCard(
+              titleColor: Colors.black,
+              title: 'Tag Without Image',
+              subtitle: '',
+              badgeCount:
+                  controller.dashboardModel?.data?.tagWithoutImages != null
+                      ? controller.dashboardModel?.data?.tagWithoutImages
+                              .toString() ??
+                          ""
+                      : "0",
+              color: brandGoldLightColor,
+              onTap: () {},
+            ),
+          ),
+        ],
+      ),
     ],
   );
 }
@@ -274,6 +293,7 @@ Widget buildApprovalCard({
   required String badgeCount,
   required Function()? onTap,
   required Color color,
+  required Color titleColor,
 }) {
   return Stack(
     clipBehavior: Clip.none,
@@ -295,10 +315,10 @@ Widget buildApprovalCard({
                 child: Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'JosefinSans',
                     fontWeight: FontWeight.w700,
-                    color: Colors.white, // Use secondaryColor if defined
+                    color: titleColor, // Use secondaryColor if defined
                     fontSize: 12,
                   ),
                 ),

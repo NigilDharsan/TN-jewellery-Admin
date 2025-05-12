@@ -24,6 +24,7 @@ class Data {
   int? workInProgressOrdersCount;
   int? deliveryReadyOrdersCount;
   int? overdueOrdersCount;
+  int? tagWithoutImages;
 
   Data(
       {this.yetToApproveCustomers,
@@ -32,7 +33,8 @@ class Data {
       this.nonAssignedOrdersCount,
       this.workInProgressOrdersCount,
       this.deliveryReadyOrdersCount,
-      this.overdueOrdersCount});
+      this.overdueOrdersCount,
+      this.tagWithoutImages});
 
   Data.fromJson(Map<String, dynamic> json) {
     yetToApproveCustomers = json['yet_to_approve_customers'];
@@ -42,6 +44,7 @@ class Data {
     workInProgressOrdersCount = json['work_in_progress_orders_count'];
     deliveryReadyOrdersCount = json['delivery_ready_orders_count'];
     overdueOrdersCount = json['overdue_orders_count'];
+    tagWithoutImages = json['tag_without_images'];
   }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +56,7 @@ class Data {
     data['work_in_progress_orders_count'] = this.workInProgressOrdersCount;
     data['delivery_ready_orders_count'] = this.deliveryReadyOrdersCount;
     data['overdue_orders_count'] = this.overdueOrdersCount;
+    data['tag_without_images'] = this.tagWithoutImages;
     return data;
   }
 }

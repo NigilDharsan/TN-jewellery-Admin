@@ -35,6 +35,7 @@ class Data {
   Null? referenceNo;
   String? name;
   String? companyName;
+  String? showCatalogueDate;
   String? dateAdd;
   String? title;
   Null? dateOfBirth;
@@ -48,31 +49,36 @@ class Data {
   String? mobileWoc;
   String? areaName;
   String? gstNumber;
+  String? showCatalogue;
+  int? catalogueVisibleType;
 
   Data(
       {this.gender,
-        this.image,
-        this.imageText,
-        this.sno,
-        this.pkId,
-        this.idCustomer,
-        this.email,
-        this.referenceNo,
-        this.name,
-        this.companyName,
-        this.dateAdd,
-        this.title,
-        this.dateOfBirth,
-        this.firstname,
-        this.lastname,
-        this.empRefCode,
-        this.mobCode,
-        this.previewImages,
-        this.isChecked,
-        this.mobile,
-        this.mobileWoc,
-        this.areaName,
-        this.gstNumber});
+      this.image,
+      this.imageText,
+      this.sno,
+      this.pkId,
+      this.idCustomer,
+      this.email,
+      this.referenceNo,
+      this.name,
+      this.companyName,
+      this.showCatalogueDate,
+      this.dateAdd,
+      this.title,
+      this.dateOfBirth,
+      this.firstname,
+      this.lastname,
+      this.empRefCode,
+      this.mobCode,
+      this.previewImages,
+      this.isChecked,
+      this.mobile,
+      this.mobileWoc,
+      this.areaName,
+      this.gstNumber,
+      this.showCatalogue,
+      this.catalogueVisibleType});
 
   Data.fromJson(Map<String, dynamic> json) {
     gender = json['gender'];
@@ -85,6 +91,7 @@ class Data {
     referenceNo = json['reference_no'];
     name = json['name'];
     companyName = json['company_name'];
+    showCatalogueDate = json['show_catalogue_date'];
     dateAdd = json['date_add'];
     title = json['title'];
     dateOfBirth = json['date_of_birth'];
@@ -98,6 +105,8 @@ class Data {
     mobileWoc = json['mobile_woc'];
     areaName = json['area_name'];
     gstNumber = json['gst_number'];
+    showCatalogue = json['show_catalogue'];
+    catalogueVisibleType = json['catalogue_visible_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -119,12 +128,15 @@ class Data {
     data['lastname'] = this.lastname;
     data['emp_ref_code'] = this.empRefCode;
     data['mob_code'] = this.mobCode;
+    data['show_catalogue_date'] = this.showCatalogueDate;
 
     data['isChecked'] = this.isChecked;
     data['mobile'] = this.mobile;
     data['mobile_woc'] = this.mobileWoc;
     data['area_name'] = this.areaName;
     data['gst_number'] = this.gstNumber;
+    data['show_catalogue'] = this.showCatalogue;
+    data['catalogue_visible_type'] = this.catalogueVisibleType;
     return data;
   }
 }

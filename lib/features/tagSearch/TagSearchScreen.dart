@@ -155,15 +155,15 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Weight", style: JosefinSansMedium),
+                            Text("Gross Weight", style: JosefinSansMedium),
                             Text(controller.tagModel?.data?.tagGwt ?? "",
                                 style: JosefinRegular),
                           ]),
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Design ", style: JosefinSansMedium),
-                            Text(controller.tagModel?.data?.designName ?? "",
+                            Text("Net Weight", style: JosefinSansMedium),
+                            Text(controller.tagModel?.data?.tagNwt ?? "",
                                 style: JosefinRegular),
                           ]),
                     ],

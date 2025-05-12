@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'package:tn_jewellery_admin/features/auth/model/account_model.dart';
 import 'package:tn_jewellery_admin/features/auth/repository/auth_repo.dart';
 import 'package:tn_jewellery_admin/utils/Loader/loader_utils.dart';
 import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
+import 'package:tn_jewellery_admin/utils/widgets/custom_snackbar.dart';
 
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
@@ -187,8 +189,8 @@ class AuthController extends GetxController implements GetxService {
     newPasswordControllerForChangePasswordScreen.text = '';
     confirmPasswordControllerForChangePasswordScreen.text = '';
 
-    signInEmailController.text = "shiningdawn";
-    signInPasswordController.text = "wholesale@sds";
+    // signInEmailController.text = "shiningdawn";
+    // signInPasswordController.text = "wholesale@sds";
 
     // getUCOGetInfo();
     // getUserProfile(false);
@@ -256,6 +258,9 @@ class AuthController extends GetxController implements GetxService {
 
       String accessToken = accountModel!.token!;
       await authRepo.saveUserToken(accessToken);
+      await authRepo.saveRefreshToken(accessToken);
+
+      startRefreshTokenTimer();
 
       Get.offAllNamed(RouteHelper.getMainRoute("0"));
     } else {
@@ -356,4 +361,34 @@ class AuthController extends GetxController implements GetxService {
 
   String? _refreshToken;
   bool _isRefreshing = false;
+
+  Future<void> refreshToken(bool isAppOpen) async {
+    // If a refresh token call is already in progress, return early
+    if (_isRefreshing) {
+      return;
+    }
+
+    var connectivityResult = await Connectivity().checkConnectivity();
+    var isOffline = connectivityResult == ConnectivityResult.none;
+
+    if (_refreshToken != "" && !isOffline && _isRefreshing == false) {
+      try {
+        _isRefreshing = true; // Mark the refresh operation as in progress
+
+        Response? result = await authRepo.refreshToken();
+        if (result != null && result.statusCode == 200) {
+          String accessToken = result.body['token'];
+
+          await authRepo.saveUserToken(accessToken);
+          await authRepo.saveRefreshToken(accessToken);
+        }
+      } catch (e) {
+        customSnackBar("Refresh Token Error: $e");
+      } finally {
+        _isRefreshing = false; // Mark the refresh operation as complete
+      }
+    } else if (isOffline) {
+      customSnackBar("Please_connect_internet".tr);
+    }
+  }
 }

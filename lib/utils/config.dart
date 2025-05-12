@@ -9,6 +9,12 @@ class Config {
   static const String GoogleApiKey = 'AIzaSyCh3c8qYAYu21XGM3aio-sZVpH6RXsh150';
   static const double appVersion = 1.0;
 
+  static const String appName = 'TN Jewellers';
+  static const String appVersionName = '1.0.0';
+  static const String appVersionCode = '1';
+  static const String appBuildNumber = '1';
+  static const String appPackageName = 'com.shiningdawn.tnjewellers';
+
   static void setEnvironment(Environment env) {
     switch (env) {
       case Environment.DEV:
@@ -38,7 +44,8 @@ class Config {
 
 class _Config {
   static const String environment = 'dev';
-  static const String baseUrl = 'https://tnjewellers.shiningdawn.in/api/';
+  static const String baseUrl =
+      'https://tnjewellers.shiningdawn.in/api/'; //'https://wholesale.shiningdawn.in/api/';
 
   static const List<String> scopes = <String>[
     'openid',
@@ -50,7 +57,7 @@ class _Config {
 
   static Map<dynamic, dynamic> debugConstants = {
     environment: "dev",
-    baseUrl: 'https://tnjewellers.shiningdawn.in/api/',
+    baseUrl: baseUrl,
     scopes: <String>[
       'openid',
       'email',
@@ -62,7 +69,7 @@ class _Config {
 
   static Map<dynamic, dynamic> stagingConstants = {
     environment: "uat",
-    baseUrl: 'https://tnjewellers.shiningdawn.in/api/',
+    baseUrl: baseUrl,
     scopes: <String>[
       'openid',
       'email',
@@ -74,7 +81,7 @@ class _Config {
 
   static Map<dynamic, dynamic> prodConstants = {
     environment: "prod",
-    baseUrl: 'https://tnjewellers.shiningdawn.in/api/',
+    baseUrl: baseUrl,
     scopes: <String>[
       'openid',
       'email',

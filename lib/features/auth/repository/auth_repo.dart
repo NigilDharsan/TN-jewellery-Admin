@@ -100,6 +100,15 @@ class AuthRepo {
     sharedPreferences.clear();
     return true;
   }
+
+  refreshToken() async {
+    final headers = {
+      "Content-Type": "application/json",
+    };
+    return await apiClient.postData(
+        AppConstants.employeeTokenRefresh, {"token": getRefreshToken()},
+        headers: headers);
+  }
 }
 
 class SingleTon {

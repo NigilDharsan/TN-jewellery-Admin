@@ -40,7 +40,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     }).catchError((e) {
       print("Video initialization failed: $e");
     });
-
     _controller.addListener(() {
       setState(() {});
     });

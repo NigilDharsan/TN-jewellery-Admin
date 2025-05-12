@@ -6,6 +6,8 @@ class AppConstants {
   static const String socialLoginUrl = 'social-login';
 
   static const String getEmpLoginUrl = 'employee/emp_login/';
+  static const String employeeTokenRefresh =
+      'customersettings/employee_token_refresh/';
 
   static const String getDashboardUrl = 'dashboard/admin_app_dashboard/';
   static const String getCustomerUrl = 'customersettings/customer_approval/';

@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -49,7 +50,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 5,bottom: 1),
+                padding: const EdgeInsets.only(right: 5, bottom: 1),
                 child: customDropdown(
                     label: 'Work Status',
                     labelStyle: const TextStyle(
@@ -95,36 +96,41 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: controller.selectedWorkStatus == "In Progress"
-                    ? customDropdown(
-                    label: 'Vendor Wise',
-                    labelStyle: const TextStyle(
-                      fontFamily: 'JosefinSans',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: brandGreyColor,
-                    ),
-                    selectedValue: controller.selectedVendor,
-                    items: controller.supplierListModel!.data!
-                        .map((e) => e.supplierName ?? '')
-                        .toList(),
-                    onChanged: (value) {
-                      controller.selectedVendor = value;
-                      var supplierID = controller.supplierListModel!.data!
-                          .firstWhere((e) => e.supplierName == value)
-                          .idSupplier;
-                      controller.filterBody = {
-                        "id_supplier": supplierID,
-                        "id_customer": "",
-                        "date": controller.formatDateToYMD(),
-                      };
-                      controller.getOrderStatusList(
-                          controller.selectedWorkStatusID,
-                          controller.filterBody);
-                    })
-
-                    :customDropdownDetails(
-                  label: 'Customer Wise',
+                child:
+                    // controller.selectedWorkStatus == "In Progress"
+                    //     ? customDropdown(
+                    //         label: 'Vendor Wise',
+                    //         labelStyle: const TextStyle(
+                    //           fontFamily: 'JosefinSans',
+                    //           fontSize: 12,
+                    //           fontWeight: FontWeight.w500,
+                    //           color: brandGreyColor,
+                    //         ),
+                    //         selectedValue: controller.selectedVendor,
+                    //         items: controller.supplierListModel!.data!
+                    //             .map((e) => e.supplierName ?? '')
+                    //             .toList(),
+                    //         onChanged: (value) {
+                    //           controller.selectedVendor = value;
+                    //           var supplierID = controller.supplierListModel!.data!
+                    //               .firstWhere((e) => e.supplierName == value)
+                    //               .idSupplier;
+                    //           controller.filterBody = {
+                    //             "id_supplier": supplierID,
+                    //             "id_customer": "",
+                    //             "date": controller.formatDateToYMD(),
+                    //           };
+                    //           controller.getOrderStatusList(
+                    //               controller.selectedWorkStatusID,
+                    //               controller.filterBody);
+                    //         })
+                    //     :
+                    customDropdownDetails(
+                  label: controller.selectedVendor != null
+                      ? controller.selectedVendor ?? ""
+                      : controller.selectedWorkStatus == "In Progress"
+                          ? 'Vendor Wise'
+                          : 'Customer Wise',
                   labelStyle: const TextStyle(
                     fontFamily: 'JosefinSans',
                     fontSize: 12,
@@ -133,41 +139,73 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                   ),
                   onPressed: () {
                     // Navigate to dropdown page or open a bottom sheet
-                    Get.to(() => OrdersDropDown());
+                    Get.to(() => OrdersDropDown())?.then((onValue) {
+                      if (onValue != null) {
+                        if (controller.selectedWorkStatus == "In Progress") {
+                          controller.selectedVendor = onValue;
+                          var supplierID = controller.supplierListModel!.data!
+                              .firstWhere((e) => e.supplierName == onValue)
+                              .idSupplier;
+                          controller.filterBody = {
+                            "id_supplier": supplierID,
+                            "id_customer": "",
+                            "date": controller.formatDateToYMD(),
+                          };
+                          controller.getOrderStatusList(
+                              controller.selectedWorkStatusID,
+                              controller.filterBody);
+                        } else {
+                          controller.selectedVendor = onValue;
+                          var customerID = Get.find<DashboardController>()
+                              .customerModel!
+                              .data!
+                              .firstWhere((e) => e.name == onValue)
+                              .idCustomer;
+                          controller.filterBody = {
+                            "id_supplier": "",
+                            "id_customer": customerID,
+                            "date": controller.formatDateToYMD(),
+                          };
+                          controller.getOrderStatusList(
+                              controller.selectedWorkStatusID,
+                              controller.filterBody);
+                        }
+                      }
+                    });
                   },
                 ),
 
                 // customDropdown(
-                //         label: 'Customer Wise',
-                //         labelStyle: const TextStyle(
-                //           fontFamily: 'JosefinSans',
-                //           fontSize: 12,
-                //           fontWeight: FontWeight.w500,
-                //           color: brandGreyColor,
-                //         ),
-                //         selectedValue: controller.selectedVendor,
-                //         items: Get.find<DashboardController>()
-                //             .customerModel!
-                //             .data!
-                //             .map((e) => e.name ?? '')
-                //             .toList(),
-                //         onChanged: (value) {
-                //           controller.selectedVendor = value;
-                //           var customerID = Get.find<DashboardController>()
-                //               .customerModel!
-                //               .data!
-                //               .firstWhere((e) => e.name == value)
-                //               .idCustomer;
-                //           controller.filterBody = {
-                //             "id_supplier": "",
-                //             "id_customer": customerID,
-                //             "date": controller.formatDateToYMD(),
-                //           };
-                //           controller.getOrderStatusList(
-                //               controller.selectedWorkStatusID,
-                //               controller.filterBody);
-                //         },
-                //       ),
+                //     label: 'Customer Wise',
+                //     labelStyle: const TextStyle(
+                //       fontFamily: 'JosefinSans',
+                //       fontSize: 12,
+                //       fontWeight: FontWeight.w500,
+                //       color: brandGreyColor,
+                //     ),
+                //     selectedValue: controller.selectedVendor,
+                //     items: Get.find<DashboardController>()
+                //         .customerModel!
+                //         .data!
+                //         .map((e) => e.name ?? '')
+                //         .toList(),
+                //     onChanged: (value) {
+                //       controller.selectedVendor = value;
+                //       var customerID = Get.find<DashboardController>()
+                //           .customerModel!
+                //           .data!
+                //           .firstWhere((e) => e.name == value)
+                //           .idCustomer;
+                //       controller.filterBody = {
+                //         "id_supplier": "",
+                //         "id_customer": customerID,
+                //         "date": controller.formatDateToYMD(),
+                //       };
+                //       controller.getOrderStatusList(
+                //           controller.selectedWorkStatusID,
+                //           controller.filterBody);
+                //     },
+                //   ),
               ),
             ),
             Container(
@@ -295,71 +333,68 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
           ),
           const SizedBox(height: 10),
           Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.person, size: 18, color: Colors.black54),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${inProgressOrderData?.supplierName ?? ''} - ",
-                              style: const TextStyle(
-                                fontFamily: 'JosefinSans',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {
-                                final phone = inProgressOrderData?.supplierMobile ?? '';
-                                if (phone.isNotEmpty) {
-                                  launchUrl(Uri.parse("tel:$phone"));
-                                }
-                              },
-                              child: Text(
-                                inProgressOrderData?.supplierMobile ?? '',
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.person,
+                            size: 18, color: Colors.black54),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${inProgressOrderData?.supplierName ?? ''} - ",
                                 style: const TextStyle(
                                   fontFamily: 'JosefinSans',
-                                  fontSize: 14,
-                                  color: Colors.blue,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black87,
                                 ),
                               ),
-                            ),
-
-
-                          ],
+                              const SizedBox(width: 5),
+                              GestureDetector(
+                                onTap: () {
+                                  final phone =
+                                      inProgressOrderData?.supplierMobile ?? '';
+                                  if (phone.isNotEmpty) {
+                                    launchUrl(Uri.parse("tel:$phone"));
+                                  }
+                                },
+                                child: Text(
+                                  inProgressOrderData?.supplierMobile ?? '',
+                                  style: const TextStyle(
+                                    fontFamily: 'JosefinSans',
+                                    fontSize: 14,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.share, color: Colors.grey),
-                        onPressed: () async {
-                          // Uncomment and use your share function here
-                          await shareProductMedia();
-                        },
-                      )
-                    ],
+                        IconButton(
+                          icon: Icon(Icons.share, color: Colors.grey),
+                          onPressed: () async {
+                            // Uncomment and use your share function here
+                            await shareProductMedia();
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                ),
-
-              ],
-            )
-
-          ),
+                ],
+              )),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: StepIndicator(currentStep: controller.currentStep),
@@ -533,7 +568,7 @@ Widget customDropdown({
           ),
         ),
         menuItemStyleData: const MenuItemStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 6,vertical: 1),
+          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 1),
         ),
       ),
     ),
@@ -548,17 +583,20 @@ Widget customDropdownDetails({
   return InkWell(
     onTap: onPressed,
     child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade400),
-        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: labelStyle,
+          Expanded(
+            child: Text(
+              label,
+              style: labelStyle,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           const Icon(Icons.arrow_drop_down, color: Colors.black),
         ],
@@ -566,9 +604,6 @@ Widget customDropdownDetails({
     ),
   );
 }
-
-
-
 
 Future<void> shareProductMedia() async {
   final controller = Get.find<OrderController>();
@@ -580,22 +615,22 @@ Future<void> shareProductMedia() async {
   final String description = controller.selectNewOrderListData?.remarks ?? "";
 
   final List<String> imageUrls =
-  (controller.selectNewOrderListData?.previewImages ?? [])
-      .map<String>((e) => e.image ?? "")
-      .where((url) => url.isNotEmpty)
-      .toList();
+      (controller.selectNewOrderListData?.previewImages ?? [])
+          .map<String>((e) => e.image ?? "")
+          .where((url) => url.isNotEmpty)
+          .toList();
 
   final List<String> videoUrls =
-  (controller.selectNewOrderListData?.previewVideos ?? [])
-      .map<String>((e) => e.video ?? "")
-      .where((url) => url.isNotEmpty)
-      .toList();
+      (controller.selectNewOrderListData?.previewVideos ?? [])
+          .map<String>((e) => e.video ?? "")
+          .where((url) => url.isNotEmpty)
+          .toList();
 
   final List<String> audioUrls =
-  (controller.selectNewOrderListData?.previewVoices ?? [])
-      .map<String>((e) => e.audio ?? "")
-      .where((url) => url.isNotEmpty)
-      .toList();
+      (controller.selectNewOrderListData?.previewVoices ?? [])
+          .map<String>((e) => e.audio ?? "")
+          .where((url) => url.isNotEmpty)
+          .toList();
 
   final List<String> allUrls = [...imageUrls, ...videoUrls, ...audioUrls];
   final List<XFile> filesToShare = [];
@@ -626,9 +661,12 @@ Description: $description
         // Detect MIME type
         final ext = fileName.split('.').last.toLowerCase();
         String mimeType = 'application/octet-stream';
-        if (['jpg', 'jpeg'].contains(ext)) mimeType = 'image/jpeg';
-        else if (ext == 'png') mimeType = 'image/png';
-        else if (ext == 'mp4') mimeType = 'video/mp4';
+        if (['jpg', 'jpeg'].contains(ext))
+          mimeType = 'image/jpeg';
+        else if (ext == 'png')
+          mimeType = 'image/png';
+        else if (ext == 'mp4')
+          mimeType = 'video/mp4';
         else if (['mp3', 'aac', 'wav'].contains(ext)) mimeType = 'audio/mpeg';
 
         filesToShare.add(XFile(filePath, mimeType: mimeType, name: fileName));
@@ -636,7 +674,8 @@ Description: $description
     } catch (e) {
       print('Download failed for $url: $e');
     }
-  }    if (Get.isDialogOpen ?? false) {
+  }
+  if (Get.isDialogOpen ?? false) {
     Get.back();
   }
   if (filesToShare.isNotEmpty) {

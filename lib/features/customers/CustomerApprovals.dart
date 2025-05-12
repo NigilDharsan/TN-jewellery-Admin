@@ -15,17 +15,38 @@ class CustomerNameList extends StatefulWidget {
 class _CustomerNameListState extends State<CustomerNameList>
     with SingleTickerProviderStateMixin {
   String isSelectButton = 'LifeTime';
-  DateTime? selectedDateTime;
+  DateFormat format = DateFormat("dd-MM-yyyy HH:mm:ss");
+
   late TabController _tabController;
   final List<String> _tabs = ['Yet to Approve', 'Rejected', 'Total Approved'];
   Map<int, Map<String, dynamic>> catalogSelections = {};
   Map<int, bool> editModes = {};
   bool isApprovalTab = true;
 
-  Future<void> pickDateTime(int customerId) async {
+  Future<void> pickDateTime(int customerId, int selectIndex) async {
+    final now = DateTime.now();
+    DateTime customerCatalogeDate;
+
+    try {
+      final dateString = Get.find<DashboardController>()
+          .customerModel
+          ?.data?[selectIndex]
+          .showCatalogueDate;
+
+      if (dateString != null && dateString.isNotEmpty) {
+        final parsedDate = format.parse(dateString);
+        // Ensure the parsed date is not before today
+        customerCatalogeDate = parsedDate.isBefore(now) ? now : parsedDate;
+      } else {
+        customerCatalogeDate = now;
+      }
+    } catch (e) {
+      customerCatalogeDate = now;
+    }
+
     final date = await showDatePicker(
       context: context,
-      initialDate: selectedDateTime ?? DateTime.now(),
+      initialDate: customerCatalogeDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
@@ -33,18 +54,31 @@ class _CustomerNameListState extends State<CustomerNameList>
     if (date != null) {
       final time = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.fromDateTime(selectedDateTime ?? DateTime.now()),
+        initialTime: TimeOfDay.fromDateTime(customerCatalogeDate),
       );
 
       if (time != null) {
         setState(() {
-          selectedDateTime =
-              DateTime(date.year, date.month, date.day, time.hour, time.minute);
+          customerCatalogeDate = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            time.hour,
+            time.minute,
+          );
+
           catalogSelections[customerId] = {
             'show_catalogue': '1',
             'show_catalogue_date':
-                DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!)
+                DateFormat('dd-MM-yyyy HH:mm:ss').format(customerCatalogeDate),
           };
+
+          Get.find<DashboardController>()
+                  .customerModel
+                  ?.data?[selectIndex]
+                  .showCatalogueDate =
+              DateFormat('dd-MM-yyyy HH:mm:ss').format(customerCatalogeDate);
+          Get.find<DashboardController>().update();
         });
       } else {
         setState(() {
@@ -90,15 +124,13 @@ class _CustomerNameListState extends State<CustomerNameList>
         return 2;
       default:
         return 1;
-
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: brandGoldLightColor.withAlpha(80),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Customer Approval'),
         backgroundColor: brandGoldColor,
@@ -125,7 +157,8 @@ class _CustomerNameListState extends State<CustomerNameList>
                 ),
               ),
               if ((isApprovalTab || editModes.values.any((mode) => mode)) &&
-                  controller.selectedCustomers.values.any((selected) => selected))
+                  controller.selectedCustomers.values
+                      .any((selected) => selected))
                 BottomAppBar(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 1),
@@ -138,7 +171,7 @@ class _CustomerNameListState extends State<CustomerNameList>
                             child: _optionButton('Approve'),
                           ),
                           InkWell(
-                            onTap: () => _submitCustomerStatus(controller, 3),
+                            onTap: () => _submitCustomerStatus(controller, 2),
                             child: _optionButton('Reject'),
                           ),
                         ] else if (_tabController.index == 1) ...[
@@ -148,7 +181,7 @@ class _CustomerNameListState extends State<CustomerNameList>
                           ),
                         ] else if (_tabController.index == 2) ...[
                           InkWell(
-                            onTap: () => _submitCustomerStatus(controller, 3),
+                            onTap: () => _submitCustomerStatus(controller, 2),
                             child: _optionButton('Update'),
                           ),
                         ],
@@ -156,7 +189,6 @@ class _CustomerNameListState extends State<CustomerNameList>
                     ),
                   ),
                 ),
-
             ],
           );
         },
@@ -187,7 +219,6 @@ class _CustomerNameListState extends State<CustomerNameList>
                     controller.selectedCustomers[customer.pkId] ?? false;
                 final isEditing = editModes[customer.pkId] ?? false;
 
-
                 return GestureDetector(
                   onTap: () {
                     final phone = customer.mobile ?? '';
@@ -197,7 +228,7 @@ class _CustomerNameListState extends State<CustomerNameList>
                   },
                   child: Card(
                     margin: const EdgeInsets.symmetric(vertical: 8),
-                    elevation: 3,
+                    elevation: 0.1,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -207,7 +238,8 @@ class _CustomerNameListState extends State<CustomerNameList>
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (isApprovalTab || ((isRejectedTab || isApprovedTab) && isEditing))
+                          if (isApprovalTab ||
+                              ((isRejectedTab || isApprovedTab) && isEditing))
                             Padding(
                               padding: const EdgeInsets.only(right: 2),
                               child: Checkbox(
@@ -250,14 +282,15 @@ class _CustomerNameListState extends State<CustomerNameList>
                                               ),
                                               const SizedBox(width: 2),
                                               Expanded(
-                                             child:  Text(
+                                                child: Text(
                                                   ' - ${customer.companyName ?? ''}',
                                                   style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                  fontFamily: 'JosefinSans',
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    fontFamily: 'JosefinSans',
+                                                  ),
                                                 ),
-                                              ),),
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -280,12 +313,24 @@ class _CustomerNameListState extends State<CustomerNameList>
                                           fontFamily: 'JosefinSans',
                                         ),
                                       ),
+                                      customer.showCatalogueDate != null
+                                          ? const SizedBox(height: 10)
+                                          : SizedBox.shrink(),
+                                      customer.showCatalogueDate != null
+                                          ? Text(
+                                              "Show until: ${customer.showCatalogueDate ?? ''}",
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
+                                            )
+                                          : SizedBox.shrink(),
                                       const SizedBox(height: 10),
                                       if ((isSelected &&
                                               (isApprovalTab ||
                                                   (isRejectedTab &&
-                                                      isEditing) ||  (isApprovedTab &&
-                                                  isEditing))) ||
+                                                      isEditing) ||
+                                                  (isApprovedTab &&
+                                                      isEditing))) ||
                                           (isApprovedTab &&
                                               controller.selectedCustomers[
                                                       customer.pkId] ==
@@ -304,7 +349,7 @@ class _CustomerNameListState extends State<CustomerNameList>
                                             ),
                                             const SizedBox(height: 1),
                                             _buildCatalogOptions(
-                                                customer.pkId!),
+                                                customer.pkId!, index),
                                           ],
                                         ),
                                       /* if (isRejectedTab && !isEditing)
@@ -317,18 +362,36 @@ class _CustomerNameListState extends State<CustomerNameList>
                                     ],
                                   ),
                                 ),
-                                if ((isRejectedTab || isApprovedTab) && !isEditing)
+                                if ((isRejectedTab || isApprovedTab) &&
+                                    !isEditing)
                                   Positioned(
                                     top: 30,
                                     right: 10,
                                     child: ElevatedButton.icon(
-                                      icon: const Icon(Icons.edit, size: 18,color: Colors.black,),
-                                      label: const Text('Edit',style: TextStyle(color: brandPrimaryColor,fontSize: 15,fontWeight:FontWeight.bold),),
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        size: 18,
+                                        color: Colors.black,
+                                      ),
+                                      label: const Text(
+                                        'Edit',
+                                        style: TextStyle(
+                                            color: brandPrimaryColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                       onPressed: () {
                                         setState(() {
                                           editModes[customer.pkId!] = true;
                                           controller.selectedCustomers[
                                               customer.pkId!] = true;
+
+                                          catalogSelections[customer.pkId!] = {
+                                            'show_catalogue':
+                                                "${controller.customerModel?.data?[index].catalogueVisibleType}",
+                                            'show_catalogue_date':
+                                                "${controller.customerModel?.data?[index].showCatalogueDate}"
+                                          };
                                         });
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -373,7 +436,7 @@ class _CustomerNameListState extends State<CustomerNameList>
     );
   }
 
-  Widget _buildCatalogOptions(int customerId) {
+  Widget _buildCatalogOptions(int customerId, int selectIndex) {
     final currentSelection =
         catalogSelections[customerId]?['show_catalogue'] == '1'
             ? 'Limited'
@@ -422,21 +485,21 @@ class _CustomerNameListState extends State<CustomerNameList>
                 value: 'Limited',
                 groupValue: currentSelection,
                 onChanged: (value) async {
-                  await pickDateTime(customerId);
+                  await pickDateTime(customerId, selectIndex);
                 },
               ),
             ),
           ],
         ),
-        if (currentSelection == 'Limited' &&
-            catalogSelections[customerId] != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            child: Text(
-              'Show until : ${DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!)}',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ),
+        // if (currentSelection == 'Limited' &&
+        //     catalogSelections[customerId] != null)
+        //   Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 0),
+        //     child: Text(
+        //       'Show until : ${DateFormat('yyyy-MM-dd HH:mm:ss').format(selectedDateTime!)}',
+        //       style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        //     ),
+        //   ),
       ],
     );
   }

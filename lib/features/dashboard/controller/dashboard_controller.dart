@@ -60,8 +60,7 @@ class DashboardController extends GetxController implements GetxService {
     Response? response = await dashboardRepo.postCustomerStatusRepo(body);
     if (response != null && response.statusCode == 200) {
       selectedCustomers.clear();
-      getCustomerList("1");
-      customSnackBar(response.statusText, isError: false);
+      customSnackBar(response.body['message'], isError: false);
     } else {
       print('Invalid User');
     }

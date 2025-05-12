@@ -59,8 +59,8 @@ class Data {
   int? isPartialSale;
   bool? isSpecialDiscountApplied;
   String? flatMcValue;
-  Null? oldTagCode;
-  Null? oldTagId;
+  String? oldTagCode;
+  String? oldTagId;
   bool? isImported;
   bool? isIssuedToCounter;
   String? createdOn;
@@ -73,7 +73,7 @@ class Data {
   int? tagProductId;
   int? tagDesignId;
   Null? tagSubDesignId;
-  Null? tagSectionId;
+  int? tagSectionId;
   int? tagOrderDet;
   int? tagPurityId;
   int? tagUomId;
