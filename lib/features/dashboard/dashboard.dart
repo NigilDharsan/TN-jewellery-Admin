@@ -15,6 +15,15 @@ class dashboardScreen extends StatefulWidget {
 }
 
 class _dashboardScreenState extends State<dashboardScreen> {
+  final List<String> workStatusList = [
+    'Approved List',
+    'CAD Issue',
+    'CAD Receipt',
+    'CAM Issue',
+    'CAM Receipt',
+    'Production Issue',
+    'Production Receipt',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,6 +183,120 @@ Widget Customerbuild(String label, String value) {
   );
 }
 
+// Widget buildApprovedButtons(DashboardController controller) {
+//   return Column(
+//     children: [
+//       Row(
+//         children: [
+//           Expanded(
+//             child: buildApprovalCard(
+//               titleColor: Colors.white,
+//               title: 'Yet To Assign',
+//               subtitle: '',
+//               badgeCount: controller
+//                       .dashboardModel?.data?.nonAssignedOrdersCount
+//                       .toString() ??
+//                   "",
+//               color: brandPrimaryColor,
+//               onTap: () {
+//                 // Handle tap
+//                 Get.offAllNamed(RouteHelper.getMainRoute("2"));
+//               },
+//             ),
+//           ),
+//           const SizedBox(width: 10),
+//           Expanded(
+//             child: buildApprovalCard(
+//               titleColor: Colors.white,
+//               title: 'Work in Progress',
+//               subtitle: '',
+//               badgeCount: controller
+//                       .dashboardModel?.data?.workInProgressOrdersCount
+//                       .toString() ??
+//                   "",
+//               color: brandGreySoftColor,
+//               onTap: () {
+//                 Get.find<OrderController>().selectedWorkStatus = "In Progress";
+//                 Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+//
+//                 Get.find<OrderController>().isNewOrdersSelected = false;
+//
+//                 Get.offAllNamed(RouteHelper.getMainRoute("2"));
+//               },
+//             ),
+//           ),
+//         ],
+//       ),
+//       SizedBox(height: 20),
+//       Row(
+//         children: [
+//           Expanded(
+//             child: buildApprovalCard(
+//               titleColor: Colors.white,
+//               title: 'Delivery Ready',
+//               subtitle: '',
+//               badgeCount: controller
+//                       .dashboardModel?.data?.deliveryReadyOrdersCount
+//                       .toString() ??
+//                   "",
+//               color: brandGreySoftColor,
+//               onTap: () {
+//                 Get.find<OrderController>().selectedWorkStatus =
+//                     "Delivery Ready";
+//                 Get.find<OrderController>().selectedWorkStatusID =
+//                     "delivery_ready";
+//
+//                 Get.find<OrderController>().isNewOrdersSelected = false;
+//                 Get.offAllNamed(RouteHelper.getMainRoute("2"));
+//               },
+//             ),
+//           ),
+//           const SizedBox(width: 10),
+//           Expanded(
+//             child: buildApprovalCard(
+//               titleColor: Colors.white,
+//               title: 'Over Due Orders',
+//               subtitle: '',
+//               badgeCount: controller.dashboardModel?.data?.overdueOrdersCount
+//                       .toString() ??
+//                   "",
+//               color: brandGoldColor,
+//               onTap: () {
+//                 // Handle tap
+//                 Get.find<OrderController>().selectedWorkStatus = "In Progress";
+//                 Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+//
+//                 Get.find<OrderController>().isNewOrdersSelected = false;
+//
+//                 Get.offAllNamed(RouteHelper.getMainRoute("2"));
+//               },
+//             ),
+//           ),
+//         ],
+//       ),
+//       SizedBox(height: 20),
+//       Row(
+//         children: [
+//           Expanded(
+//             child: buildApprovalCard(
+//               titleColor: Colors.black,
+//               title: 'Tag Without Image',
+//               subtitle: '',
+//               badgeCount:
+//                   controller.dashboardModel?.data?.tagWithoutImages != null
+//                       ? controller.dashboardModel?.data?.tagWithoutImages
+//                               .toString() ??
+//                           ""
+//                       : "0",
+//               color: brandGoldLightColor,
+//               onTap: () {},
+//             ),
+//           ),
+//         ],
+//       ),
+//     ],
+//   );
+// }
 Widget buildApprovedButtons(DashboardController controller) {
   return Column(
     children: [
@@ -182,11 +305,11 @@ Widget buildApprovedButtons(DashboardController controller) {
           Expanded(
             child: buildApprovalCard(
               titleColor: Colors.white,
-              title: 'Yet To Assign',
+              title: 'Yet To Approve',
               subtitle: '',
               badgeCount: controller
-                      .dashboardModel?.data?.nonAssignedOrdersCount
-                      .toString() ??
+                  .dashboardModel?.data?.nonAssignedOrdersCount
+                  .toString() ??
                   "",
               color: brandPrimaryColor,
               onTap: () {
@@ -197,23 +320,166 @@ Widget buildApprovedButtons(DashboardController controller) {
           ),
           const SizedBox(width: 10),
           Expanded(
-            child: buildApprovalCard(
-              titleColor: Colors.white,
-              title: 'Work in Progress',
-              subtitle: '',
-              badgeCount: controller
-                      .dashboardModel?.data?.workInProgressOrdersCount
-                      .toString() ??
-                  "",
-              color: brandGreySoftColor,
-              onTap: () {
-                Get.find<OrderController>().selectedWorkStatus = "In Progress";
-                Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+            child: Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: brandGreySoftColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'CAD',
+                      style: TextStyle(
+                        fontFamily: 'JosefinSans',
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildSubStatus(
+                        label: 'To Assign',
+                        count: controller.dashboardModel?.data?.workInProgressOrdersCount ?? 0,
+                        onTap: () {
+                          Get.find<OrderController>().selectedWorkStatus = "Yet to Assign";
+                          Get.find<OrderController>().selectedWorkStatusID = "yet_to_assign";
+                          Get.find<OrderController>().isNewOrdersSelected = false;
+                          Get.offAllNamed(RouteHelper.getMainRoute("2"));
+                        },
+                      ),
+                      _buildSubStatus(
+                        label: 'WIP',
+                        count: controller.dashboardModel?.data?.workInProgressOrdersCount ?? 0,
+                        onTap: () {
+                          Get.find<OrderController>().selectedWorkStatus = "In Progress";
+                          Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+                          Get.find<OrderController>().isNewOrdersSelected = false;
+                          Get.offAllNamed(RouteHelper.getMainRoute("2"));
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
 
-                Get.find<OrderController>().isNewOrdersSelected = false;
-
-                Get.offAllNamed(RouteHelper.getMainRoute("2"));
-              },
+        ],
+      ),
+      SizedBox(height: 20),
+      Row(
+        children: [
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: brandGreySoftColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'CAM',
+                      style: TextStyle(
+                        fontFamily: 'JosefinSans',
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildSubStatus(
+                        label: 'To Assign',
+                        count: controller.dashboardModel?.data?.deliveryReadyOrdersCount ?? 0,
+                        onTap: () {
+                          Get.find<OrderController>().selectedWorkStatus = "Yet to Assign";
+                          Get.find<OrderController>().selectedWorkStatusID = "yet_to_assign";
+                          Get.find<OrderController>().isNewOrdersSelected = false;
+                          Get.offAllNamed(RouteHelper.getMainRoute("2"));
+                        },
+                      ),
+                      _buildSubStatus(
+                        label: 'WIP',
+                        count: controller.dashboardModel?.data?.deliveryReadyOrdersCount ?? 0,
+                        onTap: () {
+                          Get.find<OrderController>().selectedWorkStatus = "In Progress";
+                          Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+                          Get.find<OrderController>().isNewOrdersSelected = false;
+                          Get.offAllNamed(RouteHelper.getMainRoute("2"));
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: brandGoldColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Production',
+                      style: TextStyle(
+                        fontFamily: 'JosefinSans',
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildSubStatus(
+                        label: 'To Assign',
+                        count: controller.dashboardModel?.data?.deliveryReadyOrdersCount ?? 0,
+                        onTap: () {
+                          Get.find<OrderController>().selectedWorkStatus = "Yet to Assign";
+                          Get.find<OrderController>().selectedWorkStatusID = "yet_to_assign";
+                          Get.find<OrderController>().isNewOrdersSelected = false;
+                          Get.offAllNamed(RouteHelper.getMainRoute("2"));
+                        },
+                      ),
+                      _buildSubStatus(
+                        label: 'WIP',
+                        count: controller.dashboardModel?.data?.deliveryReadyOrdersCount ?? 0,
+                        onTap: () {
+                          Get.find<OrderController>().selectedWorkStatus = "In Progress";
+                          Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+                          Get.find<OrderController>().isNewOrdersSelected = false;
+                          Get.offAllNamed(RouteHelper.getMainRoute("2"));
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ],
@@ -224,20 +490,19 @@ Widget buildApprovedButtons(DashboardController controller) {
           Expanded(
             child: buildApprovalCard(
               titleColor: Colors.white,
-              title: 'Delivery Ready',
+              title: 'Over Due Orders',
               subtitle: '',
-              badgeCount: controller
-                      .dashboardModel?.data?.deliveryReadyOrdersCount
-                      .toString() ??
+              badgeCount: controller.dashboardModel?.data?.overdueOrdersCount
+                  .toString() ??
                   "",
-              color: brandGreySoftColor,
+              color: brandGoldColor,
               onTap: () {
-                Get.find<OrderController>().selectedWorkStatus =
-                    "Delivery Ready";
-                Get.find<OrderController>().selectedWorkStatusID =
-                    "delivery_ready";
+                // Handle tap
+                Get.find<OrderController>().selectedWorkStatus = "In Progress";
+                Get.find<OrderController>().selectedWorkStatusID = "inprogress";
 
                 Get.find<OrderController>().isNewOrdersSelected = false;
+
                 Get.offAllNamed(RouteHelper.getMainRoute("2"));
               },
             ),
@@ -246,12 +511,12 @@ Widget buildApprovedButtons(DashboardController controller) {
           Expanded(
             child: buildApprovalCard(
               titleColor: Colors.white,
-              title: 'Over Due Orders',
+              title: 'Delivery Ready',
               subtitle: '',
-              badgeCount: controller.dashboardModel?.data?.overdueOrdersCount
-                      .toString() ??
+              badgeCount: controller.dashboardModel?.data?.deliveryReadyOrdersCount
+                  .toString() ??
                   "",
-              color: brandGoldColor,
+              color: brandGreySoftColor,
               onTap: () {
                 // Handle tap
                 Get.find<OrderController>().selectedWorkStatus = "In Progress";
@@ -271,24 +536,63 @@ Widget buildApprovedButtons(DashboardController controller) {
           Expanded(
             child: buildApprovalCard(
               titleColor: Colors.black,
-              title: 'Tag Without Image',
+              title: 'Tag Without Images',
               subtitle: '',
-              badgeCount:
-                  controller.dashboardModel?.data?.tagWithoutImages != null
-                      ? controller.dashboardModel?.data?.tagWithoutImages
-                              .toString() ??
-                          ""
-                      : "0",
+              badgeCount: controller.dashboardModel?.data?.tagWithoutImages
+                  .toString() ??
+                  "",
               color: brandGoldLightColor,
-              onTap: () {},
+              onTap: () {
+                // Handle tap
+                Get.find<OrderController>().selectedWorkStatus = "In Progress";
+                Get.find<OrderController>().selectedWorkStatusID = "inprogress";
+
+                Get.find<OrderController>().isNewOrdersSelected = false;
+
+                Get.offAllNamed(RouteHelper.getMainRoute("2"));
+              },
             ),
           ),
         ],
       ),
+
     ],
   );
 }
 
+Widget _buildSubStatus({
+  required String label,
+  required int count,
+  required VoidCallback onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'JosefinSans',),
+        ),
+        SizedBox(height: 4),
+        Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.white24,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Center( // <-- Wrap in Center
+            child: Text(
+              count.toString(),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+        )
+      ],
+    ),
+  );
+}
 Widget buildApprovalCard({
   required String title,
   required String subtitle,

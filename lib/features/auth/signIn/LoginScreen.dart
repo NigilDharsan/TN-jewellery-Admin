@@ -68,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Text(
                       'SIGN IN',
                       style: TextStyle(
+                          fontFamily: 'JosefinSans',
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: brandGreyColor),
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: const TextStyle( fontFamily: 'JosefinSans',
               fontSize: 14, fontWeight: FontWeight.bold, color: brandGreyColor),
         ),
         const SizedBox(height: 5),
@@ -145,7 +146,11 @@ class _LoginScreenState extends State<LoginScreen> {
               obscureText: isPassword ? controller.obscurePassword : false,
               decoration: InputDecoration(
                 hintText: hintName,
-                hintStyle: const TextStyle(color: brandGreySoftColor),
+
+                hintStyle: const TextStyle(color: brandGreySoftColor,
+                    fontFamily: 'JosefinSans',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400),
                 filled: true,
                 fillColor: brandGoldLightColor,
                 border: OutlineInputBorder(
