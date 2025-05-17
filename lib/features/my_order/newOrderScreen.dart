@@ -125,7 +125,7 @@ class _newOrderScreenState extends State<newOrderScreen> {
                     );
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat("yyyy-MM-dd").format(pickedDate);
+                      DateFormat("yyyy-MM-dd").format(pickedDate);
                       if (mounted) {
                         setState(() {
                           controller.selectDeliveryDate.text = formattedDate;
@@ -161,7 +161,7 @@ class _newOrderScreenState extends State<newOrderScreen> {
                       controller: controller.comment,
                       decoration: InputDecoration(
                         hintText:
-                            "Some Text describing the changes the cusopmer looking for the retailer",
+                        "Some Text describing the changes the cusopmer looking for the retailer",
                         hintStyle: TextStyle(
                             fontFamily: 'JosefinSans',
                             color: brandGreyColor,
@@ -169,7 +169,7 @@ class _newOrderScreenState extends State<newOrderScreen> {
                             fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 10),
+                        const EdgeInsets.symmetric(horizontal: 10),
                       ),
                       style: const TextStyle(color: Colors.black),
                     ),
@@ -186,9 +186,9 @@ class _newOrderScreenState extends State<newOrderScreen> {
                       "order_detail_ids": [
                         {
                           "detail_id":
-                              controller.selectNewOrderListData?.detailId ?? 0,
+                          controller.selectNewOrderListData?.detailId ?? 0,
                           "karigar_due_date":
-                              controller.selectDeliveryDate.text,
+                          controller.selectDeliveryDate.text,
                           "remarks": controller.comment.text
                         }
                       ]

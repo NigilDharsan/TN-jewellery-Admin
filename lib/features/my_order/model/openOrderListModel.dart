@@ -79,7 +79,7 @@ class OpenOrderData {
   int? order;
   int? purity;
   int? uom;
-  Null? erpTag;
+  int? erpTag;
   int? product;
   int? design;
   Null? subDesign;
@@ -99,6 +99,7 @@ class OpenOrderData {
   String? orderNo;
   String? productName;
   String? designName;
+  List<InternalProcessDetails>? internalProcessDetails;
   List<PreviewImages>? previewImages;
   String? image;
   String? imageText;
@@ -128,105 +129,106 @@ class OpenOrderData {
 
   OpenOrderData(
       {this.detailId,
-      this.stoneDetails,
-      this.pieces,
-      this.grossWt,
-      this.lessWt,
-      this.netWt,
-      this.diamondWt,
-      this.stoneWt,
-      this.wastagePercent,
-      this.wastageWt,
-      this.mcType,
-      this.mcValue,
-      this.otherChargesAmnt,
-      this.otherMetalAmnt,
-      this.otherMetalWt,
-      this.ratePerGram,
-      this.taxableAmnt,
-      this.taxType,
-      this.taxPercent,
-      this.taxAmnt,
-      this.cgstAmnt,
-      this.sgstAmnt,
-      this.igstAmnt,
-      this.itemCost,
-      this.discountAmnt,
-      this.linkedDate,
-      this.unlinkedDate,
-      this.unlinkedReason,
-      this.customerDueDate,
-      this.karigarDueDate,
-      this.remarks,
-      this.cancelReason,
-      this.cancelledDate,
-      this.updatedOn,
-      this.deliveredOn,
-      this.karigarCharges,
-      this.customerCharges,
-      this.totalCharges,
-      this.taxCharges,
-      this.isReservedItem,
-      this.voiceNote,
-      this.nickName,
-      this.customizedRefNo,
-      this.customizedProductName,
-      this.customizedDesignName,
-      this.dimension,
-      this.customizedStoneName,
-      this.customizedStoneWt,
-      this.purchaseTouch,
-      this.purchaseVa,
-      this.repairApproxAmt,
-      this.order,
-      this.purity,
-      this.uom,
-      this.erpTag,
-      this.product,
-      this.design,
-      this.subDesign,
-      this.size,
-      this.repairType,
-      this.calculationType,
-      this.tax,
-      this.orderStatus,
-      this.linkedBy,
-      this.unlinkedBy,
-      this.cancelledBy,
-      this.updatedBy,
-      this.receipt,
-      this.orderRepairType,
-      this.orderStatusName,
-      this.colour,
-      this.orderNo,
-      this.productName,
-      this.designName,
-      this.previewImages,
-      this.image,
-      this.imageText,
-      this.video,
-      this.videoText,
-      this.previewVoices,
-      this.audio,
-      this.audioText,
-      this.orderId,
-      this.date,
-      this.orderType,
-      this.orderDate,
-      this.isRateFixedOnOrder,
-      this.addedThrough,
-      this.totalDiscount,
-      this.createdOn,
-      this.orderBranch,
-      this.finYear,
-      this.customer,
-      this.supplier,
-      this.createdBy,
-      this.branchName,
-      this.customerName,
-      this.customerMobile,
-      this.uomName,
-      this.previewVideos});
+        this.stoneDetails,
+        this.pieces,
+        this.grossWt,
+        this.lessWt,
+        this.netWt,
+        this.diamondWt,
+        this.stoneWt,
+        this.wastagePercent,
+        this.wastageWt,
+        this.mcType,
+        this.mcValue,
+        this.otherChargesAmnt,
+        this.otherMetalAmnt,
+        this.otherMetalWt,
+        this.ratePerGram,
+        this.taxableAmnt,
+        this.taxType,
+        this.taxPercent,
+        this.taxAmnt,
+        this.cgstAmnt,
+        this.sgstAmnt,
+        this.igstAmnt,
+        this.itemCost,
+        this.discountAmnt,
+        this.linkedDate,
+        this.unlinkedDate,
+        this.unlinkedReason,
+        this.customerDueDate,
+        this.karigarDueDate,
+        this.remarks,
+        this.cancelReason,
+        this.cancelledDate,
+        this.updatedOn,
+        this.deliveredOn,
+        this.karigarCharges,
+        this.customerCharges,
+        this.totalCharges,
+        this.taxCharges,
+        this.isReservedItem,
+        this.voiceNote,
+        this.nickName,
+        this.customizedRefNo,
+        this.customizedProductName,
+        this.customizedDesignName,
+        this.dimension,
+        this.customizedStoneName,
+        this.customizedStoneWt,
+        this.purchaseTouch,
+        this.purchaseVa,
+        this.repairApproxAmt,
+        this.order,
+        this.purity,
+        this.uom,
+        this.erpTag,
+        this.product,
+        this.design,
+        this.subDesign,
+        this.size,
+        this.repairType,
+        this.calculationType,
+        this.tax,
+        this.orderStatus,
+        this.linkedBy,
+        this.unlinkedBy,
+        this.cancelledBy,
+        this.updatedBy,
+        this.receipt,
+        this.orderRepairType,
+        this.orderStatusName,
+        this.colour,
+        this.orderNo,
+        this.productName,
+        this.designName,
+        this.internalProcessDetails,
+        this.previewImages,
+        this.image,
+        this.imageText,
+        this.video,
+        this.videoText,
+        this.previewVoices,
+        this.audio,
+        this.audioText,
+        this.orderId,
+        this.date,
+        this.orderType,
+        this.orderDate,
+        this.isRateFixedOnOrder,
+        this.addedThrough,
+        this.totalDiscount,
+        this.createdOn,
+        this.orderBranch,
+        this.finYear,
+        this.customer,
+        this.supplier,
+        this.createdBy,
+        this.branchName,
+        this.customerName,
+        this.customerMobile,
+        this.uomName,
+        this.previewVideos});
 
   OpenOrderData.fromJson(Map<String, dynamic> json) {
     detailId = json['detail_id'];
@@ -283,7 +285,7 @@ class OpenOrderData {
     order = json['order'];
     purity = json['purity'];
     uom = json['uom'];
-    erpTag = json['erp_tag'];
+    erpTag = json['erp_tag'] ?? 0;
     product = json['product'];
     design = json['design'];
     subDesign = json['sub_design'];
@@ -302,6 +304,13 @@ class OpenOrderData {
     orderNo = json['order_no'];
     productName = json['product_name'];
     designName = json['design_name'];
+    if (json['internal_process_details'] != null) {
+      internalProcessDetails = <InternalProcessDetails>[];
+      json['internal_process_details'].forEach((v) {
+        internalProcessDetails!.add(new InternalProcessDetails.fromJson(v));
+      });
+    }
+
     if (json['preview_images'] != null) {
       previewImages = <PreviewImages>[];
       json['preview_images'].forEach((v) {
@@ -421,6 +430,11 @@ class OpenOrderData {
     data['order_no'] = this.orderNo;
     data['product_name'] = this.productName;
     data['design_name'] = this.designName;
+    if (this.internalProcessDetails != null) {
+      data['internal_process_details'] =
+          this.internalProcessDetails!.map((v) => v.toJson()).toList();
+    }
+
     if (this.previewImages != null) {
       data['preview_images'] =
           this.previewImages!.map((v) => v.toJson()).toList();
@@ -456,6 +470,47 @@ class OpenOrderData {
       data['preview_videos'] =
           this.previewVideos!.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class InternalProcessDetails {
+  int? id;
+  String? createdOn;
+  int? orderDetail;
+  int? internalOrderProcess;
+  int? createdBy;
+  String? processName;
+  String? processDate;
+
+  InternalProcessDetails(
+      {this.id,
+        this.createdOn,
+        this.orderDetail,
+        this.internalOrderProcess,
+        this.createdBy,
+        this.processName,
+        this.processDate});
+
+  InternalProcessDetails.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    createdOn = json['created_on'];
+    orderDetail = json['order_detail'];
+    internalOrderProcess = json['internal_order_process'];
+    createdBy = json['created_by'];
+    processName = json['process_name'];
+    processDate = json['process_date'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['created_on'] = this.createdOn;
+    data['order_detail'] = this.orderDetail;
+    data['internal_order_process'] = this.internalOrderProcess;
+    data['created_by'] = this.createdBy;
+    data['process_name'] = this.processName;
+    data['process_date'] = this.processDate;
     return data;
   }
 }

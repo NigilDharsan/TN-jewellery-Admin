@@ -25,6 +25,12 @@ class Data {
   int? deliveryReadyOrdersCount;
   int? overdueOrdersCount;
   int? tagWithoutImages;
+  int? cadYetToAssignCount;
+  int? cadWorkInProgressCount;
+  int? camYetToAssignCount;
+  int? camWorkInProgressCount;
+  int? productionYetToAssignCount;
+  int? productionWorkInProgressCount;
 
   Data(
       {this.yetToApproveCustomers,
@@ -34,7 +40,14 @@ class Data {
       this.workInProgressOrdersCount,
       this.deliveryReadyOrdersCount,
       this.overdueOrdersCount,
-      this.tagWithoutImages});
+      this.tagWithoutImages,
+      this.cadYetToAssignCount,
+      this.cadWorkInProgressCount,
+      this.camYetToAssignCount,
+      this.camWorkInProgressCount,
+      this.productionYetToAssignCount,
+      this.productionWorkInProgressCount
+      });
 
   Data.fromJson(Map<String, dynamic> json) {
     yetToApproveCustomers = json['yet_to_approve_customers'];
@@ -43,8 +56,14 @@ class Data {
     nonAssignedOrdersCount = json['non_assigned_orders_count'];
     workInProgressOrdersCount = json['work_in_progress_orders_count'];
     deliveryReadyOrdersCount = json['delivery_ready_orders_count'];
-    overdueOrdersCount = json['overdue_orders_count'];
+    overdueOrdersCount = json['customer_overdue_count'];
     tagWithoutImages = json['tag_without_images'];
+    cadYetToAssignCount = json['cad_yet_to_assign'];
+    cadWorkInProgressCount = json['cad_work_in_progress'];
+    camYetToAssignCount = json['cam_yet_assign'];
+    camWorkInProgressCount = json['cam_work_in_progress'];
+    productionYetToAssignCount = json['production_yet_to_assign'];
+    productionWorkInProgressCount = json['production_in_progress'];
   }
 
   Map<String, dynamic> toJson() {
@@ -56,6 +75,12 @@ class Data {
     data['work_in_progress_orders_count'] = this.workInProgressOrdersCount;
     data['delivery_ready_orders_count'] = this.deliveryReadyOrdersCount;
     data['overdue_orders_count'] = this.overdueOrdersCount;
+    data['cad_yet_to_assign'] = this.cadYetToAssignCount;
+    data['cad_work_in_progress'] = this.cadWorkInProgressCount;
+    data['cam_yet_assign'] = this.camYetToAssignCount;
+    data['cam_work_in_progress'] = this.camWorkInProgressCount;
+    data['production_yet_to_assign'] = this.productionYetToAssignCount;
+    data['production_in_progress'] = this.productionWorkInProgressCount;
     data['tag_without_images'] = this.tagWithoutImages;
     return data;
   }

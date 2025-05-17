@@ -13,6 +13,7 @@ import 'package:tn_jewellery_admin/features/my_order/widgets/orderDetailWidgets.
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
 import 'package:tn_jewellery_admin/utils/widgets/custom_app_bar.dart';
+import 'package:tn_jewellery_admin/features/my_order/model/openOrderListModel.dart';
 import 'package:http/http.dart' as http;
 
 class orderDetailScreen extends StatefulWidget {
@@ -275,20 +276,20 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
               Expanded(
                 child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Stone Type", style: JosefinSansMedium),
-                Text(
-                    controller.selectNewOrderListData?.customizedStoneName ??
-                        "",
-                    style: JosefinRegular),
-              ]),),
+                  Text("Stone Type", style: JosefinSansMedium),
+                  Text(
+                      controller.selectNewOrderListData?.customizedStoneName ??
+                          "",
+                      style: JosefinRegular),
+                ]),),
               SizedBox(width: 100),
               Expanded(
                 child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Stone Weight", style: JosefinSansMedium),
-                Text(controller.selectNewOrderListData?.stoneWt ?? "",
-                    style: JosefinRegular),
-              ]),),
+                  Text("Stone Weight", style: JosefinSansMedium),
+                  Text(controller.selectNewOrderListData?.stoneWt ?? "",
+                      style: JosefinRegular),
+                ]),),
             ],
           ),
           // const SizedBox(height: 15),
@@ -302,212 +303,212 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
           const SizedBox(height: 10),
           (controller.selectNewOrderListData?.previewImages != null)
               ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Images Reference',
-                        style: TextStyle(
-                            color: white8,
-                            fontFamily: 'JosefinSans',
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 10),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(0),
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller
-                          .selectNewOrderListData?.previewImages?.length,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          children: [
-                            Icon(Icons.photo, color: brandGreyColor),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                "photo ${index + 1}.jpg",
-                                style: TextStyle(
-                                    color: white8,
-                                    fontSize: 16,
-                                    fontFamily: 'JosefinSans',
-                                    fontWeight: FontWeight.bold),
-                                overflow: TextOverflow.ellipsis,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Images Reference',
+                  style: TextStyle(
+                      color: white8,
+                      fontFamily: 'JosefinSans',
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(0),
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller
+                    .selectNewOrderListData?.previewImages?.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      Icon(Icons.photo, color: brandGreyColor),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          "photo ${index + 1}.jpg",
+                          style: TextStyle(
+                              color: white8,
+                              fontSize: 16,
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.arrow_downward,
+                            color: brandGreyColor),
+                        onPressed: () => controller.downloadFile(
+                            context,
+                            controller.selectNewOrderListData
+                                ?.previewImages?[index].image ??
+                                ""),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.remove_red_eye_outlined,
+                            color: brandGreyColor),
+                        onPressed: () {
+                          List<String> allImagePaths = controller
+                              .selectNewOrderListData!.previewImages!
+                              .map((img) => img.image ?? "")
+                              .toList();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShowImageGallery(
+                                imagePaths: allImagePaths,
+                                startIndex: index,
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.arrow_downward,
-                                  color: brandGreyColor),
-                              onPressed: () => controller.downloadFile(
-                                  context,
-                                  controller.selectNewOrderListData
-                                          ?.previewImages?[index].image ??
-                                      ""),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.remove_red_eye_outlined,
-                                  color: brandGreyColor),
-                              onPressed: () {
-                                List<String> allImagePaths = controller
-                                    .selectNewOrderListData!.previewImages!
-                                    .map((img) => img.image ?? "")
-                                    .toList();
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ShowImageGallery(
-                                      imagePaths: allImagePaths,
-                                      startIndex: index,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    )
-                  ],
-                )
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              )
+            ],
+          )
               : Container(),
           const SizedBox(height: 15),
           (controller.selectNewOrderListData?.previewVideos != null)
               ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Video Reference',
-                      style: TextStyle(
-                        color: white8,
-                        fontFamily: 'JosefinSans',
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(0),
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller
-                              .selectNewOrderListData?.previewVideos?.length ??
-                          0,
-                      itemBuilder: (context, index) {
-                        final videoPath = controller.selectNewOrderListData
-                                ?.previewVideos?[index]?.video ??
-                            "";
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Video Reference',
+                style: TextStyle(
+                  color: white8,
+                  fontFamily: 'JosefinSans',
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(0),
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller
+                    .selectNewOrderListData?.previewVideos?.length ??
+                    0,
+                itemBuilder: (context, index) {
+                  final videoPath = controller.selectNewOrderListData
+                      ?.previewVideos?[index]?.video ??
+                      "";
 
-                        return Row(
-                          children: [
-                            const Icon(Icons.photo, color: brandGreyColor),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                "Video ${index + 1}.mp4",
-                                style: const TextStyle(
-                                  color: white8,
-                                  fontSize: 16,
-                                  fontFamily: 'JosefinSans',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.arrow_downward,
-                                  color: brandGreyColor),
-                              onPressed: () {
-                                _downloadFile(context, videoPath);
-                              },
-                            ),
-                            const SizedBox(width: 10),
-                            IconButton(
-                              icon: const Icon(Icons.visibility,
-                                  color: brandGreyColor),
-                              onPressed: () {
-                                showVideoViewer(context, videoPath);
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    )
-                  ],
-                )
+                  return Row(
+                    children: [
+                      const Icon(Icons.photo, color: brandGreyColor),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          "Video ${index + 1}.mp4",
+                          style: const TextStyle(
+                            color: white8,
+                            fontSize: 16,
+                            fontFamily: 'JosefinSans',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.arrow_downward,
+                            color: brandGreyColor),
+                        onPressed: () {
+                          _downloadFile(context, videoPath);
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        icon: const Icon(Icons.visibility,
+                            color: brandGreyColor),
+                        onPressed: () {
+                          showVideoViewer(context, videoPath);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              )
+            ],
+          )
               : Container(),
 
           const SizedBox(height: 15),
           (controller.selectNewOrderListData?.previewVoices != null)
               ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Audio Reference',
-                      style: TextStyle(
-                        color: white8,
-                        fontFamily: 'JosefinSans',
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(0),
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller
-                              .selectNewOrderListData?.previewVoices?.length ??
-                          0,
-                      itemBuilder: (context, index) {
-                        final audioPath = controller.selectNewOrderListData
-                                ?.previewVoices?[index]?.audio ??
-                            "";
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Audio Reference',
+                style: TextStyle(
+                  color: white8,
+                  fontFamily: 'JosefinSans',
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(0),
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller
+                    .selectNewOrderListData?.previewVoices?.length ??
+                    0,
+                itemBuilder: (context, index) {
+                  final audioPath = controller.selectNewOrderListData
+                      ?.previewVoices?[index]?.audio ??
+                      "";
 
-                        return Row(
-                          children: [
-                            Icon(Icons.mic, color: brandGreyColor),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                "audio ${index + 1}.mp3",
-                                style: const TextStyle(
-                                  color: white8,
-                                  fontSize: 16,
-                                  fontFamily: 'JosefinSans',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.arrow_downward,
-                                  color: brandGreyColor),
-                              onPressed: () {
-                                _downloadFile(context, audioPath);
-                              },
-                            ),
-                            const SizedBox(width: 10),
-                            IconButton(
-                              icon: Icon(
-                                  isCurrentPlaying &&
-                                          currentPlayingFile == audioPath
-                                      ? Icons.stop
-                                      : Icons.play_arrow,
-                                  color: brandGreyColor),
-                              onPressed: () {
-                                if (isCurrentPlaying &&
-                                    currentPlayingFile == audioPath) {
-                                  _stopPlayback(); // Stop if the same audio is clicked
-                                } else {
-                                  _playSegment(audioPath); // Play the new audio
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                )
+                  return Row(
+                    children: [
+                      Icon(Icons.mic, color: brandGreyColor),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          "audio ${index + 1}.mp3",
+                          style: const TextStyle(
+                            color: white8,
+                            fontSize: 16,
+                            fontFamily: 'JosefinSans',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.arrow_downward,
+                            color: brandGreyColor),
+                        onPressed: () {
+                          _downloadFile(context, audioPath);
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        icon: Icon(
+                            isCurrentPlaying &&
+                                currentPlayingFile == audioPath
+                                ? Icons.stop
+                                : Icons.play_arrow,
+                            color: brandGreyColor),
+                        onPressed: () {
+                          if (isCurrentPlaying &&
+                              currentPlayingFile == audioPath) {
+                            _stopPlayback(); // Stop if the same audio is clicked
+                          } else {
+                            _playSegment(audioPath); // Play the new audio
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          )
               : Container(),
 
           const SizedBox(height: 20),
@@ -521,10 +522,14 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
           Text(controller.selectNewOrderListData?.remarks ?? "",
               style: JosefinRegular),
           const SizedBox(height: 20),
-
-          buildChangeStatus(controller),
-          const SizedBox(height: 15),
-          buildSelectButton(),
+          if (controller.isNewOrdersSelected) ...[
+            buildChangeStatus(controller),
+            const SizedBox(height: 15),
+            buildSelectButton(controller),
+          ]else if (!controller.isNewOrdersSelected) ...[
+            const SizedBox(height: 20),
+            buildProcessHistory(controller.selectNewOrderListData?.internalProcessDetails),
+          ],
         ],
       ),
     );
@@ -539,6 +544,66 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
     );
   }
 
+  Widget buildProcessHistory(List<InternalProcessDetails>? processList) {
+    if (processList == null || processList.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(
+          "No process history available.",
+          style: TextStyle(color: Colors.grey[600]),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 24),
+        const Text(
+          "Process History",
+          style: TextStyle(
+            color: Color(0xFF8A1538),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: processList.length,
+          separatorBuilder: (_, __) =>
+              Divider(height: 1, color: Colors.grey[300]),
+          itemBuilder: (context, index) {
+            final process = processList[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    process.processName ?? '',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  Text(
+                    process.processDate ?? '',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+
   Future<void> shareProductMedia() async {
     final controller = Get.find<OrderController>();
     final String productName =
@@ -549,22 +614,22 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
     final String description = controller.selectNewOrderListData?.remarks ?? "";
 
     final List<String> imageUrls =
-        (controller.selectNewOrderListData?.previewImages ?? [])
-            .map<String>((e) => e.image ?? "")
-            .where((url) => url.isNotEmpty)
-            .toList();
+    (controller.selectNewOrderListData?.previewImages ?? [])
+        .map<String>((e) => e.image ?? "")
+        .where((url) => url.isNotEmpty)
+        .toList();
 
     final List<String> videoUrls =
-        (controller.selectNewOrderListData?.previewVideos ?? [])
-            .map<String>((e) => e.video ?? "")
-            .where((url) => url.isNotEmpty)
-            .toList();
+    (controller.selectNewOrderListData?.previewVideos ?? [])
+        .map<String>((e) => e.video ?? "")
+        .where((url) => url.isNotEmpty)
+        .toList();
 
     final List<String> audioUrls =
-        (controller.selectNewOrderListData?.previewVoices ?? [])
-            .map<String>((e) => e.audio ?? "")
-            .where((url) => url.isNotEmpty)
-            .toList();
+    (controller.selectNewOrderListData?.previewVoices ?? [])
+        .map<String>((e) => e.audio ?? "")
+        .where((url) => url.isNotEmpty)
+        .toList();
 
     final List<String> allUrls = [...imageUrls, ...videoUrls, ...audioUrls];
     final List<XFile> filesToShare = [];

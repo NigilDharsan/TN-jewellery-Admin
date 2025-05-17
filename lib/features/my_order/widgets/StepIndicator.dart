@@ -77,10 +77,11 @@ class StepIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        buildStep(1, 'Allocated', false),
-        buildStep(2, 'Inprogress', false),
-        buildStep(3, 'Completed', false),
-        buildStep(4, 'Delivered', true),
+        buildStep(1, 'Approved', false),
+        buildStep(2, 'CAD', false),
+        buildStep(3, 'CAM', false),
+        buildStep(4, 'Production', false),
+        buildStep(5, 'Delivered', true),
       ],
     );
   }

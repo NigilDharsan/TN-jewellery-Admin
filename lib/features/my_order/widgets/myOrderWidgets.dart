@@ -35,7 +35,7 @@ Widget buildOrderCard(
       controller.update();
       Get.toNamed(RouteHelper.orderdetailScreen)?.then((value) {
         if (value == true) {
-          controller.getNewOrderList();
+          controller.getCurrentOrderList({"filter_type":"0"});
         }
       });
     },
@@ -82,7 +82,7 @@ Widget buildOrderCard(
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Container(
+                  /* Container(
                     height: 40,
                     width: 150,
                     decoration: BoxDecoration(
@@ -103,7 +103,7 @@ Widget buildOrderCard(
                         ),
                       ),
                     ),
-                  ),
+                  ), */
                 ],
               ),
             ),

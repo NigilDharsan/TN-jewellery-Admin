@@ -16,6 +16,13 @@ class OrderRepo {
     );
   }
 
+  Future<Response?> currentorderStatusList(dynamic body) async {
+    return await apiClient.postData(
+      AppConstants.getInternalOrderStatusUrl,
+      body
+    );
+  }
+
   Future<Response?> getSupplierRepo() async {
     return await apiClient.getData(AppConstants.getSupplierUrl);
   }
@@ -36,7 +43,7 @@ class OrderRepo {
 
   Future<Response?> orderUpdateStatus(dynamic body) async {
     return await apiClient.postData(
-      AppConstants.getOrderUpdatenUrl,
+      AppConstants.getInternalOrderUpdatUrl,
       body,
     );
   }

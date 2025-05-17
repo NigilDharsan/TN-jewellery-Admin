@@ -31,17 +31,12 @@ class _myOrderScreenState extends State<myOrderScreen> {
             isBackButtonExist: false,
           )),
       body: GetBuilder<OrderController>(initState: (state) {
-        Get.find<OrderController>().getSupplierList();
+        // Get.find<OrderController>().getSupplierList();
 
         if (Get.find<OrderController>().isNewOrdersSelected == true) {
-          Get.find<OrderController>().getNewOrderList();
-        } else {
-          Get.find<OrderController>().getOrderStatusList(
-              Get.find<OrderController>().selectedWorkStatusID,
-              Get.find<OrderController>().filterBody); //delivery_ready
-        }
-        if (Get.find<OrderController>().selectedWorkStatusID != "inprogress") {
-          Get.find<DashboardController>().getCustomerList("2");
+          Get.find<OrderController>().getCurrentOrderList({"filter_type":"0"});
+        } else if (Get.find<OrderController>().selectedWorkStatusID != "1") {
+          Get.find<OrderController>().getCurrentOrderList({"filter_type": Get.find<OrderController>().selectedWorkStatusID});
         }
       }, builder: (controller) {
         return buildOrderList(controller);
@@ -61,15 +56,15 @@ Widget buildOrderList(OrderController controller) {
               child: buildTabButton(
                   "New Orders", controller.isNewOrdersSelected, () {
                 controller.isNewOrdersSelected = true;
-                controller.getNewOrderList();
+                controller.getCurrentOrderList({"filter_type":"0"});
               }),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: buildTabButton(
                   "Order Status", !controller.isNewOrdersSelected, () {
-                controller.selectedWorkStatus = "In Progress";
-                controller.selectedWorkStatusID = "inprogress";
+                controller.selectedWorkStatus = "Approved List";
+                controller.selectedWorkStatusID = "1";
                 controller.selectedVendor = null;
                 controller.selectedDate = null;
 
@@ -80,8 +75,7 @@ Widget buildOrderList(OrderController controller) {
                 };
 
                 controller.isNewOrdersSelected = false;
-                controller.getOrderStatusList(
-                    "inprogress", controller.filterBody); //delivery_ready
+                controller.getCurrentOrderList({"filter_type":"1"}); //delivery_ready
               }),
             ),
           ],

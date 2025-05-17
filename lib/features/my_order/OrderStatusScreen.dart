@@ -11,9 +11,11 @@ import 'package:tn_jewellery_admin/features/dashboard/controller/dashboard_contr
 import 'package:tn_jewellery_admin/features/my_order/controller/order_controller.dart';
 import 'package:tn_jewellery_admin/features/my_order/model/InProgressOrderListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/Orders_Drop_Down.dart';
+import 'package:tn_jewellery_admin/features/my_order/model/openOrderListModel.dart';
 import 'package:tn_jewellery_admin/features/my_order/widgets/StepIndicator.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tn_jewellery_admin/utils/core/helper/route_helper.dart';
 
 class OrderStatusPage extends StatefulWidget {
   const OrderStatusPage({super.key});
@@ -29,9 +31,15 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
   List<Color> borderColors = [brandGoldColor, brandGoldColor];
 
   final List<String> workStatusList = [
-    'In Progress',
+    'Approved List',
+    'CAD Issue',
+    'CAD Receipt',
+    'CAM Issue',
+    'CAM Receipt',
+    'Production Issue',
+    'Production Receipt',
     'Delivery Ready',
-    'Delivered'
+    'Over Due Orders'
   ];
 
   @override
@@ -71,29 +79,51 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                       };
                       controller.selectedVendor = null;
                       controller.selectedDate = null;
-                      if (controller.selectedWorkStatus == "In Progress") {
-                        controller.selectedWorkStatusID = "inprogress";
+                      if (controller.selectedWorkStatus == "Approved List") {
+                        controller.selectedWorkStatusID = "1";
+                        controller.currentStep = 1;
+                        controller.getCurrentOrderList({"filter_type":"1"});
+                      } else if (controller.selectedWorkStatus == "CAD Issue") {
+                        controller.selectedWorkStatusID = "2";
                         controller.currentStep = 2;
-                        controller.getOrderStatusList(
-                            "inprogress", controller.filterBody);
-                      } else if (controller.selectedWorkStatus ==
-                          "Delivery Ready") {
-                        controller.selectedWorkStatusID = "delivery_ready";
+                        controller.getCurrentOrderList({"filter_type":"2"});
+                      } else if (controller.selectedWorkStatus == "CAD Receipt") {
+                        controller.selectedWorkStatusID = "3";
+                        controller.currentStep = 2;
+                        controller.getCurrentOrderList({"filter_type":"3"});
+                      }else if (controller.selectedWorkStatus == "CAM Issue") {
+                        controller.selectedWorkStatusID = "4";
                         controller.currentStep = 3;
-                        controller.getOrderStatusList(
-                            "delivery_ready", controller.filterBody);
-                        Get.find<DashboardController>().getCustomerList("2");
-                      } else if (controller.selectedWorkStatus == "Delivered") {
-                        controller.selectedWorkStatusID = "delivered";
+                        controller.getCurrentOrderList({"filter_type":"4"});
+                      }else if (controller.selectedWorkStatus == "CAM Receipt") {
+                        controller.selectedWorkStatusID = "5";
+                        controller.currentStep = 3;
+                        controller.getCurrentOrderList({"filter_type":"5"});
+                      }else if (controller.selectedWorkStatus == "Production Issue") {
+                        controller.selectedWorkStatusID = "6";
                         controller.currentStep = 4;
-                        controller.getOrderStatusList(
-                            "delivered", controller.filterBody);
-                        Get.find<DashboardController>().getCustomerList("2");
+                        controller.getCurrentOrderList({"filter_type":"6"});
+                      }else if (controller.selectedWorkStatus == "Production Receipt") {
+                        controller.selectedWorkStatusID = "7";
+                        controller.currentStep = 4;
+                        controller.getCurrentOrderList({"filter_type":"7"});
+                      }else if (controller.selectedWorkStatus == "Delivery Ready") {
+                        controller.selectedWorkStatusID = "8";
+                        controller.currentStep = 7;
+                        controller.getCurrentOrderList({"filter_type":"7"});
+                      }else if (controller.selectedWorkStatus == "Over Due Orders") {
+                        controller.selectedWorkStatusID = "9";
+                        controller.currentStep = 3;
+                        controller.getCurrentOrderList({"filter_type":"8"});
+                      }else{
+                        controller.selectedWorkStatusID = "1";
+                        controller.currentStep = 2;
+                        controller.getCurrentOrderList({"filter_type":"0"});
                       }
                     }),
               ),
             ),
-            Expanded(
+            /* Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child:
@@ -208,7 +238,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                 //   ),
               ),
             ),
-            Container(
+             */Container(
               height: 50,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
@@ -240,8 +270,10 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
             itemCount: controller.inProgressOrderListModel?.data?.length ?? 0,
             separatorBuilder: (c, _) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
+              var orderListData =
+              controller.openOrderListModel?.data?[index];
               return orderDetailsStatus(controller,
-                  controller.inProgressOrderListModel?.data![index]);
+                  controller.inProgressOrderListModel?.data![index], orderListData);
             },
           ),
         )
@@ -250,7 +282,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
   }
 
   Widget orderDetailsStatus(
-      OrderController controller, InProgressOrderData? inProgressOrderData) {
+      OrderController controller, InProgressOrderData? inProgressOrderData, OpenOrderData? orderListData) {
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 12),
       child: Column(
@@ -258,18 +290,29 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
         children: [
           Row(
             children: [
-              Container(
-                padding: EdgeInsets.all(2), // Space between avatar and border
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: white8, width: 1),
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 24,
-                  child: Icon(Icons.shopping_cart, color: Colors.black),
+              GestureDetector(
+                onTap: () {
+                  // Your action here
+                  controller.selectNewOrderListData = orderListData;
+                  controller.update();
+                  Get.toNamed(RouteHelper.orderdetailScreen)?.then((value) {
+
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(2), // Space between avatar and border
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: white8, width: 1),
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 24,
+                    child: Icon(Icons.shopping_cart, color: Colors.black),
+                  ),
                 ),
               ),
+
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -332,169 +375,117 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
             ],
           ),
           const SizedBox(height: 10),
-          Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.person,
-                            size: 18, color: Colors.black54),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${inProgressOrderData?.supplierName ?? ''} - ",
-                                style: const TextStyle(
-                                  fontFamily: 'JosefinSans',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              GestureDetector(
-                                onTap: () {
-                                  final phone =
-                                      inProgressOrderData?.supplierMobile ?? '';
-                                  if (phone.isNotEmpty) {
-                                    launchUrl(Uri.parse("tel:$phone"));
-                                  }
-                                },
-                                child: Text(
-                                  inProgressOrderData?.supplierMobile ?? '',
-                                  style: const TextStyle(
-                                    fontFamily: 'JosefinSans',
-                                    fontSize: 14,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.share, color: Colors.grey),
-                          onPressed: () async {
-                            // Uncomment and use your share function here
-                            await shareProductMedia();
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              )),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(6.0),
             child: StepIndicator(currentStep: controller.currentStep),
           ),
           const SizedBox(height: 10),
-          inProgressOrderData?.orderStatus == 4
-              ? Center(
-                  child: InkWell(
-                    onTap: () async {
-                      await Get.find<OrderController>()
-                          .OrderCompleteStatus(body: {
-                        "detail_id": "${inProgressOrderData?.detailId ?? 0}",
-                        "added_through": 2,
-                        "id_job_order_detail":
-                            "${inProgressOrderData?.idJobOrderDetail ?? 0}",
-                        "status": 5 // 4 = Complete, 5 = Delivered
-                      });
+          if(Get.find<OrderController>().selectedWorkStatusID != "8")
+            getActionButton(inProgressOrderData),
 
-                      await Get.find<OrderController>().getOrderStatusList(
-                          Get.find<OrderController>().selectedWorkStatus,
-                          controller.filterBody);
-                    },
-                    child: Container(
-                        width: 130,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: brandGoldColor,
-                          border: Border.all(color: brandGoldColor, width: 1.5),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          children: [
-                            Text(
-                              "DELIVER NOW",
-                              style: TextStyle(
-                                fontFamily: 'JosefinSans',
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        )),
-                  ),
-                )
-              : inProgressOrderData?.orderStatus == 3
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: List.generate(labels.length, (index) {
-                        return GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              selectedIndex = index;
-                            });
-
-                            if (selectedIndex == 0) {
-                              // Cancel Order Logic
-                              await Get.find<OrderController>()
-                                  .OrderCancelStatus(body: {
-                                "cancel_reason": "Any",
-                                "detail_id":
-                                    "${inProgressOrderData?.detailId ?? 0}",
-                                "id_job_order_detail":
-                                    "${inProgressOrderData?.idJobOrderDetail ?? 0}",
-                                "status": 6
-                              });
-                            } else {
-                              // Complete Status Logic
-                              Get.find<OrderController>()
-                                  .OrderCompleteStatus(body: {
-                                "detail_id":
-                                    "${inProgressOrderData?.detailId ?? 0}",
-                                "added_through": 2,
-                                "id_job_order_detail":
-                                    "${inProgressOrderData?.idJobOrderDetail ?? 0}",
-                                "status": 4 // 4 = Complete, 5 = Delivered
-                              });
-                            }
-                            await Get.find<OrderController>()
-                                .getOrderStatusList(
-                                    Get.find<OrderController>()
-                                        .selectedWorkStatus,
-                                    controller.filterBody);
-                          },
-                          child: actionButton(
-                            labels[index],
-                            borderColors[index],
-                            isSelected: selectedIndex == index,
-                          ),
-                        );
-                      }),
-                    )
-                  : SizedBox.shrink(),
           SizedBox(height: 10),
           Divider(thickness: 1, color: Colors.grey[300]),
         ],
       ),
     );
   }
+
+
+  Widget getActionButton(dynamic inProgressOrderData) {
+
+    final controller = Get.find<OrderController>();
+    final statusID = controller.selectedWorkStatusID;
+
+    String buttonText = "";
+    String remarks = "";
+    int processType = 0;
+
+    switch (statusID) {
+      case "1":
+        buttonText = "CAD Issue";
+        remarks = "Item issued to CAD process";
+        processType = 2;
+        break;
+      case "2":
+        buttonText = "CAD Done";
+        remarks = "CAD process completed";
+        processType = 3;
+        break;
+      case "3":
+        buttonText = "CAM Issue";
+        remarks = "Item issued to CAM process";
+        processType = 4;
+        break;
+      case "4":
+        buttonText = "CAM Done";
+        remarks = "CAM process completed";
+        processType = 5;
+        break;
+      case "5":
+        buttonText = "Production Issue";
+        remarks = "Item issued to Production";
+        processType = 6;
+        break;
+      case "6":
+        buttonText = "Production Done";
+        remarks = "Production process completed";
+        processType = 7;
+        break;
+      case "7":
+        buttonText = "Delivered";
+        remarks = "Order Delivered";
+        processType = 8;
+        break;
+      case "8":
+        buttonText = "Deliver Now";
+        remarks = "Item Delivered";
+        processType = 5; // or whatever is correct for delivery
+        break;
+      default:
+        return const SizedBox.shrink();
+    }
+
+    return Center(
+      child: InkWell(
+        onTap: () async {
+          await controller.OrderUpdateStatus(body: {
+            "process_type": processType,
+            "added_through": 2,
+            "order_detail_ids": [
+              {
+                "detail_id": "${inProgressOrderData?.detailId ?? 0}",
+                "remarks": remarks
+              }
+            ]
+          });
+
+          await controller.getCurrentOrderList({
+            "filter_type": controller.selectedWorkStatusID,
+          });
+        },
+        child: Container(
+          width: 130,
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          decoration: BoxDecoration(
+            color: brandGoldColor,
+            border: Border.all(color: brandGoldColor, width: 1.5),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: Text(
+              buttonText,
+              style: const TextStyle(
+                fontFamily: 'JosefinSans',
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   Widget actionButton(String label, Color borderColor,
       {required bool isSelected}) {
@@ -615,22 +606,22 @@ Future<void> shareProductMedia() async {
   final String description = controller.selectNewOrderListData?.remarks ?? "";
 
   final List<String> imageUrls =
-      (controller.selectNewOrderListData?.previewImages ?? [])
-          .map<String>((e) => e.image ?? "")
-          .where((url) => url.isNotEmpty)
-          .toList();
+  (controller.selectNewOrderListData?.previewImages ?? [])
+      .map<String>((e) => e.image ?? "")
+      .where((url) => url.isNotEmpty)
+      .toList();
 
   final List<String> videoUrls =
-      (controller.selectNewOrderListData?.previewVideos ?? [])
-          .map<String>((e) => e.video ?? "")
-          .where((url) => url.isNotEmpty)
-          .toList();
+  (controller.selectNewOrderListData?.previewVideos ?? [])
+      .map<String>((e) => e.video ?? "")
+      .where((url) => url.isNotEmpty)
+      .toList();
 
   final List<String> audioUrls =
-      (controller.selectNewOrderListData?.previewVoices ?? [])
-          .map<String>((e) => e.audio ?? "")
-          .where((url) => url.isNotEmpty)
-          .toList();
+  (controller.selectNewOrderListData?.previewVoices ?? [])
+      .map<String>((e) => e.audio ?? "")
+      .where((url) => url.isNotEmpty)
+      .toList();
 
   final List<String> allUrls = [...imageUrls, ...videoUrls, ...audioUrls];
   final List<XFile> filesToShare = [];

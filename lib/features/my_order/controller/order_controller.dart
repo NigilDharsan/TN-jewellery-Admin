@@ -17,8 +17,8 @@ class OrderController extends GetxController implements GetxService {
   bool hasMoreItems = true;
   bool get isLoading => _isLoading;
 
-  var selectedWorkStatus = "In Progress";
-  var selectedWorkStatusID = "inprogress";
+  var selectedWorkStatus = "Approved List";
+  var selectedWorkStatusID = "1";
 
   var currentStep = 2;
 
@@ -94,18 +94,18 @@ class OrderController extends GetxController implements GetxService {
         await Permission.storage.request(); // Request storage permissions
   }
 
-  Future<void> getNewOrderList() async {
+  Future<void> getCurrentOrderList(dynamic body) async {
     _isLoading = true;
     loaderController.showLoaderAfterBuild(_isLoading);
-
     update();
-    Response? response = await orderRepo.orderList();
+    Response? response = await orderRepo.currentorderStatusList(body);
     if (response != null && response.statusCode == 200) {
       openOrderListModel = OpenOrderListModel.fromJson(response.body);
+      inProgressOrderListModel =
+          InProgressOrderListModel.fromJson(response.body);
     } else {
       print('Invalid User');
     }
-
     _isLoading = false;
     loaderController.showLoaderAfterBuild(_isLoading);
 
@@ -172,20 +172,11 @@ class OrderController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> OrderCancelStatus({Map<String, dynamic>? body}) async {
+  Future<void> OrderUpdateStatus({Map<String, dynamic>? body}) async {
     _isLoading = true;
     loaderController.showLoaderAfterBuild(_isLoading);
-
     update();
-
-    // Map<String, dynamic> body = {
-    //   "cancel_reason": "Any",
-    //   "detail_id": "78",
-    //   "id_job_order_detail": "54",
-    //   "status": 6
-    // };
-
-    Response? response = await orderRepo.orderUpdateStatus([body]);
+    Response? response = await orderRepo.orderUpdateStatus(body);
     if (response != null && response.statusCode == 200) {
       customSnackBar('Job Orders Status Updated successfully', isError: false);
     } else {

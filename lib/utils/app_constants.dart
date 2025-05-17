@@ -18,6 +18,9 @@ class AppConstants {
   static const String getOrderAssignUrl = 'orders/job_order/create/';
   static const String getOrderUpdatenUrl = 'orders/order/job_orders/update/';
 
+  static const String getInternalOrderStatusUrl = 'orders/internal_process_status/';
+  static const String getInternalOrderUpdatUrl = 'orders/order/assign_internal_process/';
+
   static const String getSupplierUrl = 'retailmaster/supplier/?active';
 
   static const String getTagSearchUrl = 'inventory/tag/admin_app/search/';
