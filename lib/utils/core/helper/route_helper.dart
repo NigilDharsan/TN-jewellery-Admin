@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Estimate_Screen.dart';
 import 'package:tn_jewellery_admin/features/auth/signIn/LoginScreen.dart';
 import 'package:tn_jewellery_admin/features/dashboard/dashboard.dart';
 import 'package:tn_jewellery_admin/features/landing/landing_screen.dart';
@@ -32,6 +33,8 @@ class RouteHelper {
   static const String orderdetailScreen = '/orderDetailScreen';
   static const String neworderScreen = '/newOrderScreen';
   static const String tagsearchscreen = '/tagsearchscreen';
+  static const String estimatescreen = '/estimatecreen';
+
 
   static String getInitialRoute() => initial;
   static String getSplashRoute() => splash;
@@ -44,6 +47,8 @@ class RouteHelper {
   static String getOrderDetailsScreen() => orderdetailScreen;
   static String getNewOrderScreen() => neworderScreen;
   static String getTagSearchScreen() => tagsearchscreen;
+  static String getEstimateScreen() => estimatescreen;
+
 
   static String getAddLocation(int id, int accountId) =>
       '$addLocation?userId=$id&accountId=$accountId';
@@ -56,6 +61,8 @@ class RouteHelper {
     GetPage(name: orderdetailScreen, page: () => const orderDetailScreen()),
     GetPage(name: neworderScreen, page: () => const newOrderScreen()),
     GetPage(name: tagsearchscreen, page: () => TagSearchScreen()),
+    GetPage(name: estimatescreen, page: () => EstimateScreen()),
+
     GetPage(
       name: main,
       page: () {
