@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Estimate_Screen.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/New_Gold_Screen.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Old_Gold_Screen.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Stone_Details_Page.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Eatimate_details_Page2.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Estimate_details_Page1.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Scan_Pages.dart';
 import 'package:tn_jewellery_admin/features/auth/signIn/LoginScreen.dart';
 import 'package:tn_jewellery_admin/features/dashboard/dashboard.dart';
 import 'package:tn_jewellery_admin/features/landing/landing_screen.dart';
@@ -34,6 +40,16 @@ class RouteHelper {
   static const String neworderScreen = '/newOrderScreen';
   static const String tagsearchscreen = '/tagsearchscreen';
   static const String estimatescreen = '/estimatecreen';
+  static const String scanscreen = '/scancreen';
+  static const String estimatedetails1screen = '/estimatedetails1screen';
+  static const String estimatedetails2screen = '/estimatedetails2screen';
+  static const String newscreen = '/newscreen';
+  static const String oldscreen = '/oldscreen';
+  static const String stonedetailsscreen = '/stonescreen';
+
+
+
+
 
 
   static String getInitialRoute() => initial;
@@ -48,6 +64,16 @@ class RouteHelper {
   static String getNewOrderScreen() => neworderScreen;
   static String getTagSearchScreen() => tagsearchscreen;
   static String getEstimateScreen() => estimatescreen;
+  static String getScanScreen() => scanscreen;
+  static String getEstimatedetails1Screen() => estimatedetails1screen;
+  static String getEstimatedetails2Screen() => estimatedetails2screen;
+  static String getNewScreen() => newscreen;
+  static String getOld2Screen() => oldscreen;
+  static String getStoneScreen() => stonedetailsscreen;
+
+
+
+
 
 
   static String getAddLocation(int id, int accountId) =>
@@ -62,6 +88,14 @@ class RouteHelper {
     GetPage(name: neworderScreen, page: () => const newOrderScreen()),
     GetPage(name: tagsearchscreen, page: () => TagSearchScreen()),
     GetPage(name: estimatescreen, page: () => EstimateScreen()),
+    GetPage(name: scanscreen, page: () => ScanPages()),
+    GetPage(name: estimatedetails1screen, page: () => EstimateDetailsPage1()),
+    GetPage(name: estimatedetails2screen, page: () => EstimateDetailsPage2()),
+    GetPage(name: newscreen, page: () => NewGoldScreen()),
+    GetPage(name: oldscreen, page: () => OldGoldScreen()),
+    GetPage(name: stonedetailsscreen, page: () => StoneDetailsPage()),
+
+
 
     GetPage(
       name: main,

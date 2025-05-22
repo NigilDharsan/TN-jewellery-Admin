@@ -364,6 +364,25 @@ TextStyle dashboardRoundT = TextStyle(
   fontWeight: FontWeight.w800,
 );
 
+TextStyle tag1 = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 15,
+  color: brandGreyColor,
+  fontWeight: FontWeight.w800,
+);
+TextStyle tag2 = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 15,
+  color: brandGreyColor,
+  fontWeight: FontWeight.w400,
+);
+TextStyle tag3 = TextStyle(
+  fontFamily: 'JosefinSans',
+  fontSize: 15,
+  color: brandPrimaryColor,
+  fontWeight: FontWeight.w800,
+);
+
 //List KM
 TextStyle List_KM = TextStyle(
     fontFamily: 'JosefinSans',
