@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Stone_Details_Page.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Estimate_details_Page1.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
 import 'package:tn_jewellery_admin/utils/widgets/Common_drop_down_field.dart';
@@ -50,32 +51,51 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: buildTextField(title: "PRODUCT", hint: "Product"),
+                      child: buildTextField(
+                          title: "PRODUCT",
+                          hint: "Product"),
                     ),
-                    const SizedBox(width: 10),
                     Expanded(
                       child: CustomDropdown(title: "ITEM TYPE"),
                     ),
+                    Expanded(
+                      child: CustomDropdown(title: "TOUCH"),
+                    ),
                   ],
                 ),
                 Row(
                   children: [
                     Expanded(
-                      child: CustomDropdown(title: "TOUCH"),
-                    ),
-                    Expanded(child: CustomDropdown(title: "NO.OF.PSC")),
+                        child: grossWeight(
+                            title: "GROSS WEIGHT",
+                            hint: "",
+                            onTap: () {
+                              Get.to(StoneDetailsPage());
+                            })),
+                    Expanded(
+                        child: grossWeight(
+                            title: "LESS WEIGHT",
+                            hint: "",
+                            onTap: () {
+                              Get.to(StoneDetailsPage());
+                            })),
+                    Expanded(
+                        child: grossWeight(
+                            title: "NET WEIGHT",
+                            hint: "",
+                            onTap: () {
+                              Get.to(StoneDetailsPage());
+                            })),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(child: CustomDropdown(title: "GROSS WEIGHT")),
-                    Expanded(child: CustomDropdown(title: "LESS WEIGHT")),
-                  ],
-                ),
-                Row(
-                  children: [
+
+                    Expanded(child:  buildTextField(
+                        title: "NO.OF.PSC",
+                        hint: "1")),
                     Expanded(child: CustomDropdown(title: "DUST WEIGHT")),
-                    Expanded(child: CustomDropdown(title: "NET WEIGHT")),
+
                   ],
                 ),
                 Row(
@@ -116,7 +136,7 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(StoneDetailsPage());
+                    Get.to(() => const StoneDetailsPage(), arguments: {'showAddButton': false});
                   },
                   child: Container(
                     height: 50,
@@ -142,7 +162,7 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Stone Material', style: tag2),
+                          Text('Stone NAME', style: tag2),
                           Text('DIAMOND', style: tag1),
                         ],
                       ),
@@ -226,7 +246,7 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () {
-                // Handle tag number tap
+                Get.to(EstimateDetailsPage1());
               },
               child: Container(
                 padding: const EdgeInsets.all(12),

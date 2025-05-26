@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/New_Gold_Screen.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Old_Gold_Screen.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Estimate_details_Page1.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Scan_Pages.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 
@@ -90,8 +91,8 @@ class _EstimateScreenState extends State<EstimateScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      // Handle tag number tap
-                    },
+                      Get.to(ScanPages());
+                      },
                     child: Container(
                       height: 140,
                       width: 150,
@@ -182,7 +183,7 @@ class _EstimateScreenState extends State<EstimateScreen> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () {
-                // Handle tag number tap
+                Get.to(EstimateDetailsPage1()); // Handle tag number tap
               },
               child: Container(
                 padding: const EdgeInsets.all(12),

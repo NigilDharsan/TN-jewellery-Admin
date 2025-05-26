@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Stone_Details_Page.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Estimate_details_Page1.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
 import 'package:tn_jewellery_admin/utils/widgets/Common_drop_down_field.dart';
@@ -50,7 +51,7 @@ class _NewGoldScreenState extends State<NewGoldScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: buildTextField(title: "PRODUCT", hint: "Product"),
+                      child: CustomDropdown(title: "PRODUCT"),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -63,19 +64,40 @@ class _NewGoldScreenState extends State<NewGoldScreen> {
                     Expanded(
                       child: CustomDropdown(title: "PURITY"),
                     ),
-                    Expanded(child: CustomDropdown(title: "NO.OF.PSC")),
+                    Expanded(child:   buildTextField(
+                        title: "NO.OF.PSC",
+                        hint: "1")),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(child: CustomDropdown(title: "MATERIAL")),
-                    Expanded(child: CustomDropdown(title: "GROSS WEIGHT")),
+                    Expanded(
+                        child: grossWeight(
+                            title: "GROSS WEIGHT",
+                            hint: "",
+                            onTap: () {
+                              Get.to(StoneDetailsPage());
+                            })),
+                    Expanded(
+                        child: grossWeight(
+                            title: "LESS WEIGHT",
+                            hint: "",
+                            onTap: () {
+                              Get.to(StoneDetailsPage());
+                            })),
+                    Expanded(
+                        child: grossWeight(
+                            title: "NET WEIGHT",
+                            hint: "",
+                            onTap: () {
+                              Get.to(StoneDetailsPage());
+                            })),
                   ],
                 ),
                 Row(
                   children: [
                     Expanded(child: CustomDropdown(title: "WASTAGE %")),
-                    Expanded(child: CustomDropdown(title: "MC PER")),
+                    Expanded(child: buildTextField(title: "MC PER", hint: "1")),
                   ],
                 ),
                 Row(
@@ -116,7 +138,8 @@ class _NewGoldScreenState extends State<NewGoldScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(StoneDetailsPage());
+                    Get.to(() => const StoneDetailsPage(), arguments: {'showAddButton': true});
+
                   },
                   child: Container(
                     height: 50,
@@ -142,7 +165,7 @@ class _NewGoldScreenState extends State<NewGoldScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Stone Material', style: tag2),
+                          Text('Stone NAME', style: tag2),
                           Text('DIAMOND', style: tag1),
                         ],
                       ),
@@ -227,8 +250,8 @@ class _NewGoldScreenState extends State<NewGoldScreen> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () {
-                // Handle tag number tap
-              },
+                Get.to(EstimateDetailsPage1());
+                },
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(

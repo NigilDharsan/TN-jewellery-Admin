@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Estimate_details_Page1.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
+import 'package:tn_jewellery_admin/utils/styles.dart';
 
 class ScanPages extends StatefulWidget {
   const ScanPages({super.key});
@@ -12,24 +13,25 @@ class ScanPages extends StatefulWidget {
 
 class _ScanPagesState extends State<ScanPages> {
   int? selectedEmployeeId;
+  final TextEditingController tagController = TextEditingController();
 
   final List<Map<String, dynamic>> carratDetails = [
     {
       'name': 'Gold Ring',
       'gram': '4.5g',
-      'carrat': '22K',
+      'price': '22000',
       'icon': Icons.delete_outline,
     },
     {
       'name': 'Silver Ring',
       'gram': '3.2g',
-      'carrat': '18K',
+      'price': '18000',
       'icon': Icons.delete_outline,
     },
     {
       'name': 'Platinum Ring',
       'gram': '5.1g',
-      'carrat': '24K',
+      'price': '24000',
       'icon': Icons.delete_outline,
     },
   ];
@@ -126,23 +128,42 @@ class _ScanPagesState extends State<ScanPages> {
                                 Container(
                                   height: 55,
                                   width: 180,
-                                  padding: const EdgeInsets.all(12),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       bottomLeft: Radius.circular(10),
                                     ),
                                     border: Border.all(color: brandGoldColor),
                                   ),
-                                  child: const Text(
-                                    "TAG", // Replace with your tag or number
-                                    style: TextStyle(color: Colors.white),
+                                  child: TextField(
+                                    controller: tagController,
+                                    style: TextStyle(color: Colors.black),
+                                    decoration: InputDecoration(
+                                      hintText: "TAG",
+                                      hintStyle:
+                                          TextStyle(color: Colors.white54),
+                                      border: InputBorder
+                                          .none, // removes default underline
+                                    ),
                                   ),
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    Get.to(EstimateDetailsPage1());
-                                  },
+                                    final value = tagController.text.trim();
+                                    if (value.isNotEmpty) {
+                                      setState(() {
+                                        carratDetails.add({
+                                          'name': value,
+                                          'gram': '1.5g',
+                                          'price': '2500',
+                                          'icon': Icons.delete_outline,
+                                        });
+                                        tagController.clear();
+                                      });
+                                    }
+                                     },
                                   child: Container(
                                     height: 55,
                                     padding: const EdgeInsets.all(12),
@@ -172,54 +193,113 @@ class _ScanPagesState extends State<ScanPages> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: carratDetails.map((item) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
-                                      child: Row(
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: carratDetails.map((item) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 120,
+                                              child: Text(
+                                                item['name'],
+                                                style: const TextStyle(
+                                                  fontFamily: 'JosefinSans',
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                            // Gram
+                                            SizedBox(
+                                              width: 80,
+                                              child: Text(
+                                                item['gram'],
+                                                style: const TextStyle(
+                                                  fontFamily: 'JosefinSans',
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                            // Price
+                                            SizedBox(
+                                              width: 80,
+                                              child: Text(
+                                                '₹${item['price']}',
+                                                style: const TextStyle(
+                                                  fontFamily: 'JosefinSans',
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                            // Delete Icon
+                                            IconButton(
+                                              icon: Icon(item['icon']),
+                                              onPressed: () {
+                                                setState(() {
+                                                  carratDetails.remove(item);
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 50),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          SizedBox(
-                                            width: 120,
-                                            child: Text(
-                                              item['name'],
-                                              style: const TextStyle(
-                                                fontFamily: 'JosefinSans',
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 80,
-                                            child: Text(
-                                              item['gram'],
-                                              style: const TextStyle(
-                                                fontFamily: 'JosefinSans',
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 80,
-                                            child: Text(
-                                              item['carrat'],
-                                              style: const TextStyle(
-                                                fontFamily: 'JosefinSans',
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          Icon(item['icon']),
+                                          Text('Gross Weight', style: tag2),
+                                          Text('30 GRM', style: tag1),
                                         ],
                                       ),
-                                    );
-                                  }).toList(),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Less Weight', style: tag2),
+                                          Text('3 GRAMS', style: tag1),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Net Weight', style: tag2),
+                                          Text('9 GRAMS', style: tag1),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -227,6 +307,7 @@ class _ScanPagesState extends State<ScanPages> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            Get.to(EstimateDetailsPage1());
                           },
                           child: Container(
                             margin: EdgeInsets.all(40),

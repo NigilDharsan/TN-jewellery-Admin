@@ -4,7 +4,6 @@ import 'package:tn_jewellery_admin/features/Estimate_Creation/Estimate_Screen.da
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/New_Gold_Screen.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Old_Gold_Screen.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Stone_Details_Page.dart';
-import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Eatimate_details_Page2.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Estimate_details_Page1.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Scan_Pages.dart';
 import 'package:tn_jewellery_admin/features/auth/signIn/LoginScreen.dart';
@@ -66,7 +65,6 @@ class RouteHelper {
   static String getEstimateScreen() => estimatescreen;
   static String getScanScreen() => scanscreen;
   static String getEstimatedetails1Screen() => estimatedetails1screen;
-  static String getEstimatedetails2Screen() => estimatedetails2screen;
   static String getNewScreen() => newscreen;
   static String getOld2Screen() => oldscreen;
   static String getStoneScreen() => stonedetailsscreen;
@@ -90,7 +88,6 @@ class RouteHelper {
     GetPage(name: estimatescreen, page: () => EstimateScreen()),
     GetPage(name: scanscreen, page: () => ScanPages()),
     GetPage(name: estimatedetails1screen, page: () => EstimateDetailsPage1()),
-    GetPage(name: estimatedetails2screen, page: () => EstimateDetailsPage2()),
     GetPage(name: newscreen, page: () => NewGoldScreen()),
     GetPage(name: oldscreen, page: () => OldGoldScreen()),
     GetPage(name: stonedetailsscreen, page: () => StoneDetailsPage()),
