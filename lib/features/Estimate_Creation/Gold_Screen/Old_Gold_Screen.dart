@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Controller/Drop_Down_Controller.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Stone_Details_Page.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Estimate_details_Page1.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
@@ -16,6 +17,7 @@ class OldGoldScreen extends StatefulWidget {
 class _OldGoldScreenState extends State<OldGoldScreen> {
   int? selectedEmployeeId;
   bool isSwitched = false;
+  final dropdownController = Get.put(DropdownController());
 
   @override
   void initState() {
@@ -53,13 +55,21 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                     Expanded(
                       child: buildTextField(
                           title: "PRODUCT",
-                          hint: "Product"),
+                          hint: "Product",controller: dropdownController.productController),
                     ),
                     Expanded(
-                      child: CustomDropdown(title: "ITEM TYPE"),
+                      child: CustomDropdown(
+                        title: "ITEM TYPE",
+                        selectedId: dropdownController.typeSelected,
+                        items: dropdownController.type,
+                      ),
                     ),
                     Expanded(
-                      child: CustomDropdown(title: "TOUCH"),
+                      child: CustomDropdown(
+                        title: "TOUCH",
+                        selectedId: dropdownController.touchSelected,
+                        items: dropdownController.touch,
+                      ),
                     ),
                   ],
                 ),
@@ -68,6 +78,8 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                     Expanded(
                         child: grossWeight(
                             title: "GROSS WEIGHT",
+                            selectedId: dropdownController.grossSelected,
+                            items: dropdownController.gross,
                             hint: "",
                             onTap: () {
                               Get.to(StoneDetailsPage());
@@ -75,6 +87,8 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                     Expanded(
                         child: grossWeight(
                             title: "LESS WEIGHT",
+                            selectedId: dropdownController.lessSelected,
+                            items: dropdownController.less,
                             hint: "",
                             onTap: () {
                               Get.to(StoneDetailsPage());
@@ -83,6 +97,8 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                         child: grossWeight(
                             title: "NET WEIGHT",
                             hint: "",
+                            selectedId: dropdownController.netSelected,
+                            items: dropdownController.net,
                             onTap: () {
                               Get.to(StoneDetailsPage());
                             })),
@@ -90,18 +106,32 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                 ),
                 Row(
                   children: [
-
-                    Expanded(child:  buildTextField(
-                        title: "NO.OF.PSC",
-                        hint: "1")),
-                    Expanded(child: CustomDropdown(title: "DUST WEIGHT")),
-
+                    Expanded(
+                        child: buildTextField(
+                            title: "NO.OF.PSC",
+                            hint: "1",controller: dropdownController.noController)),
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "DUST WEIGHT",
+                      selectedId: dropdownController.noSelected,
+                      items: dropdownController.no,
+                    )),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(child: CustomDropdown(title: "RATE PER GRAM")),
-                    Expanded(child: CustomDropdown(title: "ITEM COST")),
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "RATE PER GRAM",
+                      selectedId: dropdownController.rateSelected,
+                      items: dropdownController.rate,
+                    )),
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "ITEM COST",
+                      selectedId: dropdownController.costSelected,
+                      items: dropdownController.cost,
+                    )),
                   ],
                 ),
               ],
@@ -136,7 +166,8 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const StoneDetailsPage(), arguments: {'showAddButton': false});
+                    Get.to(() => const StoneDetailsPage(),
+                        arguments: {'showAddButton': false});
                   },
                   child: Container(
                     height: 50,
@@ -163,7 +194,10 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Stone NAME', style: tag2),
-                          Text('DIAMOND', style: tag1),
+                          Text(
+                            '${dropdownController.stoneSelected.value} GRAMS',
+                            style: tag1,
+                          )
                         ],
                       ),
                     ],
@@ -176,7 +210,10 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Stone Weight', style: tag2),
-                          Text('3 GRAMS', style: tag1),
+                          Text(
+                            '${dropdownController.weightSelected.value} GRAMS',
+                            style: tag1,
+                          )
                         ],
                       ),
                     ],
@@ -189,7 +226,11 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Rate', style: tag2),
-                          Text('2,000', style: tag1),
+                          Text(dropdownController.rateController.text.isEmpty
+                              ? '0'
+                              : dropdownController.rateController.text,
+                            style: tag1,
+                          )
                         ],
                       ),
                     ],
@@ -236,7 +277,10 @@ class _OldGoldScreenState extends State<OldGoldScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Net Value ₹', style: tag2),
-                        Text('3 GRAMS', style: tag1),
+                        Text(
+                          '${dropdownController.netSelected.value} GRAMS',
+                          style: tag1,
+                        ),
                       ],
                     ),
                   ],

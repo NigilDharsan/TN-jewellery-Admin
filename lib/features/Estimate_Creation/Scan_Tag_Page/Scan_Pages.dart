@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Controller/Drop_Down_Controller.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Scan_Tag_Page/Estimate_details_Page1.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
@@ -14,6 +15,7 @@ class ScanPages extends StatefulWidget {
 class _ScanPagesState extends State<ScanPages> {
   int? selectedEmployeeId;
   final TextEditingController tagController = TextEditingController();
+  final dropdownController = Get.put(DropdownController());
 
   final List<Map<String, dynamic>> carratDetails = [
     {
@@ -267,7 +269,10 @@ class _ScanPagesState extends State<ScanPages> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text('Gross Weight', style: tag2),
-                                          Text('30 GRM', style: tag1),
+                                          Text(
+                                            '${dropdownController.grossSelected.value} GRAMS',
+                                            style: tag1,
+                                          )
                                         ],
                                       ),
                                     ],
@@ -281,7 +286,10 @@ class _ScanPagesState extends State<ScanPages> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text('Less Weight', style: tag2),
-                                          Text('3 GRAMS', style: tag1),
+                                          Text(
+                                            '${dropdownController.lessSelected.value} GRAMS',
+                                            style: tag1,
+                                          )
                                         ],
                                       ),
                                     ],
@@ -295,7 +303,10 @@ class _ScanPagesState extends State<ScanPages> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text('Net Weight', style: tag2),
-                                          Text('9 GRAMS', style: tag1),
+                                          Text(
+                                            '${dropdownController.netSelected.value} GRAMS',
+                                            style: tag1,
+                                          ),
                                         ],
                                       ),
                                     ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Controller/Drop_Down_Controller.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/New_Gold_Screen.dart';
 import 'package:tn_jewellery_admin/features/Estimate_Creation/Gold_Screen/Old_Gold_Screen.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
@@ -16,6 +17,8 @@ class _StoneDetailsPageState extends State<StoneDetailsPage> {
   int? selectedEmployeeId;
   bool isSwitched = false;
   late bool showAddButton;
+  final dropdownController = Get.put(DropdownController());
+
   @override
   void initState() {
     super.initState();
@@ -53,29 +56,83 @@ class _StoneDetailsPageState extends State<StoneDetailsPage> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    Expanded(child: CustomDropdown(title: "STONE NAME")),
-                    Expanded(child: CustomDropdown(title: "STONE WEIGHT")),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(child: CustomDropdown(title: "PURITY")),
-                    Expanded(child: CustomDropdown(title: "QUALITY CODE")),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(child: CustomDropdown(title: "NO.OF.PCS")),
-                    Expanded(child: CustomDropdown(title: "LESS WEIGHT")),
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "STONE NAME",
+                      selectedId: dropdownController.stoneSelected,
+                      items: dropdownController.stone,
+                    )),
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "STONE WEIGHT",
+                      selectedId: dropdownController.weightSelected,
+                      items: dropdownController.weight,
+                    )),
                   ],
                 ),
                 Row(
                   children: [
                     Expanded(
-                      child: buildTextField(title: "AMOUNT", hint: "4500"),
+                        child: CustomDropdown(
+                      title: "PURITY",
+                      selectedId: dropdownController.puritySelected,
+                      items: dropdownController.purityItems,
+                    )),
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "QUALITY CODE",
+                      selectedId: dropdownController.qualitySelected,
+                      items: dropdownController.quality,
+                    )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "NO.OF.PCS",
+                      selectedId: dropdownController.noSelected,
+                      items: dropdownController.no,
+                    )),
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "LESS WEIGHT",
+                      selectedId: dropdownController.lessSelected,
+                      items: dropdownController.less,
+                    )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "GROSS WEIGHT",
+                      selectedId: dropdownController.grossSelected,
+                      items: dropdownController.gross,
+                    )),
+                    Expanded(
+                        child: CustomDropdown(
+                      title: "NET WEIGHT",
+                      selectedId: dropdownController.netSelected,
+                      items: dropdownController.net,
+                    )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: buildTextField(
+                        title: "AMOUNT",
+                        hint: "4500",
+                        controller: dropdownController.amountController,
+                      ),
                     ),
                     Expanded(
-                      child: buildTextField(title: "RATE", hint: "5000"),
+                      child: buildTextField(
+                        title: "RATE",
+                        hint: "5000",
+                        controller: dropdownController.rateController,
+                      ),
                     ),
                   ],
                 ),
@@ -83,31 +140,31 @@ class _StoneDetailsPageState extends State<StoneDetailsPage> {
             ),
             const SizedBox(height: 20),
             if (showAddButton)
-            GestureDetector(
-              onTap: () {
-              Get.to( NewGoldScreen());
-              },
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: brandGoldColor),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.add_box_outlined, color: Colors.white),
-                    Text('ADD NOW',
-                        style: TextStyle(
-                            fontFamily: 'JosefinSans',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: brandGoldColor)),
-                  ],
+              GestureDetector(
+                onTap: () {
+                  Get.to(NewGoldScreen());
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: brandGoldColor),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.add_box_outlined, color: Colors.white),
+                      Text('ADD NOW',
+                          style: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: brandGoldColor)),
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
