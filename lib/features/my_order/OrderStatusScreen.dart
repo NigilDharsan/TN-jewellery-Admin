@@ -267,7 +267,16 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 24,
-                  child: Icon(Icons.shopping_cart, color: Colors.black),
+                  child: inProgressOrderData?.image != null
+                      ? ClipOval(
+                          child: Image.network(
+                            inProgressOrderData!.image!,
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : Icon(Icons.shopping_cart, color: Colors.black),
                 ),
               ),
               const SizedBox(width: 10),
@@ -307,7 +316,8 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          inProgressOrderData?.productName ?? '',
+                          "${inProgressOrderData?.productName ?? ''} " +
+                              "(${inProgressOrderData?.tagCode ?? ''})",
                           style: TextStyle(
                               fontFamily: 'JosefinSans',
                               fontWeight: FontWeight.w500,
@@ -418,7 +428,7 @@ class _OrderStatusPageState extends State<OrderStatusPage> {
                           controller.filterBody);
                     },
                     child: Container(
-                        width: 130,
+                        width: 140,
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 12),
                         decoration: BoxDecoration(

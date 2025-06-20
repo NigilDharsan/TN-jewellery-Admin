@@ -23,9 +23,28 @@ class TagRepo {
     );
   }
 
+  Future<Response?> tagWithOutImage() async {
+    return await apiClient.getData(
+      AppConstants.getTagWithoutImageUrl,
+    );
+  }
+
+  Future<Response?> tagRemove(int tag_code) async {
+    return await apiClient.getData(
+      AppConstants.getRemoveTagUrl + "?tag_id=${tag_code}",
+    );
+  }
+
   Future<Response?> tagImageUpload(dynamic body) async {
     return await apiClient.postData(
       AppConstants.getTagImageUpdateUrl,
+      body,
+    );
+  }
+
+  Future<Response?> tagAdded(dynamic body) async {
+    return await apiClient.postData(
+      AppConstants.getTagAddUrl,
       body,
     );
   }

@@ -1,5 +1,5 @@
 class AppConstants {
-  static const String appName = 'Hello Taxi';
+  static const String appName = 'TN Jewellery Admin';
 
   static const String configUrl = 'configs';
   static const String onBoards = 'on-boards';
@@ -21,6 +21,10 @@ class AppConstants {
   static const String getSupplierUrl = 'retailmaster/supplier/?active';
 
   static const String getTagSearchUrl = 'inventory/tag/admin_app/search/';
+  static const String getTagAddUrl = 'inventory/tag/tag_set/list/';
+  static const String getTagWithoutImageUrl = 'inventory/tag/without_images/';
+  static const String getRemoveTagUrl = 'inventory/tag/remove_tag_set/';
+
   static const String getTagImageUpdateUrl =
       'inventory/tag/admin_app/image_update/';
 

@@ -100,6 +100,7 @@ class Data {
   String? metalName;
   String? metal;
   List<TagImages>? tagImages;
+  List<RelatedItems>? relatedItems;
 
   Data(
       {this.tagId,
@@ -181,7 +182,8 @@ class Data {
       this.purityName,
       this.metalName,
       this.metal,
-      this.tagImages});
+      this.tagImages,
+      this.relatedItems});
 
   Data.fromJson(Map<String, dynamic> json) {
     tagId = json['tag_id'];
@@ -274,6 +276,12 @@ class Data {
         tagImages!.add(new TagImages.fromJson(v));
       });
     }
+    if (json['related_items'] != null) {
+      relatedItems = <RelatedItems>[];
+      json['related_items'].forEach((v) {
+        relatedItems!.add(new RelatedItems.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -362,6 +370,10 @@ class Data {
     data['metal'] = this.metal;
     if (this.tagImages != null) {
       data['tag_images'] = this.tagImages!.map((v) => v.toJson()).toList();
+    }
+    if (this.relatedItems != null) {
+      data['related_items'] =
+          this.relatedItems!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -484,6 +496,346 @@ class TagImages {
     data['is_default'] = this.isDefault;
     data['erp_tag'] = this.erpTag;
     data['name'] = this.name;
+    return data;
+  }
+}
+
+class RelatedItems {
+  int? tagId;
+  String? date;
+  int? catId;
+  int? taxId;
+  Null? weightRange;
+  String? purchaseDate;
+  String? monthSupCode;
+  String? tagCode;
+  String? tagDate;
+  int? tagPcs;
+  String? tagGwt;
+  String? tagLwt;
+  String? tagNwt;
+  String? tagStnWt;
+  String? tagDiaWt;
+  String? tagOtherMetalWt;
+  String? tagWastagePercentage;
+  String? tagWastageWt;
+  int? tagMcType;
+  String? tagMcValue;
+  String? tagBuyRate;
+  String? tagSellRate;
+  String? tagTaxAmount;
+  String? tagItemCost;
+  String? tagPurchaseTouch;
+  String? tagPurchaseVa;
+  String? tagPurchaseMc;
+  int? tagPurchaseMcType;
+  int? tagPurchaseCalcType;
+  String? tagPureWt;
+  String? tagPurchaseRate;
+  int? tagPurchaseRateCalcType;
+  Null? tagHuid;
+  Null? tagHuid2;
+  String? tagPurchaseCost;
+  int? isPartialSale;
+  bool? isSpecialDiscountApplied;
+  String? flatMcValue;
+  String? totalMcValue;
+  String? oldTagCode;
+  String? oldTagId;
+  bool? isImported;
+  bool? isIssuedToCounter;
+  String? createdOn;
+  Null? updatedOn;
+  int? finYear;
+  Null? idBranch;
+  Null? tagBranch;
+  int? tagCurrentBranch;
+  Null? tagLotInwardDetails;
+  int? tagProductId;
+  int? tagDesignId;
+  Null? tagSubDesignId;
+  int? tagSectionId;
+  Null? tagOrderDet;
+  int? tagPurityId;
+  int? tagUomId;
+  Null? tagCalculationType;
+  Null? tagTaxGrpId;
+  Null? size;
+  Null? container;
+  int? tagStatus;
+  Null? idSupplier;
+  int? createdBy;
+  Null? updatedBy;
+  String? branchName;
+  String? productName;
+  String? productCode;
+  String? salesMode;
+  String? fixedRateType;
+  String? designName;
+  String? sectionName;
+  String? uom;
+  String? taxType;
+  String? purityName;
+  String? metalName;
+  String? metal;
+  List<TagImages>? tagImages;
+  TagImages? defaultImage;
+
+  RelatedItems(
+      {this.tagId,
+      this.date,
+      this.catId,
+      this.taxId,
+      this.weightRange,
+      this.purchaseDate,
+      this.monthSupCode,
+      this.tagCode,
+      this.tagDate,
+      this.tagPcs,
+      this.tagGwt,
+      this.tagLwt,
+      this.tagNwt,
+      this.tagStnWt,
+      this.tagDiaWt,
+      this.tagOtherMetalWt,
+      this.tagWastagePercentage,
+      this.tagWastageWt,
+      this.tagMcType,
+      this.tagMcValue,
+      this.tagBuyRate,
+      this.tagSellRate,
+      this.tagTaxAmount,
+      this.tagItemCost,
+      this.tagPurchaseTouch,
+      this.tagPurchaseVa,
+      this.tagPurchaseMc,
+      this.tagPurchaseMcType,
+      this.tagPurchaseCalcType,
+      this.tagPureWt,
+      this.tagPurchaseRate,
+      this.tagPurchaseRateCalcType,
+      this.tagHuid,
+      this.tagHuid2,
+      this.tagPurchaseCost,
+      this.isPartialSale,
+      this.isSpecialDiscountApplied,
+      this.flatMcValue,
+      this.totalMcValue,
+      this.oldTagCode,
+      this.oldTagId,
+      this.isImported,
+      this.isIssuedToCounter,
+      this.createdOn,
+      this.updatedOn,
+      this.finYear,
+      this.idBranch,
+      this.tagBranch,
+      this.tagCurrentBranch,
+      this.tagLotInwardDetails,
+      this.tagProductId,
+      this.tagDesignId,
+      this.tagSubDesignId,
+      this.tagSectionId,
+      this.tagOrderDet,
+      this.tagPurityId,
+      this.tagUomId,
+      this.tagCalculationType,
+      this.tagTaxGrpId,
+      this.size,
+      this.container,
+      this.tagStatus,
+      this.idSupplier,
+      this.createdBy,
+      this.updatedBy,
+      this.branchName,
+      this.productName,
+      this.productCode,
+      this.salesMode,
+      this.fixedRateType,
+      this.designName,
+      this.sectionName,
+      this.uom,
+      this.taxType,
+      this.purityName,
+      this.metalName,
+      this.metal,
+      this.tagImages,
+      this.defaultImage});
+
+  RelatedItems.fromJson(Map<String, dynamic> json) {
+    tagId = json['tag_id'];
+    date = json['date'];
+    catId = json['cat_id'];
+    taxId = json['tax_id'];
+    weightRange = json['weight_range'];
+    purchaseDate = json['purchase_date'];
+    monthSupCode = json['month_sup_code'];
+    tagCode = json['tag_code'];
+    tagDate = json['tag_date'];
+    tagPcs = json['tag_pcs'];
+    tagGwt = json['tag_gwt'];
+    tagLwt = json['tag_lwt'];
+    tagNwt = json['tag_nwt'];
+    tagStnWt = json['tag_stn_wt'];
+    tagDiaWt = json['tag_dia_wt'];
+    tagOtherMetalWt = json['tag_other_metal_wt'];
+    tagWastagePercentage = json['tag_wastage_percentage'];
+    tagWastageWt = json['tag_wastage_wt'];
+    tagMcType = json['tag_mc_type'];
+    tagMcValue = json['tag_mc_value'];
+    tagBuyRate = json['tag_buy_rate'];
+    tagSellRate = json['tag_sell_rate'];
+    tagTaxAmount = json['tag_tax_amount'];
+    tagItemCost = json['tag_item_cost'];
+    tagPurchaseTouch = json['tag_purchase_touch'];
+    tagPurchaseVa = json['tag_purchase_va'];
+    tagPurchaseMc = json['tag_purchase_mc'];
+    tagPurchaseMcType = json['tag_purchase_mc_type'];
+    tagPurchaseCalcType = json['tag_purchase_calc_type'];
+    tagPureWt = json['tag_pure_wt'];
+    tagPurchaseRate = json['tag_purchase_rate'];
+    tagPurchaseRateCalcType = json['tag_purchase_rate_calc_type'];
+    tagHuid = json['tag_huid'];
+    tagHuid2 = json['tag_huid2'];
+    tagPurchaseCost = json['tag_purchase_cost'];
+    isPartialSale = json['is_partial_sale'];
+    isSpecialDiscountApplied = json['is_special_discount_applied'];
+    flatMcValue = json['flat_mc_value'];
+    totalMcValue = json['total_mc_value'];
+    oldTagCode = json['old_tag_code'];
+    oldTagId = json['old_tag_id'];
+    isImported = json['is_imported'];
+    isIssuedToCounter = json['is_issued_to_counter'];
+    createdOn = json['created_on'];
+    updatedOn = json['updated_on'];
+    finYear = json['fin_year'];
+    idBranch = json['id_branch'];
+    tagBranch = json['tag_branch'];
+    tagCurrentBranch = json['tag_current_branch'];
+    tagLotInwardDetails = json['tag_lot_inward_details'];
+    tagProductId = json['tag_product_id'];
+    tagDesignId = json['tag_design_id'];
+    tagSubDesignId = json['tag_sub_design_id'];
+    tagSectionId = json['tag_section_id'];
+    tagOrderDet = json['tag_order_det'];
+    tagPurityId = json['tag_purity_id'];
+    tagUomId = json['tag_uom_id'];
+    tagCalculationType = json['tag_calculation_type'];
+    tagTaxGrpId = json['tag_tax_grp_id'];
+    size = json['size'];
+    container = json['container'];
+    tagStatus = json['tag_status'];
+    idSupplier = json['id_supplier'];
+    createdBy = json['created_by'];
+    updatedBy = json['updated_by'];
+    branchName = json['branch_name'];
+    productName = json['product_name'];
+    productCode = json['product_code'];
+    salesMode = json['sales_mode'];
+    fixedRateType = json['fixed_rate_type'];
+    designName = json['design_name'];
+    sectionName = json['section_name'];
+    uom = json['uom'];
+    taxType = json['tax_type'];
+    purityName = json['purity_name'];
+    metalName = json['metal_name'];
+    metal = json['metal'];
+    if (json['tag_images'] != null) {
+      tagImages = <TagImages>[];
+      json['tag_images'].forEach((v) {
+        tagImages!.add(new TagImages.fromJson(v));
+      });
+    }
+    defaultImage = json['default_image'] != null
+        ? new TagImages.fromJson(json['default_image'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['tag_id'] = this.tagId;
+    data['date'] = this.date;
+    data['cat_id'] = this.catId;
+    data['tax_id'] = this.taxId;
+    data['weight_range'] = this.weightRange;
+    data['purchase_date'] = this.purchaseDate;
+    data['month_sup_code'] = this.monthSupCode;
+    data['tag_code'] = this.tagCode;
+    data['tag_date'] = this.tagDate;
+    data['tag_pcs'] = this.tagPcs;
+    data['tag_gwt'] = this.tagGwt;
+    data['tag_lwt'] = this.tagLwt;
+    data['tag_nwt'] = this.tagNwt;
+    data['tag_stn_wt'] = this.tagStnWt;
+    data['tag_dia_wt'] = this.tagDiaWt;
+    data['tag_other_metal_wt'] = this.tagOtherMetalWt;
+    data['tag_wastage_percentage'] = this.tagWastagePercentage;
+    data['tag_wastage_wt'] = this.tagWastageWt;
+    data['tag_mc_type'] = this.tagMcType;
+    data['tag_mc_value'] = this.tagMcValue;
+    data['tag_buy_rate'] = this.tagBuyRate;
+    data['tag_sell_rate'] = this.tagSellRate;
+    data['tag_tax_amount'] = this.tagTaxAmount;
+    data['tag_item_cost'] = this.tagItemCost;
+    data['tag_purchase_touch'] = this.tagPurchaseTouch;
+    data['tag_purchase_va'] = this.tagPurchaseVa;
+    data['tag_purchase_mc'] = this.tagPurchaseMc;
+    data['tag_purchase_mc_type'] = this.tagPurchaseMcType;
+    data['tag_purchase_calc_type'] = this.tagPurchaseCalcType;
+    data['tag_pure_wt'] = this.tagPureWt;
+    data['tag_purchase_rate'] = this.tagPurchaseRate;
+    data['tag_purchase_rate_calc_type'] = this.tagPurchaseRateCalcType;
+    data['tag_huid'] = this.tagHuid;
+    data['tag_huid2'] = this.tagHuid2;
+    data['tag_purchase_cost'] = this.tagPurchaseCost;
+    data['is_partial_sale'] = this.isPartialSale;
+    data['is_special_discount_applied'] = this.isSpecialDiscountApplied;
+    data['flat_mc_value'] = this.flatMcValue;
+    data['total_mc_value'] = this.totalMcValue;
+    data['old_tag_code'] = this.oldTagCode;
+    data['old_tag_id'] = this.oldTagId;
+    data['is_imported'] = this.isImported;
+    data['is_issued_to_counter'] = this.isIssuedToCounter;
+    data['created_on'] = this.createdOn;
+    data['updated_on'] = this.updatedOn;
+    data['fin_year'] = this.finYear;
+    data['id_branch'] = this.idBranch;
+    data['tag_branch'] = this.tagBranch;
+    data['tag_current_branch'] = this.tagCurrentBranch;
+    data['tag_lot_inward_details'] = this.tagLotInwardDetails;
+    data['tag_product_id'] = this.tagProductId;
+    data['tag_design_id'] = this.tagDesignId;
+    data['tag_sub_design_id'] = this.tagSubDesignId;
+    data['tag_section_id'] = this.tagSectionId;
+    data['tag_order_det'] = this.tagOrderDet;
+    data['tag_purity_id'] = this.tagPurityId;
+    data['tag_uom_id'] = this.tagUomId;
+    data['tag_calculation_type'] = this.tagCalculationType;
+    data['tag_tax_grp_id'] = this.tagTaxGrpId;
+    data['size'] = this.size;
+    data['container'] = this.container;
+    data['tag_status'] = this.tagStatus;
+    data['id_supplier'] = this.idSupplier;
+    data['created_by'] = this.createdBy;
+    data['updated_by'] = this.updatedBy;
+    data['branch_name'] = this.branchName;
+    data['product_name'] = this.productName;
+    data['product_code'] = this.productCode;
+    data['sales_mode'] = this.salesMode;
+    data['fixed_rate_type'] = this.fixedRateType;
+    data['design_name'] = this.designName;
+    data['section_name'] = this.sectionName;
+    data['uom'] = this.uom;
+    data['tax_type'] = this.taxType;
+    data['purity_name'] = this.purityName;
+    data['metal_name'] = this.metalName;
+    data['metal'] = this.metal;
+    if (this.tagImages != null) {
+      data['tag_images'] = this.tagImages!.map((v) => v.toJson()).toList();
+    }
+    if (this.defaultImage != null) {
+      data['default_image'] = this.defaultImage!.toJson();
+    }
     return data;
   }
 }

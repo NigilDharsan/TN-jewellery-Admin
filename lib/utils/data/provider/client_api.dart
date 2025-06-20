@@ -226,7 +226,8 @@ class ApiClient extends GetxService {
     }
 
     if (response0.statusCode != 200 && response0.statusCode != 201) {
-      String errorMessage = ErrorHandler.handleError(response0.body);
+      String errorMessage =
+          response0.body["message"] ?? ErrorHandler.handleError(response0.body);
       print(errorMessage);
       if (response0.statusCode == 500) {
         var tokenExpiredHeader = response.headers['token-expired'];

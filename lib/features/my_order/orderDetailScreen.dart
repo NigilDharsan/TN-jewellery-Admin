@@ -1,7 +1,10 @@
 import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -13,7 +16,6 @@ import 'package:tn_jewellery_admin/features/my_order/widgets/orderDetailWidgets.
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
 import 'package:tn_jewellery_admin/utils/widgets/custom_app_bar.dart';
-import 'package:http/http.dart' as http;
 
 class orderDetailScreen extends StatefulWidget {
   const orderDetailScreen({super.key});
@@ -273,22 +275,27 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Stone Type", style: JosefinSansMedium),
-                Text(
-                    controller.selectNewOrderListData?.customizedStoneName ??
-                        "",
-                    style: JosefinRegular),
-              ]),),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Stone Type", style: JosefinSansMedium),
+                      Text(
+                          controller.selectNewOrderListData
+                                  ?.customizedStoneName ??
+                              "",
+                          style: JosefinRegular),
+                    ]),
+              ),
               SizedBox(width: 100),
               Expanded(
-                child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text("Stone Weight", style: JosefinSansMedium),
-                Text(controller.selectNewOrderListData?.stoneWt ?? "",
-                    style: JosefinRegular),
-              ]),),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Stone Weight", style: JosefinSansMedium),
+                      Text(controller.selectNewOrderListData?.stoneWt ?? "",
+                          style: JosefinRegular),
+                    ]),
+              ),
             ],
           ),
           // const SizedBox(height: 15),
@@ -541,6 +548,7 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
 
   Future<void> shareProductMedia() async {
     final controller = Get.find<OrderController>();
+
     final String productName =
         controller.selectNewOrderListData?.productName ?? "";
     final String weight = controller.selectNewOrderListData?.grossWt ?? "";
@@ -550,19 +558,19 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
 
     final List<String> imageUrls =
         (controller.selectNewOrderListData?.previewImages ?? [])
-            .map<String>((e) => e.image ?? "")
+            .map((e) => e.image ?? "")
             .where((url) => url.isNotEmpty)
             .toList();
 
     final List<String> videoUrls =
         (controller.selectNewOrderListData?.previewVideos ?? [])
-            .map<String>((e) => e.video ?? "")
+            .map((e) => e.video ?? "")
             .where((url) => url.isNotEmpty)
             .toList();
 
     final List<String> audioUrls =
         (controller.selectNewOrderListData?.previewVoices ?? [])
-            .map<String>((e) => e.audio ?? "")
+            .map((e) => e.audio ?? "")
             .where((url) => url.isNotEmpty)
             .toList();
 
@@ -570,19 +578,20 @@ class _orderDetailScreenState extends State<orderDetailScreen> {
     final List<XFile> filesToShare = [];
 
     final String message = '''
-Check out this product:
-Order No: $order
-Product Name: $productName
-Design: $design
-Gross Weight: $weight
-Description: $description
+🛍️ *Product Details*
+📦 Order No: $order
+📌 Product: $productName
+🎨 Design: $design
+⚖️ Gross Wt: $weight
+📝 Description: $description
 ''';
 
     final tempDir = await getTemporaryDirectory();
-    Get.dialog(
-      Center(child: CircularProgressIndicator()),
-      barrierDismissible: true,
-    );
+
+    // Show loading dialog
+    Get.dialog(const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false);
+
     for (final url in allUrls) {
       try {
         final response = await http.get(Uri.parse(url));
@@ -592,28 +601,35 @@ Description: $description
           final file = File(filePath);
           await file.writeAsBytes(response.bodyBytes);
 
-          // Detect MIME type
-          final ext = fileName.split('.').last.toLowerCase();
-          String mimeType = 'application/octet-stream';
-          if (['jpg', 'jpeg'].contains(ext)) mimeType = 'image/jpeg';
-          else if (ext == 'png') mimeType = 'image/png';
-          else if (ext == 'mp4') mimeType = 'video/mp4';
-          else if (['mp3', 'aac', 'wav'].contains(ext)) mimeType = 'audio/mpeg';
-
+          final mimeType =
+              lookupMimeType(filePath) ?? 'application/octet-stream';
           filesToShare.add(XFile(filePath, mimeType: mimeType, name: fileName));
         }
       } catch (e) {
-        print('Download failed for $url: $e');
+        print('⚠️ Failed to download $url → $e');
       }
-    }    if (Get.isDialogOpen ?? false) {
-      Get.back();
     }
+
+    // Close loading dialog
+    if (Get.isDialogOpen ?? false) Get.back();
+
     if (filesToShare.isNotEmpty) {
-      // await Share.shareXFiles(filesToShare, text: message);
-      await Share.shareXFiles([filesToShare.first], text: message);
+      // Corrected to pass List<XFile> directly
+      await SharePlus.instance.share(
+        ShareParams(
+          files: filesToShare, // Now passing the XFile list directly
+          text: message,
+          subject: "Product Shared from TN Jewellers",
+        ),
+      );
     } else {
-      await Share.share(message);
+      // For text only
+      await SharePlus.instance.share(
+        ShareParams(
+          text: message,
+          subject: "Product Shared from TN Jewellers",
+        ),
+      );
     }
   }
-
 }

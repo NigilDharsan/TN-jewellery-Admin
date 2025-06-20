@@ -61,9 +61,10 @@ dependencies:
   dropdown_button2:
 
   photo_view:
-
-
   barcode_scan2:
+  textfield_tags:
+  flutter_image_compress:
+  mime:
 
 
 dev_dependencies:

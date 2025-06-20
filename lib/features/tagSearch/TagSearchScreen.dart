@@ -9,7 +9,7 @@ import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/styles.dart';
 
 class TagSearchScreen extends StatefulWidget {
-  const TagSearchScreen({super.key});
+  TagSearchScreen({super.key});
 
   @override
   _TagSearchScreenState createState() => _TagSearchScreenState();
@@ -19,16 +19,26 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
   final TagController controller = Get.find<TagController>();
 
   @override
-  void dispose() {
-    clearData();
-    super.dispose();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Future.microtask(() {
+      if (controller.selectedTag != null) {
+        controller.getTagSearch(
+          tagCode: controller.selectedTag ?? "",
+        );
+      }
+    });
   }
 
-  void clearData() {
-    controller.searchTextController.clear();
-    controller.tagModel = null;
-    controller.images.clear();
-    controller.update();
+  @override
+  void dispose() {
+    super.dispose();
+
+    Future.microtask(() {
+      controller.clearData();
+    });
   }
 
   @override
@@ -64,7 +74,7 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                       child: TextField(
                         controller: controller.searchTextController,
                         decoration: InputDecoration(
-                          hintText: 'Enter tag code',
+                          hintText: 'Search tag code',
                           hintStyle: TextStyle(
                             fontFamily: 'JosefinSans',
                             fontWeight: FontWeight.w500,
@@ -99,9 +109,18 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                         color: brandGreyColor,
                       ),
                       onPressed: () {
+                        if (controller.searchTextController.text
+                            .trim()
+                            .isEmpty) {
+                          Get.snackbar("Error", "Tag code cannot be empty");
+                          return;
+                        }
+
                         controller.getTagSearch(
                           tagCode: controller.searchTextController.text.trim(),
                         );
+                        FocusScope.of(context)
+                            .unfocus(); // This hides the keyboard
                       },
                     ),
                     IconButton(
@@ -129,7 +148,7 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          'JEWEL DETAILS - ${controller.tagModel?.data?.tagCode ?? ''}',
+                          'JEWEL DETAILS - ${controller.tagModel?.data?.oldTagCode ?? ''}',
                           style: TextStyle(
                               color: brandPrimaryColor,
                               fontFamily: 'JosefinSans',
@@ -346,16 +365,234 @@ class _TagSearchScreenState extends State<TagSearchScreen> {
 
                 SizedBox(height: 20),
 
+                if (controller.tagModel != null)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Add set items tag',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: brandPrimaryColor,
+                      ),
+                    ),
+                  ),
+                SizedBox(height: 10),
+
+                // ➕ Tag input and Add button
+                if (controller.tagModel != null)
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: TextField(
+                  //         controller: controller.stringTagController,
+                  //         decoration: InputDecoration(
+                  //           hintText: 'Enter tag code',
+                  //           filled: true,
+                  //           fillColor: Colors.white,
+                  //           contentPadding: EdgeInsets.symmetric(
+                  //               horizontal: 12, vertical: 14),
+                  //           border: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(10),
+                  //             borderSide:
+                  //                 BorderSide(color: brandGreyColor, width: 1),
+                  //           ),
+                  //         ),
+                  //         onSubmitted: (value) async {
+                  //           await controller.addSetItemTag(
+                  //               tagCode: value.trim());
+                  //           controller.searchTextController.clear();
+                  //         },
+                  //       ),
+                  //     ),
+                  //     IconButton(
+                  //       iconSize: 40,
+                  //       icon: Icon(
+                  //         Icons.add_box,
+                  //         color: brandPrimaryColor,
+                  //       ),
+                  //       onPressed: () async {
+                  //         await controller.addSetItemTag(
+                  //             tagCode:
+                  //                 controller.stringTagController.text.trim());
+                  //         controller.stringTagController.clear();
+                  //       },
+                  //     ),
+                  //     // IconButton(
+                  //     //   icon: Icon(Icons.qr_code_scanner),
+                  //     //   onPressed: () async {
+                  //     //     var result = await BarcodeScanner.scan();
+                  //     //     if (result.rawContent.isNotEmpty) {
+                  //     //       controller.addTag(result.rawContent.trim());
+                  //     //     }
+                  //     //   },
+                  //     // ),
+                  //   ],
+                  // ),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: controller.stringTagController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter tag code',
+                            hintStyle: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.w500,
+                              color: brandGreyColor,
+                              fontSize: 15,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 14),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: brandGreyColor, width: 1),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: brandGreyColor, width: 1),
+                            ),
+                          ),
+                          onSubmitted: (value) {
+                            if (value.trim().isEmpty) {
+                              Get.snackbar("Error", "Tag code cannot be empty");
+                              return;
+                            }
+
+                            _showSetTagPreviewDialog(context, value.trim());
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.search, color: brandGreyColor),
+                        onPressed: () {
+                          if (controller.stringTagController.text
+                              .trim()
+                              .isEmpty) {
+                            Get.snackbar("Error", "Tag code cannot be empty");
+                            return;
+                          }
+                          _showSetTagPreviewDialog(context,
+                              controller.stringTagController.text.trim());
+                          FocusScope.of(context).unfocus();
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.qr_code_scanner),
+                        onPressed: () async {
+                          var result = await BarcodeScanner.scan();
+                          if (result.rawContent.isNotEmpty) {
+                            controller.stringTagController.text =
+                                result.rawContent;
+                            _showSetTagPreviewDialog(
+                                context, result.rawContent.trim());
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+
+                SizedBox(height: 10),
+
+// 🏷️ Display added tags
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    alignment:
+                        WrapAlignment.start, // 👈 ensures items align left
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    children: controller.addedTags.map((tag) {
+                      return Chip(
+                        label: Text(tag.name),
+                        deleteIcon: Icon(Icons.close),
+                        onDeleted: () => controller.removeTag(tag.id),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
                 // ✅ Submit Button
                 if (controller.images.isNotEmpty)
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: brandGoldColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
                     onPressed: () => controller.uploadImages(),
-                    child: Text("Submit"),
+                    child: const Text('Submit',
+                        style: TextStyle(
+                            fontFamily: 'JosefinSans',
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: secondaryColor)),
                   ),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  void _showSetTagPreviewDialog(BuildContext context, String tagCode) async {
+    final tagDetails = await controller.getSetItemTagSearch(tagCode: tagCode);
+
+    if (controller.tagModel == null) {
+      Get.snackbar("Not Found", "Tag not found or invalid");
+      return;
+    }
+
+    Get.dialog(
+      AlertDialog(
+        title: Text('Preview Tag'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+                'Tag Code: ${controller.setItemTagModel?.data?.oldTagCode ?? ''}',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: brandPrimaryColor)),
+            SizedBox(height: 8),
+            Text(controller.setItemTagModel?.data?.productName ?? '',
+                style: JosefinRegular),
+            SizedBox(height: 8),
+            Text(
+                "Gross Weight: ${controller.setItemTagModel?.data?.tagGwt ?? ''}",
+                style: JosefinRegular),
+            Text(
+                "Net Weight: ${controller.setItemTagModel?.data?.tagNwt ?? ''}",
+                style: JosefinRegular),
+            Text(
+                "Purity: ${controller.setItemTagModel?.data?.purityName ?? ''}",
+                style: JosefinRegular),
+            Text("Metal: ${controller.setItemTagModel?.data?.metalName ?? ''}",
+                style: JosefinRegular),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              controller.addSetItemTag(tagCode: tagCode);
+              controller.stringTagController.clear();
+              Get.back();
+            },
+            child: Text("Add"),
+          ),
+        ],
       ),
     );
   }

@@ -278,7 +278,9 @@ Widget buildApprovedButtons(DashboardController controller) {
                           ""
                       : "0",
               color: brandGoldLightColor,
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(RouteHelper.tagwithoutimagescreen);
+              },
             ),
           ),
         ],
