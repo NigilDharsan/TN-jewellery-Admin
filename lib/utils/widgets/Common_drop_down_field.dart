@@ -8,10 +8,12 @@ class CustomDropdown extends StatelessWidget {
   final RxInt selectedId;
   final List<Map<String, dynamic>> items;
 
+
   CustomDropdown({
     required this.title,
     required this.selectedId,
     required this.items,
+
   });
 
   @override
@@ -21,14 +23,18 @@ class CustomDropdown extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontFamily: 'JosefinSans',
-              fontSize: 13,
-              color: brandGreyColor,
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: 'JosefinSans',
+                  fontSize: 13,
+                  color: brandGreyColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 8),
           Obx(() {
