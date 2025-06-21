@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tn_jewellery_admin/features/auth/controller/auth_controller.dart';
 import 'package:tn_jewellery_admin/utils/colors.dart';
 import 'package:tn_jewellery_admin/utils/images.dart';
@@ -14,37 +13,24 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController signInEmailController = TextEditingController();
-  final TextEditingController signInPasswordController = TextEditingController();
   bool _isChecked = false; // Initially hide the password
   @override
   void initState() {
     super.initState();
-    _loadSavedCredentials();
+    // _loadSavedCredentials();
   }
 
-  void _loadSavedCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _isChecked = prefs.getBool('rememberMe') ?? false;
-      if (_isChecked) {
-        signInEmailController.text = prefs.getString('username') ?? "";
-        signInPasswordController.text = prefs.getString('password') ?? "";
-      }
-    });
-  }
-  void _saveCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (_isChecked) {
-      await prefs.setString('username', signInEmailController.value.text);
-      await prefs.setString('password', signInPasswordController.value.text);
-      await prefs.setBool('rememberMe', true);
-    } else {
-      await prefs.remove('phoneNumber');
-      await prefs.remove('password');
-      await prefs.setBool('rememberMe', false);
-    }
-  }
+  // void _loadSavedCredentials() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     _isChecked = prefs.getBool('rememberMe') ?? false;
+  //     if (_isChecked) {
+  //       signInEmailController.text = prefs.getString('username') ?? "";
+  //       signInPasswordController.text = prefs.getString('password') ?? "";
+  //     }
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,14 +70,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CheckBoxes(context, value: _isChecked, onChanged: (value) {
+                        CheckBoxes(context, value: _isChecked,
+                            onChanged: (value) {
                           setState(() {
                             setState(() => _isChecked = !_isChecked);
                           });
-                          _saveCredentials();
+                          controller.saveCredentials();
                         }, onTap: () {
-                          _saveCredentials();
-
+                          controller.saveCredentials();
                         }, checkBoxText: 'Remember me', width: null),
                       ],
                     ),
@@ -204,6 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         onPressed: () {
           if (controller.formKey.currentState!.validate()) {
+            controller.saveCredentials();
             controller.login();
           }
         },
@@ -216,12 +203,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
 Widget CheckBoxes(context,
     {required bool? value,
-      required void Function(bool?)? onChanged,
-      required String checkBoxText,
-      void Function()? onTap,
-      required double? width}) {
+    required void Function(bool?)? onChanged,
+    required String checkBoxText,
+    void Function()? onTap,
+    required double? width}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: Row(
@@ -240,6 +228,7 @@ Widget CheckBoxes(context,
     ),
   );
 }
+
 Widget RemberText(String txt, {required double? width}) {
   return Padding(
     padding: const EdgeInsets.only(left: 5, top: 3),

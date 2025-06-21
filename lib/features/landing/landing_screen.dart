@@ -33,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
       });
     }
   }
+
   void _showLogoutConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -96,49 +97,37 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _getScreen(_selectedPageIndex),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(RouteHelper.tagsearchscreen),
-        backgroundColor: brandPrimaryColor,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add, size: 30, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _selectPage,
-        backgroundColor: brandGoldLightColor,
-        currentIndex: _selectedPageIndex,
-        selectedItemColor: brandPrimaryColor,
-        unselectedItemColor: Colors.brown,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.verified), label: 'CUSTOMERS'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'ORDERS'),
-          BottomNavigationBarItem(icon: Icon(Icons.logout_rounded), label: 'Logout'),
-        ],
+    return PopScope(
+      canPop: false, // This disables the back button completely
+      child: Scaffold(
+        body: _getScreen(_selectedPageIndex),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Get.toNamed(RouteHelper.tagsearchscreen),
+          backgroundColor: brandPrimaryColor,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add, size: 30, color: Colors.white),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: _selectPage,
+          backgroundColor: brandGoldLightColor,
+          currentIndex: _selectedPageIndex,
+          selectedItemColor: brandPrimaryColor,
+          unselectedItemColor: Colors.brown,
+          type: BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.verified), label: 'CUSTOMERS'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart), label: 'ORDERS'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.logout_rounded), label: 'Logout'),
+          ],
+        ),
       ),
     );
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // bool _doubleBackToExitPressedOnce = false;
   // PageController? _pageController;

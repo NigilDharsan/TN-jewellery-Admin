@@ -240,6 +240,19 @@ class AuthController extends GetxController implements GetxService {
     return false;
   }
 
+  void saveCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // if (_isChecked) {
+    await prefs.setString('username', signInEmailController.value.text);
+    await prefs.setString('password', signInPasswordController.value.text);
+    await prefs.setBool('rememberMe', true);
+    // } else {
+    //   await prefs.remove('phoneNumber');
+    //   await prefs.remove('password');
+    //   await prefs.setBool('rememberMe', false);
+    // }
+  }
+
   Future<void> login() async {
     _hideKeyboard();
     _isLoading = true;
@@ -255,6 +268,7 @@ class AuthController extends GetxController implements GetxService {
       signInEmailController.clear();
 
       accountModel = AccountModel.fromJson(response.body);
+      AuthRepo.saveUserModel(accountModel!);
 
       String accessToken = accountModel!.token!;
       await authRepo.saveUserToken(accessToken);
@@ -362,10 +376,10 @@ class AuthController extends GetxController implements GetxService {
   String? _refreshToken;
   bool _isRefreshing = false;
 
-  Future<void> refreshToken(bool isAppOpen) async {
+  Future<bool> refreshToken(bool isAppOpen) async {
     // If a refresh token call is already in progress, return early
     if (_isRefreshing) {
-      return;
+      return false;
     }
 
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -381,14 +395,18 @@ class AuthController extends GetxController implements GetxService {
 
           await authRepo.saveUserToken(accessToken);
           await authRepo.saveRefreshToken(accessToken);
+          return true;
         }
+        return false;
       } catch (e) {
         customSnackBar("Refresh Token Error: $e");
+        return false;
       } finally {
         _isRefreshing = false; // Mark the refresh operation as complete
       }
     } else if (isOffline) {
       customSnackBar("Please_connect_internet".tr);
     }
+    return true;
   }
 }

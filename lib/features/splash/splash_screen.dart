@@ -65,10 +65,13 @@ class SplashScreenState extends State<SplashScreen> {
     // Get.find<SplashController>().getConfigData().then((value) {
     Timer(const Duration(seconds: 2), () async {
       if (Get.find<AuthController>().isLoggedIn()) {
-        await Get.find<AuthController>().refreshToken(true);
-        Get.find<AuthController>().startRefreshTokenTimer();
-
-        Get.offAllNamed(RouteHelper.getMainRoute("0"));
+        var result = await Get.find<AuthController>().refreshToken(true);
+        if (result) {
+          Get.offAllNamed(RouteHelper.getMainRoute("0"));
+        } else {
+          Get.toNamed(RouteHelper.getSignInRoute());
+        }
+        // Get.find<AuthController>().startRefreshTokenTimer();
       } else {
         Get.toNamed(RouteHelper.getSignInRoute());
       }

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tn_jewellery_admin/features/auth/model/account_model.dart';
 import 'package:tn_jewellery_admin/utils/app_constants.dart';
 import 'package:tn_jewellery_admin/utils/data/provider/client_api.dart';
 
@@ -82,6 +85,25 @@ class AuthRepo {
     return await sharedPreferences.setString(AppConstants.token, token);
   }
 
+  static const String _keyUserModel = 'user_model';
+
+  static Future<void> saveUserModel(AccountModel userModel) async {
+    final prefs = await SharedPreferences.getInstance();
+    String jsonString = json.encode(userModel.toJson());
+    await prefs.setString(_keyUserModel, jsonString);
+  }
+
+  static Future<AccountModel?> getUserModel() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString(_keyUserModel);
+
+    if (jsonString != null) {
+      Map<String, dynamic> jsonMap = json.decode(jsonString);
+      return AccountModel.fromJson(jsonMap);
+    }
+    return null; // Return null if no user model is found
+  }
+
   String getRefreshToken() {
     return sharedPreferences.getString(AppConstants.refreshToken) ?? "";
   }
@@ -102,11 +124,19 @@ class AuthRepo {
   }
 
   refreshToken() async {
+    final loginModel = await AuthRepo.getUserModel();
+    final prefs = await SharedPreferences.getInstance();
+
     final headers = {
       "Content-Type": "application/json",
     };
     return await apiClient.postData(
-        AppConstants.employeeTokenRefresh, {"token": getRefreshToken()},
+        AppConstants.employeeTokenRefresh,
+        {
+          "id_employee": loginModel?.employee?.idEmployee.toString() ?? "",
+          "username": prefs.getString('username'),
+          "password": prefs.getString('password'),
+        },
         headers: headers);
   }
 }
